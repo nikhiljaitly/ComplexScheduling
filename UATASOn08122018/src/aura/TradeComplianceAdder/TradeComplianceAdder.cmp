@@ -1,0 +1,44 @@
+<aura:component controller="TradeTypeController" >
+    <aura:attribute name="showFile" type="Boolean" default="true" />
+    <aura:attribute name="columns" type="List" default="[]" /> 
+    <aura:attribute name="data" type="List" />
+    <aura:attribute name="parentField" type="String" default="Account__c" />
+    <aura:attribute name="parentId" type="String" />
+    <aura:attribute name="attachments" type="List" default="[]" />
+    <aura:attribute name="isVisible" type="Boolean" default="true"/>
+    
+    
+    <aura:method name="saveTradeCompliances" action="{!c.saveData}" />
+    <aura:method name="initiateDocs" action="{!c.initiateDocuments}" />
+    <aura:if isTrue="{!v.isVisible}">
+        <lightning:button label="Add License Compliance" 
+                          class="slds-m-top--medium"
+                          variant="brand"
+                          onclick="{!c.clickAdd}"/>
+    </aura:if> 
+    
+    
+    <c:TradeTypeAttachmentTable aura:id="tradeTypeTable" 
+                                attachmentList="{!v.attachments}" 
+                                showFile="{!v.showFile}" 
+                                tradeTypes="{!v.data}" onrowaction="{! c.handleRowAction }" />
+     
+    <div aura:id="modal"  class="slds-hide" style="height: 640px;">
+        <c:Popup hide="{!c.hideWindow}" title="Compliance License" >
+            <c:TradeComplianceForm aura:id="compliance" />
+            <aura:set attribute="footer" >
+                
+                <lightning:button label="Cancel" 
+                                  class="slds-m-top--medium"
+                                  variant="neutral"
+                                  onclick="{!c.hideWindow}" />
+                
+                <lightning:button label="Add" 
+                                  class="slds-m-top--medium"
+                                  variant="brand"
+                                  onclick="{!c.addCompliance}" />                
+            </aura:set>
+        </c:Popup>
+    </div>
+    
+</aura:component>

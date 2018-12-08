@@ -1,0 +1,11 @@
+<aura:component extends="c:basic" 
+                implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doRedirect}" />
+    <aura:attribute name="leadId" type="String" />
+    <aura:if isTrue="{!v.leadId != null}">
+        <c:LeadFinalForm />
+        <aura:set attribute="else">
+            <c:LeadInitialForm />
+        </aura:set>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="Event template" >
+     <aura:attribute name="trade" type="Trade_Type__c" default="{sobjectType : 'Trade_Type__c'}" />
+</aura:event>

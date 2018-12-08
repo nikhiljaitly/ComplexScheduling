@@ -1,0 +1,39 @@
+<aura:component controller="ListEmailClaimController" 
+                implements="force:hasRecordId,flexipage:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="RecordConId" type="string" default="" />
+    <force:recordData aura:id="record"
+		layoutType="FULL"
+		recordId="{!v.RecordConId}"
+		targetError="{!v.recordError}"
+    	fields="Name,LastName"
+        recordUpdated="{!c.doInit}"
+		mode="VIEW"/>
+    <!-- attributes -->
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List" default="[{label: 'Name', fieldName: 'name', type: 'text'},
+            {label: 'Email', fieldName: 'email', type: 'text'},
+            {label: 'Phone', fieldName: 'phone', type: 'text'},
+            {label: 'Role', fieldName: 'userRole', type: 'text'}]"/>
+    <aura:attribute name="recordId" type="String" default="5005D00000341eDQAQ" />
+    <aura:attribute name="selectedRowsCount" type="Integer" default="0"/>
+	
+    <div style="display:flow-root;">
+        <h1 style="float:left;">Selected Rows: {!v.selectedRowsCount}</h1>
+        <div style="float:Right;" >
+            <lightning:button variant="brand" label="Send Email" onclick="{!c.showEmailComposer}" />
+        </div>
+    </div>
+    <br/>
+    <!-- the container element determine the height of the datatable -->
+    <div style="height: 251px">
+        <lightning:datatable style="height: 90% !important;display: block;"
+                             aura:id="contacts"
+                             columns="{!v.columns}"
+                             data="{!v.data}"
+                             keyField="id"
+                             selectedRows="{!v.selectedRows}"
+                             onrowselection="{!c.updateSelectedText}" />        
+    </div>
+    <c:EmailComposer aura:id="emailComposer" recordId="{!v.recordId}" />
+</aura:component>

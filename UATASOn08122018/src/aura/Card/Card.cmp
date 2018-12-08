@@ -1,0 +1,33 @@
+<aura:component controller="FieldUtils">
+    <aura:attribute type="String" name="cardName" required="true" />
+    <aura:attribute type="Object[]" name="sections" />
+    <aura:attribute type="Object[]" name="errors" />
+    <aura:attribute type="Object" name="valueMap" />
+    <aura:attribute type="Object" name="errorMap"  />
+    <aura:attribute type="Object" name="cacheData" />   
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:registerEvent name="dataChanged" type="c:Message"/>
+    
+    
+    <aura:handler name="fieldInfo" event="c:Message" action="{!c.updateValueMap}"/>
+    
+    <aura:method name="convertToRecord" action="{!c.convertToValueMap}" >
+    </aura:method>
+    
+    <aura:method name="getPicklistOptions" action="{!c.retrieveServerOptions}" >
+        <aura:attribute name="wizardSetting" type="Object" />
+    </aura:method>
+    
+    <aura:method name="validateFields" action="{!c.validate}" >
+    </aura:method>
+    
+    <aura:method name="refresh" action="{!c.refresh}" 
+                 description="used to refresh the card info"> 
+    </aura:method>
+    <aura:method name="updateFieldValue" action="{!c.updateValueMap}"/> 
+    <c:ErrorDisplay errors="{!v.errorMap.generalError}" />
+    <c:FormSection sections="{!v.sections}" aura:id="sections" />
+    
+</aura:component>

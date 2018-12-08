@@ -1,0 +1,47 @@
+<!-- Child Lightning Component for Create New Row Instance-->
+<aura:component >    
+    <!-- Aura Attribute for store single Contact[standard Object] Instance
+         And Store Index of Particular Instance --> 
+    <aura:attribute name="TradeTypeInstance" type="Object"/>
+    <aura:attribute name="rowIndex" type="String"/>
+
+    <!--Handler for add trade type-->
+
+    
+    <!-- Register 2 Lightning Event for handle add or Delete rows on Parent Component  --> 
+    <aura:registerEvent name="DeleteRowEvt" type="c:DeleteTradeTypeRowEvt"/> 
+    <aura:registerEvent name="EditRowEvt" type="c:EditTradeTypeRowEvt"/> 
+    
+    <!-- Table Row -->   
+    <tr class="slds-text-title_caps">
+        <td> 
+            {!v.rowIndex + 1}
+        </td>
+        <td>
+            <ui:outputText class="slds-input" value="{!v.TradeTypeInstance.tradeTypeVal}"/>
+        </td>        
+        <td>
+            <ui:outputText class="slds-input" value="{!v.TradeTypeInstance.licenceType}"/>
+        </td>
+        <!--<td>
+            <ui:inputText class="slds-input" value="{!v.TradeTypeInstance.licenceNo}"/>
+        </td>
+        <td>
+            <ui:inputPhone class="slds-input" value="{!v.TradeTypeInstance.licenceExpiry}"/>
+        </td>-->
+        <td>
+            <!-- conditionally Display Add or Delete Icons
+                 if rowIndex is 0 then show Add New Row Icon else show delete Icon
+             --> 
+                <a onclick="{!c.EditRow}">
+                  <lightning:icon iconName="utility:edit" class="slds-icon slds-icon_small" size="small" alternativeText="add"/>
+                  <span class="slds-assistive-text">Add Icon</span>
+                </a>    
+                 <a onclick="{!c.removeRow}">
+                   <lightning:icon variant="error" iconName="utility:delete" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                   <span class="slds-assistive-text">Delete Icon</span>
+                 </a>
+
+        </td> 
+    </tr>
+</aura:component>

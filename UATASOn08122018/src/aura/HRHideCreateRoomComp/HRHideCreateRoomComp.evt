@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="by this event we are capturing the save room transaction">
+    <aura:attribute name="roomCreatedFlag" type="string" default = "No"/>
+</aura:event>

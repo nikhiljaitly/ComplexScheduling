@@ -1,0 +1,13 @@
+.THIS {
+}
+.THIS .scrollable-booking-details-card {
+    max-height: 500px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+.THIS.spinner{
+    position: relative;
+}
+.THIS lightning-spinner.slds-spinner_container {
+    position: fixed !important;
+}

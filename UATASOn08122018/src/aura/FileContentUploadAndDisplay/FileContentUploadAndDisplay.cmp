@@ -1,0 +1,55 @@
+<aura:component controller="ContentVersionFileUploadController">
+    
+    <aura:attribute name="attachmentList" type="List"/>	 
+    <aura:attribute name="documentHeader" type="String"/>
+    <aura:attribute name="fileName" type="String" default=""/>
+    <aura:attribute name="fileDescription" type="String" default="No File Description.." />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="parentId" type="String" />
+    <aura:attribute name="showLoadingSpinner" type="boolean" default="false"/>   
+    <aura:attribute name="isRequired" type="Boolean" default="true"/>
+    
+    <aura:method name="initiate" action="{!c.doInit}" />
+    
+    <div class="slds-form-element slds-size_1-of-1">  
+        <aura:if isTrue="{!v.fileName == ''}">
+            <div class="slds-p-around_small">
+                <aura:if isTrue="{!v.isRequired}">
+                      <lightning:input aura:id="fileId" onchange="{!c.handleFilesChange}" type="file" name="file" 
+                                 label="{!'Add '+v.documentHeader}" multiple="false"/>
+                   <aura:set attribute="else">
+                       <lightning:input aura:id="fileId" class="slds-file-selectorRequired" onchange="{!c.handleFilesChange}" type="file" name="file" 
+                                 label="{!'Add '+v.documentHeader}" multiple="false"/>
+                    </aura:set>
+                </aura:if>
+                           
+                <div class="slds-text-body_small slds-text-color_error">{!v.fileName} </div>
+                <!--use aura:if for show-hide the loading spinner image--> 
+                <aura:if isTrue="{!v.showLoadingSpinner}">
+                    <div class="slds-text-body_small slds-text-color_error">Uploading... 
+                        <img src="/auraFW/resources/aura/images/spinner.gif" class="spinner-img" alt="Loading"/>'
+                    </div>
+                </aura:if>
+            </div>
+            <aura:set attribute="else">
+                <div class="slds-p-around_small" style="float: left;display: inline-flex;">
+                    <div class="slds-m-left_small slds-m-right_small slds-m-left_small boxBorder">
+                        <lightning:icon class="slds-m-around_xx-small" iconName="doctype:attachment"/>
+                        <ui:outputURL aura:id="oURL" value="{!'/servlet/servlet.FileDownload?file='+v.recordId}" label="{!v.fileName}" target="_blank"/>
+                        <a onclick="{!c.removeRow}">
+                            <lightning:icon variant="error" iconName="utility:delete" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                            <span class="slds-assistive-text">Delete Icon</span>                            
+                        </a>
+                        <aura:if isTrue="{!v.showLoadingSpinner}">
+                            Deleting... 
+                            <img src="/auraFW/resources/aura/images/spinner.gif" class="spinner-img" alt="Loading"/>'
+                        </aura:if>
+                    </div>         
+                </div>
+            </aura:set>
+        </aura:if>
+    </div>
+    <br/>
+    
+    <!--  <button class="slds-button slds-button_brand" onclick="{!c.doSave}">Upload {!v.fileDescription}</button> -->
+</aura:component>

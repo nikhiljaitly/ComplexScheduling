@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT" description="Used for component message transport">
+    <aura:attribute type="String" name="type" />
+    <aura:attribute type="Object" name="payload" />
+</aura:event>

@@ -1,0 +1,80 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" controller="ContentFileListController" access="global" >
+    <lightning:spinner aura:id="mySpinner" alternativeText="Loading" class="slds-hide"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="listOfNotes" type="ContentDocumentLink[]"/>
+    <aura:attribute name="recordId" type="String" description="Record to which the files should be attached" />
+    <aura:attribute name="LatestPublishedVersionId" type="String" default=""/>
+    <aura:attribute name="selectedValue" type="String" default=""/>
+    <aura:attribute name="isPdf" type="boolean" default="true"/>
+    <aura:attribute name="comunitityName" type="String" default=""/>
+    
+    <lightning:card title="{!'Invoices ('+v.listOfNotes.length+')'}" iconName="standard:work_type">
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer" width="151px">
+      <thead>
+        <tr class="slds-text-title--caps">           
+           <th class="slds-is-sortable slds-text-title--caps" scope="col">
+              <span class="slds-truncate" style="width:151px;" title="Name">FILE NAME</span>  
+           </th>  
+            <th class="slds-is-sortable slds-text-title--caps" scope="col">
+              <span class="slds-truncate" style="width:151px;" title="Name">Created By</span>  
+           </th>
+           <th class="slds-is-sortable slds-text-title--caps" scope="col">
+              <span class="slds-truncate" style="width:151px;" title="Name">Created Date</span>  
+           </th>
+        </tr>
+      </thead>
+      <tbody>
+        <aura:iteration items="{!v.listOfNotes}" var="note">  
+        <tr>
+          <th scope="row">			
+            <div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
+                <a onclick="{!c.showPreviewModal}" title="{!note.ContentDocument.LatestPublishedVersion.Title}" Id="{!note.ContentDocument.LatestPublishedVersionId}" href="javascript:void(0);"> {!note.ContentDocument.LatestPublishedVersion.Title}</a>
+            </div>
+          </th>
+          <th scope="row">			
+            <div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
+                     {!note.ContentDocument.LatestPublishedVersion.LastModifiedBy.Name}
+            </div>
+          </th>             
+          <th scope="row">			
+            <div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
+                     <ui:outputDate value="{!note.ContentDocument.CreatedDate}"/>
+            </div>
+          </th>
+        </tr>
+       </aura:iteration>          
+      </tbody>
+    </table> 
+    <!--<div class="slds-card__footer">
+        <a href="{!'/lightning/r/'+v.recordId+'/related/CombinedAttachments/view?ws=%2Flightning%2Fr%2FCase%2F'+v.recordId+'%2Fview'}"><span class="view-all-label">View All</span></a>
+    </div>-->
+        
+   <div aura:id="FileModal"  class="slds-modal slds-fade-in-open slds-hide" aria-hidden="false" role="dialog">
+        <div class="slds-modal__container" style="max-width:50rem;">
+            <div class="slds-modal__header">
+                <button class="slds-button slds-button--icon-inverse slds-modal__close" onclick="{!c.hideExampleModal}">
+                    <lightning:icon iconName="utility:close" size="medium" variant="bare"/>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 class="slds-text-heading--medium">Invoices</h2>
+            </div>
+            <div class="slds-modal__content slds-p-around--medium">
+                <div class="modalContent slds-align_absolute-center">
+                    <aura:if isTrue="{!v.isPdf}">
+                        	<img src="{!'/'+v.comunitityName+'/sfc/servlet.shepherd/version/renditionDownload?rendition=SVGZ&amp;versionId='+v.LatestPublishedVersionId+'&amp;perationContext=CHATTER'}" />
+                        <aura:set attribute="else">
+                            <img src="{!'/'+v.comunitityName+'/sfc/servlet.shepherd/version/renditionDownload?rendition=ORIGINAL_Png&amp;versionId='+v.LatestPublishedVersionId+'&amp;perationContext=CHATTER'}" />
+                        </aura:set>
+                    </aura:if>
+                </div>
+            </div>
+            <div class="slds-modal__footer">
+                <button class="slds-button slds-button--neutral slds-button--brand" onclick="{!c.hideExampleModal}">Close</button>
+            </div>
+        </div>
+ </div>
+        
+        
+    </lightning:card>
+    
+</aura:component>

@@ -1,0 +1,253 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="EOI_Controller">
+    <aura:attribute name="abn" type="String" default="17162913911"/>
+    <aura:attribute name="valError" type="Boolean" default="false"/>
+
+    <div class="enquiry-container">
+        <div class="slds-grid slds-wrap slds-small-size--6-of-8 slds-medium-size-6-of-8 slds-large-size--10-of-12">
+            <div class="slds-size--1-of-1 introduction-message">
+                The <b style="color:#1fc3df;">HomeRepairs</b> team would love to review your EOI submission with sufficient data being added into the fields below.
+            </div>
+            <div class="slds-size--1-of-1">
+                <div class="slds-grid slds-wrap enquiry-content">
+                    <div class="slds-size--4-of-6">
+                        <form action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST">
+                            
+                            <input type="hidden" name="oid" value="00DN0000000B7Vk" />
+                            <input type="hidden" name="retURL" value="https://uat-uat-homerepair.cs6.force.com/trade/s/thankyou" />
+                            <input type="hidden" name="lead_source" id="lead_source" value="Trade Portal" />
+                            <input type="hidden" id="country" name="country" value="Australia" />
+                            
+                            
+                            <div class="slds-form--stacked">
+                                
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="first_name">
+                                        <abbr class="slds-required" title="required">*</abbr>First Name
+                                    </label>
+                                    <div class="slds-form-element__control">
+                                        <input type="text" maxlength="40" name="first_name" size="20" id="first_name" class="slds-input" placeholder="Enter First Name" required="true"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="last_name">
+                                        <abbr class="slds-required" title="required">*</abbr>Last Name
+                                    </label>
+                                    <div class="slds-form-element__control">
+                                        <input id="last_name" maxlength="80" name="last_name" size="20" type="text"  class="slds-input" placeholder="Enter Last Name" required="true"/>
+                                    </div>
+                                </div>
+
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="phone">
+                                    Phone
+                                    </label>
+                                    <div class="slds-form-element__control">
+                                        <input id="phone" maxlength="80" name="phone" size="20" type="text" class="slds-input" placeholder="Enter Phone"/>
+                                    </div>
+                                </div>
+
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="email">
+                                        <abbr class="slds-required" title="required">*</abbr>Email
+                                    </label>
+                                    <div class="slds-form-element__control">
+                                        <input id="email" maxlength="80" name="email" size="20" type="text" class="slds-input" placeholder="Enter Email" required="true"/>
+                                    </div>
+                                </div>
+
+                                 <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="state">
+                                        <abbr class="slds-required" title="required">*</abbr>Street
+                                    </label>
+                                    <div class="slds-form-element__control">
+                                        <input id="street" maxlength="40" name="street" size="20" type="text" class="slds-input" placeholder="Enter Street Name" required="true"/>
+                                    </div>
+                                </div>
+                                                               
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="city">
+                                        <abbr class="slds-required" title="required">*</abbr>City
+                                    </label>
+                                    <div class="slds-form-element__control">
+                                        <input id="city" maxlength="40" name="city" size="20" type="text" class="slds-input" placeholder="Enter City Name" required="true"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="state">
+                                        <abbr class="slds-required" title="required">*</abbr>State/Province
+                                    </label>
+                                    <div class="slds-form-element__control">
+                                        <input id="state" maxlength="20" name="state" size="20" type="text" class="slds-input" placeholder="Enter State Name" required="true"/>
+                                    </div>
+                                </div>
+
+                                 <div class="slds-form-element" aura:id="abnForm">
+                                    <label class="slds-form-element__label" for="abn">
+                                        <abbr class="slds-required" title="required">*</abbr>ABN
+                                    </label>
+                                    <div class="slds-form-element__control">
+                                        <input id="00NN0000002k7JH" maxlength="11" name="00NN0000002k7JH" size="20" type="text" class="slds-input" placeholder="Enter a valid ABN" aura:id="abn" required="true" onchange="{!c.searchABNChange}"/>
+                                    </div>
+                                    <div class="slds-form-element__help slds-hide" id="abnformat-id" aura:id="abnHelp">ABN should be 11 digits</div>
+                                    <div class="slds-form-element__help slds-hide" id="invalidabn-id" aura:id="abnError">Invalid ABN. Please enter a valid ABN</div>
+                                    <!--<div>
+                                        <ui:button label="LookUp ABN" class="slds-button_neutral" press="{!c.lookUpABN}"/>
+                                    </div>-->
+                                </div>
+                            
+
+                                 <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="company">Client Name / Company</label>
+                                    <div class="slds-form-element__control">
+                                        <input id="company" maxlength="40" name="company" size="20" type="text" class="slds-input" placeholder="Enter Client Name or Company" />
+                                    </div>
+                                </div>
+
+                                <!--GST Status-->
+                                 <div class="slds-form-element">
+                                    <label class="slds-form-element__label"  for="gst">GST Status
+                                    </label>
+                                    <div class="slds-select_container"> 
+                                        <select class="slds-select" id="gst" name="gst" title="GST" aura:id="gstStatus">
+                                        <option value="">-None-</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+
+                                        </select>
+                                    </div>
+                                </div> 
+
+
+                                 <div class="slds-form-element">
+                                    <label class="slds-form-element__label"  for="Trade Type">Trade Type
+                                    </label>
+                                    <div class="slds-select_container"> 
+                                        <select class="slds-select" id="00NN0000002k7JM" name="00NN0000002k7JM" title="Trade Types" multiple="multiple">
+
+                                        <option value="">--None--</option>
+                                        <option value="AIR CON REPAIR &amp; SERVICE">AIR CON REPAIR &amp; SERVICE</option>
+                                        <option value="ANTENNAS">ANTENNAS</option>
+                                        <option value="APPLIANCES">APPLIANCES</option>
+                                        <option value="ASBESTOS REMOVAL">ASBESTOS REMOVAL</option>
+                                        <option value="BLINDS &amp; SHADE SAILS">BLINDS &amp; SHADE SAILS</option>
+                                        <option value="BRICKLAYER">BRICKLAYER</option>
+                                        <option value="CABINETS - JOINERY">CABINETS - JOINERY</option>
+                                        <option value="CARPENTER - BUILDER">CARPENTER - BUILDER</option>
+                                        <option value="CLEANER">CLEANER</option>
+                                        <option value="DOORS - WINDOWS">DOORS - WINDOWS</option>
+                                        <option value="ELECTRICIAN">ELECTRICIAN</option>
+                                        <option value="ENGINEERING">ENGINEERING</option>
+                                        <option value="FENCING">FENCING</option>
+                                        <option value="FLOORING">FLOORING</option>
+                                        <option value="FURNITURE REMOVAL">FURNITURE REMOVAL</option>
+                                        <option value="GARAGES - GATES - SHEDS">GARAGES - GATES - SHEDS</option>
+                                        <option value="GLAZIER">GLAZIER</option>
+                                        <option value="INSULATION">INSULATION</option>
+                                        <option value="LOCKSMITH">LOCKSMITH</option>
+                                        <option value="MAKESAFES ONLY">MAKESAFES ONLY</option>
+                                        <option value="PAINTERS">PAINTERS</option>
+                                        <option value="PLASTERERS">PLASTERERS</option>
+                                        <option value="PLUMBER">PLUMBER</option>
+                                        <option value="RENDER">RENDER</option>
+                                        <option value="RESTORER AND MOULD">RESTORER AND MOULD</option>
+                                        <option value="ROOF PLUMBER">ROOF PLUMBER</option>
+                                        <option value="ROOF TILER">ROOF TILER</option>
+                                        <option value="ROOFER- SPECALIST PERGOLA">ROOFER- SPECALIST PERGOLA</option>
+                                        <option value="ROOFER- SPECALIST PERGOLA / PATIO AWNINGS / CARPORTS">ROOFER- SPECALIST PERGOLA / PATIO AWNINGS / CARPORTS</option>
+                                        <option value="ROOFER-METAL">ROOFER-METAL</option>
+                                        <option value="ROOFER-TILED">ROOFER-TILED</option>
+                                        <option value="RUBBISH">RUBBISH</option>
+                                        <option value="SCAFFOLD">SCAFFOLD</option>
+                                        <option value="SHOWER SCREENS">SHOWER SCREENS</option>
+                                        <option value="SKYLIGHTS">SKYLIGHTS</option>
+                                        <option value="SOLAR">SOLAR</option>
+                                        <option value="SOLAR-ELECTRIC PANELS">SOLAR-ELECTRIC PANELS</option>
+                                        <option value="SOLAR-HOT WATER SERVICE">SOLAR-HOT WATER SERVICE</option>
+                                        <option value="TILER">TILER</option>
+                                        <option value="TREE SERVICES">TREE SERVICES</option>
+                                        <option value="Other">Other</option>
+
+                                        </select>
+                                    </div>
+                                </div> 
+
+                                 <div class="slds-form-element">
+                                    <label class="slds-form-element__label"  for="Coverage Area">Coverage Area
+                                    </label>
+                                    <div class="slds-select_container"> 
+                                        <select class="slds-select" id="00NN0000002k7JI" name="00NN0000002k7JI" title="Coverage Area" multiple="multiple">
+
+                                        <option value="">--None--</option>
+                                        <option value="NSW Central Coast/ Newcastle">NSW Central Coast/ Newcastle</option>
+                                        <option value="NSW Sydney Metro NE">NSW Sydney Metro NE</option>
+                                        <option value="NSW Sydney Metro NW">NSW Sydney Metro NW</option>
+                                        <option value="NSW Sydney Metro SE">NSW Sydney Metro SE</option>
+                                        <option value="NSW Sydney Metro SW">NSW Sydney Metro SW</option>
+                                        <option value="Wollongong">Wollongong</option>
+                                        <option value="QLD Brisbane North">QLD Brisbane North</option>
+                                        <option value="QLD Brisbane South">QLD Brisbane South</option>
+                                        <option value="QLD Gold Coast">QLD Gold Coast</option>
+                                        <option value="QLD Ipswich">QLD Ipswich</option>
+                                        <option value="QLD Sunshine Coast">QLD Sunshine Coast</option>
+                                        <option value="VIC Ballarat">VIC Ballarat</option>
+                                        <option value="VIC Geelong">VIC Geelong</option>
+                                        <option value="VIC Melbourne Metro NE">VIC Melbourne Metro NE</option>
+                                        <option value="VIC Melbourne Metro NW">VIC Melbourne Metro NW</option>
+                                        <option value="VIC Melbourne Metro SE">VIC Melbourne Metro SE</option>
+                                        <option value="VIC Melbourne Metro SW">VIC Melbourne Metro SW</option>
+                                        <option value="VIC Mornington Peninsula">VIC Mornington Peninsula</option>
+
+                                        </select>
+                                    </div>
+                                </div> 
+
+                                 <div class="slds-form-element">
+                                    <label class="slds-form-element__label"  for="Licence?">Licence?
+                                    </label>
+                                    <div class="slds-select_container"> 
+                                        <select class="slds-select" id="00NN0000002k7JL" name="00NN0000002k7JL" title="Licence?">
+
+                                        <option value="">--None--</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                        <option value="N/A">N/A</option>
+
+                                        </select>
+                                    </div>
+                                </div> 
+
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="Licence Number">
+                                    Licence Number
+                                    </label>
+                                    <div class="slds-form-element__control">
+                                        <input  id="00NN0000002k7JJ" maxlength="15" name="00NN0000002k7JJ" size="20" type="text" class="slds-input" placeholder="Enter Licence No"/>
+                                    </div>
+                                </div> 
+
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="Licence Type">
+                                    Licence Type
+                                    </label>
+                                    <div class="slds-form-element__control">
+                                        <input  id="00NN0000002k7JK" maxlength="30" name="00NN0000002k7JK" size="20" type="text" class="slds-input" placeholder="Enter Licence Type"/>
+                                    </div>
+                                </div>                                                                                             
+
+                                <div class="slds-form-element">
+                                    <!--<button type="submit" name="submit" class="slds-button slds-button-brand">Submit EOI</button>-->
+
+                                    <lightning:button type="submit" name="submit" variant="brand" label="Submit EOI" disabled="{!v.valError}"/>
+                                </div>
+                            </div>
+                            
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

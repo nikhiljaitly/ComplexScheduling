@@ -1,0 +1,7 @@
+<aura:event type="APPLICATION" 
+            description="Event fired when a selection is made in the ClaimSrvApptManager component">
+	<!-- possible values are APPOINTMENT_SELECTED, NON_APPOINTMENT_SELECTED -->
+    <aura:attribute name="messageType" type="String"/>
+    <!-- if a Service Appointment Selected, it's Unique Id -->
+    <aura:attribute name="selectedAppt" type="String"/>
+</aura:event>

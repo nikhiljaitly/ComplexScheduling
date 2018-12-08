@@ -1,0 +1,52 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" controller="WorkOrderLineItemListController" access="global" >
+    <lightning:spinner aura:id="mySpinner" alternativeText="Loading" class="slds-hide"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="listOfWorkOderLineItem" type="WorkOrderLineItem[]"/>
+    <aura:attribute name="recordId" type="String" description="Work Order Id" />
+    <aura:attribute name="selectedId" type="String" description="Work Order Line Item Id" default="" />
+    <aura:attribute name="comunitityName" type="String" default=""/>
+    <lightning:card title="{!'Work Order Line Item ('+v.listOfWorkOderLineItem.length+')'}" iconName="standard:work_type">
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer" width="151px">
+      <thead>
+        <tr class="slds-text-title--caps">           
+           <th class="slds-is-sortable slds-text-title--caps" scope="col">
+              <span class="slds-truncate" style="width:151px;" title="Name">Line Item Number</span>  
+           </th>  
+            <th class="slds-is-sortable slds-text-title--caps" scope="col">
+              <span class="slds-truncate" style="width:151px;" title="Name">Product Name</span>  
+           </th>
+           <th class="slds-is-sortable slds-text-title--caps" scope="col">
+              <span class="slds-truncate" style="width:151px;" title="Name">Action</span>  
+           </th>
+        </tr>
+      </thead>
+      <tbody>
+        <aura:iteration items="{!v.listOfWorkOderLineItem}" var="woli" indexVar="index"> 
+            <aura:if isTrue="{!lessthanorequal(index,5)}">
+                <tr>
+                  <th scope="row">			
+                    <div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
+                        <a href="{!'/trade/s/detail/'+woli.Id}">{!woli.LineItemNumber}</a>
+                    </div>
+                  </th>                               
+                  <th scope="row">			
+                    <div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
+                             {!woli.Product_Description__c}
+                    </div>
+                  </th>
+                    <th scope="row">		
+                    	<lightning:buttonMenu aura:id="menu" onselect="{!c.handleEdit}" alternativeText="Show menu">
+                            <lightning:menuItem value="{!woli.Id}" label="Edit" />
+                        </lightning:buttonMenu>
+                    </th>
+                </tr>
+            </aura:if>
+        
+       </aura:iteration>          
+      </tbody>
+    </table> 
+    <div class="slds-card__footer">
+        <a href="{!'/t/s/relatedlist/'+v.recordId+'/WorkOrderLineItems'}"><span class="view-all-label">View All</span></a>
+    </div>
+    </lightning:card>
+</aura:component>

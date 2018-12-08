@@ -1,0 +1,87 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" controller="LightningFileUploadController" access="global" >
+    <lightning:spinner aura:id="mySpinner" alternativeText="Loading" class="slds-hide"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler event="force:refreshView" action="{!c.doInit}"/>
+    <aura:attribute name="listOfDocuments" type="ContentDocumentLink[]"/>
+    <aura:attribute name="recordId" type="String" description="Record to which the files should be attached" />
+    <aura:attribute name="claimId" type="String" description="Claim Record to which the files should be attached" />
+    <aura:attribute name="selectedValue" type="String" default=""/>
+    <aura:attribute name="dType" type="String[]" default="Invoice"/>
+    <aura:attribute name="docType" type="String[]" default=""/>
+    <aura:attribute name="isFileUpload" type="Boolean" default="" access="global"/>
+    <aura:attribute name="isWorkOrder" type="Boolean" default="false" />
+    <aura:attribute name="isTradePlatform" type="Boolean" default="" />
+    <aura:attribute name="IsActivityRequired" type="Boolean" default="" />
+    <aura:attribute name="fileToBeUploaded" type="Object[]"/>
+    <aura:attribute name="Platform" type="String" default="Claim"/>
+    <aura:attribute name="uploadedAttachments" type="List" />
+    <aura:attribute name="disabled" type="Boolean" default="true"/>
+    <lightning:card title="File Upload">
+        <div style="text-align: left;margin: 10px;"> 
+            <lightning:select name="select" onchange="{!c.onChange}" aura:id="fieldId" label="Select a Document Type" value="{!v.selectedValue}" required="true" messageWhenValueMissing="Please select the document type">
+                <option value="">-- None --</option>
+                <aura:iteration items="{!v.docType}" var="docType">
+                    <option value="{!docType}" text="{!docType}"></option>
+                </aura:iteration>
+            </lightning:select>
+            <br/>
+            <aura:if isTrue="{!!v.isWorkOrder}">
+                <aura:if isTrue="{!!v.IsActivityRequired}">
+                    <div>Do you want to send this to Claims Hub?</div>
+                    <lightning:input type="checkbox" aura:id="sendDocToClaimHub" label="" name="sendDocToClaimHub" onchange="{!c.onChangeSendDocToClaimHub}"/>
+                    <br/>
+                </aura:if>
+            </aura:if>
+            <aura:if isTrue="{!v.isFileUpload}">
+                <b>Please upload the file by using file upload button below</b>
+            </aura:if>
+            <lightning:fileUpload  name="fileUploader"
+                                  label= "Select Attachments"
+                                  multiple="false"
+                                  aura:id="fileUpload"
+                                  accept="['.pdf','.csv', '.jpg', '.png', '.gif', '.word','.xlsx', '.zip', '.rar']"
+                                  disabled="{!v.disabled}"
+                                  recordId="{!v.recordId}"
+                                  onuploadfinished="{! c.handleUploadFinished }"/>
+            
+        </div>
+        <aura:if isTrue="{!!v.IsActivityRequired}">
+        <table class="slds-table slds-table--bordered slds-table--cell-buffer" width="151px">
+            <thead>
+                <tr class="slds-text-title--caps">           
+                    <th class="slds-is-sortable slds-text-title--caps" scope="col">
+                        <span class="slds-truncate" style="width:151px;" title="Name">FILE NAME</span>  
+                    </th>  
+                    <th class="slds-is-sortable slds-text-title--caps" scope="col">
+                        <span class="slds-truncate" style="width:51px;" title="LastModifiedBy">Document Type</span>  
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.listOfDocuments}" var="doc">  
+                    <tr>
+                        <th scope="row">
+                            
+                            <div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
+                                <a href="{!'/lightning/r/ContentDocument/'+doc.ContentDocumentId+'/view'}"> {!doc.ContentDocument.LatestPublishedVersion.Title}</a>
+                            </div>
+                        </th> 
+                        <td scope="row">
+                            
+                            <div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
+                                {!doc.ContentDocument.Description}
+                            </div>
+                        </td> 
+                        
+                    </tr>
+                </aura:iteration>
+                
+            </tbody>
+        </table> 
+        <div class="slds-card__footer">
+            <a href="{!'/lightning/r/'+v.recordId+'/related/CombinedAttachments/view?ws=%2Flightning%2Fr%2FCase%2F'+v.recordId+'%2Fview'}"><span class="view-all-label">View All</span></a>
+            
+        </div>
+        </aura:if>
+    </lightning:card>    
+</aura:component>

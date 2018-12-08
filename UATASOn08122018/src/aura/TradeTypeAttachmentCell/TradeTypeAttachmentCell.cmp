@@ -1,0 +1,28 @@
+<aura:component Implements="forceCommunity:availableForAllPageTypes">
+<aura:attribute name="DocAdded" type="boolean" default="false"/>
+<aura:attribute name="leadRecord" type="Lead" default="{sobjectType : 'Lead'}"/>
+<aura:attribute name="tradeTypeRec" type="Trade_Type__c" default="{sobjectType : 'Trade_Type__c'}"/>
+<aura:attribute name="attachments" type="attachment[]"/>
+<aura:handler name="change" value="{!v.attachments}" action="{!c.attachmentsChange}"/>  
+<aura:handler name="DeleteRowEvt" event="c:DeleteFileRow" action="{!c.removeDeletedRow}"/>
+
+	<aura:if isTrue="{!!v.DocAdded}">                                  
+        <div class="slds-form-element__row">
+            <div class="slds-form-element slds-size_2-of-2">
+                <div class="slds-form-element"> 
+                    <c:FileUpload parentId="{!v.leadRecord.Id}" fileDescription="{!v.tradeTypeRec.unknown_custom_field}" attachmentList="{!v.attachments}" aura:id="ttFile" documentHeader="Licence"/>
+				</div>  
+            </div>                         
+        </div>
+            <aura:set attribute="else">
+                <div class="slds-form-element__row" id="otherInsuranceUpload">
+                    <div class="slds-form-element slds-size_2-of-2">
+                       <div class="slds-form-element">                                         
+                            <c:AttachmentEntry attachmentsList="{!v.attachments}" fileDescription="{!v.tradeTypeRec.unknown_custom_field}"/>
+                        </div>  
+                    </div>                         
+                </div>                                       
+            </aura:set>
+    </aura:if> 
+
+</aura:component>

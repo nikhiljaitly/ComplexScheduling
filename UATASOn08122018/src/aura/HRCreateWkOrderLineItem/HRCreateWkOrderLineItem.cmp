@@ -1,0 +1,99 @@
+<aura:component controller="createWorkOrderLineItemCtrl" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <aura:attribute name="selectedPricebookEntryLookUpRecord" type="sObject" default="{}"/>
+    <aura:attribute name="selectedWorkOrderLookUpRecord" type="sObject" default="{}"/>
+    <aura:attribute name="selectedServiceApptLookUpRecord" type="sObject" default="{}"/>
+    <aura:attribute name="selectedRoomLookUpRecord" type="sObject" default="{}"/>
+    <aura:attribute name="objWorkOrderLineItem" type="WorkOrderLineItem" default="{'sobjectType':'WorkOrderLineItem'}"/>
+    <aura:attribute name="listOfSearchRecords" type="List" description="Use,for store the list of search records which returns from apex class"/>
+    <aura:attribute name="priceBookId" type="string" description="Use,for store the PriceBookId returned from apex class"/>
+    <aura:attribute name="labourPrice" type="decimal"/>
+    <aura:attribute name="materialPrice" type="decimal"/>
+    <aura:attribute name="labourTime" type="decimal"/>
+    <aura:attribute name="recordId" type="Id" default=""/>
+
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    
+    <!--declare events hendlers-->  
+    <aura:handler name="SelectedRecordEvent" event="c:selectedsObjectRecordEvent" action="{!c.handleComponentEvent}"/>
+    
+    <aura:handler name="handleClearedPriceBookEntryEvent" event="c:handleClearedPriceBookEntryEvent" action="{!c.clearCosts}"/>
+        
+   <!-- <aura:handler event="aura:waiting" action="{!c.showSpinner}"/> !-->
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>    
+    <!--loading spinner start... style=Brand Medium (blue dots)-->
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <!-- Loading spinner end-->
+    
+ <!-- <form class="slds-grid slds-gutters"> !-->
+    <div class="slds-col slds-size_1-of-1">  
+   <!-- <div class="slds-m-around_large"> !-->
+        <c:HRPriceBookWkType objectAPIName="PricebookEntry" 
+                             subHeadingFieldsAPI="ProductCode"
+                             IconName="standard:pricebook" 
+                             selectedRecord="{!v.selectedPricebookEntryLookUpRecord}" 
+                             label="Product Name"
+                             woRecordId="{!v.recordId}"/>
+        <br/>
+        
+     <aura:if isTrue="{!v.selectedPricebookEntryLookUpRecord.Id != undefined}">
+        <lightning:recordEditForm
+                onload="{!c.overrideCosts}"
+                onsubmit=""
+                onsuccess=""
+                recordId="{!v.priceBookId}"
+                objectApiName="Pricebook2">
+                <!-- the messages component is for error messages -->
+                <lightning:messages />
+              
+                <lightning:inputField aura:id="labourprice" fieldName="Labour_Price__c" />
+                <lightning:inputField aura:id="materialprice" fieldName="Material_Price__c" />
+                <lightning:inputField aura:id="labourtime" fieldName="Labour_TIME_mins__c" formatter="decimal"/>
+                <lightning:input aura:id="quantity"
+                                 type="number"
+                                 name="quantity"
+                                 label="Quantity"
+                                 min = "1.00"                         
+                                 step="0.01"
+                                 value="1"
+                                 messageWhenRangeUnderflow="Enter an quantity that's at least 1."/>        
+         </lightning:recordEditForm> 
+         
+         <c:HRWoliRoomLookUp objectAPIName="Room__c" 
+                            subHeadingFieldsAPI="Name"
+                            IconName="standard:lead" 
+                            selectedRecord="{!v.selectedRoomLookUpRecord}"
+                            woRecordId = "{!v.recordId}"
+                            label="Room"/> 
+        <br/>         
+	 </aura:if>       
+       <br/>
+        
+      <!-- <c:HRWorkOrderLookUp objectAPIName="WorkOrder" 
+                             subHeadingFieldsAPI="WorkOrderNumber"
+                             IconName="standard:account" 
+                             selectedRecord="{!v.selectedWorkOrderLookUpRecord}" 
+                             label="Work Order"/>
+       <br/>
+        
+              <c:HRServiceAppointmentLookUp objectAPIName="ServiceAppointment" 
+                             subHeadingFieldsAPI="AppointmentNumber"
+                             IconName="standard:contact" 
+                             selectedRecord="{!v.selectedServiceApptLookUpRecord}" 
+                             label="Service Appointment"/> 
+        <br/> !-->
+
+        <div class="slds-m-top_medium">
+            <button class="slds-button slds-button_brand" onclick="{!c.saveWoliRecord}">Save</button>
+            <button class="slds-button slds-button_brand" style="margin-left:20px" onclick="{!c.handleCancel}">Cancel</button>         
+        </div>
+    </div>
+ <!-- </form> !-->
+</aura:component>
