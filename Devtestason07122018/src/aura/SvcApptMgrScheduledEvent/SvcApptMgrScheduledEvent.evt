@@ -1,0 +1,5 @@
+<aura:event type="APPLICATION" 
+            description="Event fired when a service appointment is scheduled in the ServiceAppointmentManager component">
+	<!-- possible values are APPOINTMENT_SCHEDULED -->
+    <aura:attribute name="messageType" type="String"/>
+</aura:event>

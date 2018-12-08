@@ -1,0 +1,65 @@
+<aura:component  implements="force:appHostable" >
+    <!--@Desription:This componnet is used for showing the user a message with single lin eonly and without header and then based on user input 
+                    it the application goes further-->
+    <!-- Main Attributes -->
+    <aura:attribute name="toastType" type="String" default="success" 
+                    description="The Attribute will be used for the variants of the toast. 
+                                 The supported variants are info,success,error and warning. Default is info."/>
+    <aura:attribute name="title" type="String" default="WARNING!" 
+                    description="The Attribute will be used for storing the tittle which will be displayed in the body of the toast"/>
+    <aura:attribute name="bodyMessage" type="String" default="Please complete the relevent section in environment tools."
+                    description="The attribute will be used to display the body message in the toast."/>
+    <aura:attribute name="actionName" type="String" default="Okay,Thanks !" 
+                    description="The attribute will be used to display the action name."/>
+    <aura:attribute name="displayToast" type="boolean" default="true" 
+                    description="The attribute will be used to show/hide the toast. Default is true."/>
+    <aura:attribute name="timer" type="Integer" 
+                    description="The attribute will be used to hold the timeout that closes the toast. The Values has to be given in Mili Seconds."/>
+    
+    <aura:attribute name="displayCrossIcon" type="Boolean" />
+    <!-- CSS Attributes -->
+    <aura:attribute name="tittleClass" type="String" default=" slds-text-heading_small" 
+                    description="The attribute will be used for header text class. 
+                                 Only lightning standard CSS class has to be used. 
+                                 Default is slds-text-heading_small."/>
+    <aura:attribute name="bodyClass" type="String" default=" slds-text-heading_small" 
+                    description="The attribute will used for body text class.
+                                 Only lightning standard CSS class has to be used. 
+                                 Default is slds-text-heading_small."/>
+    <aura:attribute name="actionNameClass" type="String" default="slds-text-heading_large" 
+                    description="The attribute will be used for actionName text class. 
+                                 Only lightning standard CSS class has to be used. 
+                                 Default is slds-text-heading_large."/>
+    <aura:attribute name="iconSize" type="String" default="large" 
+                    description="The attribute will be used for the size of the action button.
+                                 Options include x-small, small, medium, and large. Default is large."/>
+    
+    <!-- Handle Event-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <!-- Register Event -->
+    
+    
+    <!--standard toast-->
+    
+    <aura:if  isTrue="{!v.displayToast}">
+        <div>
+            <div class="slds-notify_container slds-is-relative ">
+                <div class="{!'slds-notify slds-notify_toast toastSizeClassMob  toast_height-Class  slds-theme_' + v.toastType}" role="alert" >
+                       <lightning:layout horizontalAlign="spread" verticalAlign="stretch" multipleRows="true"  >
+                            <lightning:layoutItem flexibility="auto"  size="12" smallDeviceSize="8" mediumDeviceSize="12" largeDeviceSize="10" padding="horizontal-large">
+                                <div class=" slds-text-color_inverse slds-text-heading_medium"> 
+                                    <span class="slds-text-color_inverse slds-p-right_xx-large "><span class="{!'slds-p-right_medium  slds-text-title_bold'+v.tittleClass}">{!v.tittle}</span><span class="{!'TextWrapClass'+v.bodyClass}"><aura:unescapedHtml value="{!v.bodyMessage}"/></span></span> 
+                                </div>
+                            </lightning:layoutItem>
+                            <aura:if isTrue="{!v.displayCrossIcon}">
+                                <lightning:layoutItem >
+                                    <lightning:buttonIcon class="slds-notify__close" variant="bare-inverse" size="small" iconName="utility:close" alternativeText="Close Toast" onclick="{!c.closeToast}"/>
+                                </lightning:layoutItem>
+                            </aura:if>
+                        </lightning:layout>
+                    </div>
+                </div>
+            </div>
+    </aura:if>
+</aura:component>

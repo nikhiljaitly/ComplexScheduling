@@ -1,0 +1,17 @@
+{
+    "projectName": "UATason07122018",
+    "username": "nikhil.jaitly@homerepair.com.uat",
+    "id": "dd666a30-f9ba-11e8-baaa-5fd163878fb5",
+    "namespace": "",
+    "orgType": "developer",
+    "loginUrl": "https://login.salesforce.com/",
+    "instanceUrl": "https://homerepair--UAT.cs6.my.salesforce.com",
+    "workspace": "/Users/nj/Documents",
+    "subscription": [
+        "ApexClass",
+        "ApexComponent",
+        "ApexPage",
+        "ApexTrigger",
+        "StaticResource"
+    ]
+}

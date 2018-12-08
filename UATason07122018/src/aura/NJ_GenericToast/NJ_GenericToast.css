@@ -1,0 +1,43 @@
+.THIS .TextWrapClass{
+    white-space: nowrap;
+}
+.THIS .slds-button__icon {
+    fill: white !important; 
+}
+.THIS .closeToastClass{
+    position: absolute;
+    right: -26px;
+    margin-top: -63px;
+}
+.THIS .toast_height-Class{
+    height: 35px;
+}
+.THIS .textAlign_Class
+{
+    margin-top: 10px;  
+}
+
+
+@media (min-width: 320px) and (max-width:700px){
+    .THIS .TextWrapClass{
+        white-space: normal !important;
+    }
+    .THIS .toastSizeClassMob  {
+        min-width:16rem !important;
+    }
+    .THIS .toastGridClass {
+        display: unset;
+    }
+    .THIS .toastSize1of5ClassMob {
+        width: 100%;
+        padding-top:5px;
+    }
+    .THIS .closeToastClass{
+        position: absolute;
+        right: -31px;
+        margin-top: -114px;
+    }
+    .THIS .toast_height-Class{
+    height: 115px;
+}
+}

@@ -1,0 +1,10 @@
+<aura:component implements="force:hasRecordId,force:lightningQuickAction" >
+	  <aura:attribute name="summaries" type="NJ_SelectOptionLightning[]" access="public" />
+    <lightning:layout >
+    	  <aura:iteration items="{!v.summaries}" var="sum">
+             
+        			<c:NJ_HighlightPanelItem borderColor="{!sum.colorCode}" iconName="{!sum.iconName}" summarisedStatus="{!sum.label}" appointmentCount="{!sum.total}" alternativeText="{!sum.value}"/>
+    	 
+          </aura:iteration>
+    </lightning:layout>
+</aura:component>
