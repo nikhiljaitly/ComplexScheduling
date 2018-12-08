@@ -1,0 +1,115 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" 
+                access="global"
+                controller="HRGanttChildController">
+    
+    <!-- moment.js library to assist with date/time handling -->
+    <ltng:require scripts="{!$Resource.momentJS}" afterScriptsLoaded="{!c.afterMomentScriptsLoaded}" />
+    
+    <!-- Id of the Claim we are working on -->
+    <aura:attribute name="claimId" type="Id" />
+  
+    <aura:attribute name="ganttData" type="Object" required="{!true}" description="The ganttData based on which chart renders."/>
+    
+    <!-- handle application event for a Service Appointment being scheduled in another component -->
+    <aura:handler event="c:SvcApptMgrScheduledEvent" action="{!c.handleSvcApptMgrScheduledEvent}"/>
+    
+    <!-- Toggle re-rendering of Gantt Chart -->
+    <aura:attribute name="reRenderChartFlag" type="Boolean" default="false" />
+    <aura:attribute name="showModal" type="Boolean" default="false" />
+    <aura:attribute name="options" type="List" default="[
+    {'label': 'Ross', 'value': 'option1'},
+    {'label': 'Rachel', 'value': 'option2'}
+    ]"/>
+    <aura:attribute name="value" type="List" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:attribute name="modalTitle" type="String" />
+    <aura:attribute name="isTentativeConfirm" type="Boolean" />
+    <aura:attribute type="Boolean" name="showError" />
+    <aura:attribute type="Boolean" name="modalError" />
+    <aura:attribute type="Boolean" name="disableModalConfirm" default="false" /> 
+    <aura:attribute type="String" name="errorTitle" />
+    <aura:attribute type="String" name="errorMesg" />
+    <aura:attribute type="Boolean" name="isInProcess" />
+    <aura:attribute type="Boolean" name="selAll"  default="false" />
+
+    <div style="text-align: center;" class="slds-m-top_x-small">
+    	<lightning:button variant="brand" 
+                      label="Confirm Appointments" 
+                      title="ScheduleAppointments" 
+                      onclick="{!c.handleGetTentativeAppointment}"
+                       />
+        <lightning:button variant="brand" 
+                      label="Unschedule Appointments" 
+                      title="UnscheduleAppointments" 
+                      onclick="{!c.handleGetConfirmAppointment}" />
+    </div>
+   
+    <div class="chartDiv">
+        <c:HRGanttChart type="gantt" 
+                    data="{!v.ganttData}" 
+                    chartRendered="{!v.reRenderChartFlag}"
+                    ganttMarginRight="20"
+                    ganttCursorColor="#55bb76"
+                    ganttValueBalloonsEnabled="true"
+                    ganttCursorAlpha="1"
+                    ganttValueLineAlpha="1"
+                    ganttValueLineBalloonEnabled="true"
+                    ganttValueLineEnabled="true"
+                    ganttZoomable="true"
+                    ganttValueZoomable="true"
+                    ganttBrightnessStep="20"
+                    ganttRotate="true"
+                    ganttStartDate="2018-08-01"
+                    ganttFillAlphas="1"
+                    ganttLineAlpha="1"
+                    ganttLineColor="#FFFFFF"
+                    ganttAutoGridCount="true"
+                    ganttColumnWidth="0.25"
+                    /> 
+    </div>
+    
+    <!--ganttLineColor="#FFFFFF"-->
+    
+    <aura:if isTrue = "{!v.isProcessing}"> 
+            <lightning:spinner alternativeText="Loading" size="medium" />
+    </aura:if>
+    <aura:if isTrue="{!v.showModal}">
+        <div aria-hidden="true" id="modals" role="dialog"  class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <c:NJ_GenericToast toastType="error" displayToast="{!v.showError}" title="{!v.errorTitle}"  bodyMessage="{!v.errorMesg}" displayCrossIcon="true" />
+                <div class="slds-modal__header">
+                    <h2>{!v.modalTitle}</h2>
+                    <lightning:buttonIcon size="large" class="closeIcon" iconName="utility:close"  variant="bare-inverse" title="close" alternativeText="Close window" onclick="{!c.handleHideModalBox}"/>
+                    <span class="slds-assistive-text">Close</span>
+                </div>
+                <div class="slds-modal__content">
+                    <div class="slds-m-around_large">
+                        <aura:if isTrue="{!not(empty(v.modalError))}">
+                            <div style="color:Red;">{!v.modalError}</div>
+                        </aura:if>
+                        <aura:if isTrue="{!empty(v.modalError)}">
+                            <lightning:input checked="{!v.selAll}" type="checkbox" onchange="{!c.handleSelectAll}" label="Select All" name="selectAll"/>
+                        </aura:if>
+                        <lightning:checkboxGroup name="group" label=" "
+                                             options="{! v.options }" value="{! v.value }" />
+                    </div>
+                </div>
+                <div class="slds-modal__footer">
+                    <div class="slds-align_absolute-center">
+                        <aura:if isTrue="{!v.isTentativeConfirm}">
+                            <lightning:button variant="brand" label="Confirm" 
+                                          title="Confirm" onclick="{!c.handleConfirmAppointment}"
+                                          disabled="{!or(v.isInProcess,v.disableModalConfirm)}" />
+                        </aura:if>
+                        <aura:if isTrue="{!not(v.isTentativeConfirm)}">
+                            <lightning:button variant="brand" label="Unschedule" 
+                                          title="Unschedule" onclick="{!c.handleUnscheduleAppointment}"
+                                          disabled="{!or(v.isInProcess,v.disableModalConfirm)}" />
+                        </aura:if>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-backdrop slds-backdrop--open" id="backGroundSectionId"></div>
+    </aura:if>
+</aura:component>

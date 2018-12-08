@@ -1,0 +1,18 @@
+{
+    "projectName": "DevtestAsOn08122018",
+    "username": "nikhil.jaitly@homerepair.com.devtest",
+    "id": "53644730-fadc-11e8-a5df-afddd2a9f2be",
+    "namespace": "",
+    "orgType": "developer",
+    "loginUrl": "https://login.salesforce.com/",
+    "instanceUrl": "https://homerepair--DevTest.cs72.my.salesforce.com",
+    "workspace": "/Users/nj/Documents",
+    "subscription": [
+        "ApexClass",
+        "ApexComponent",
+        "ApexPage",
+        "ApexTrigger",
+        "AuraDefinitionBundle",
+        "StaticResource"
+    ]
+}

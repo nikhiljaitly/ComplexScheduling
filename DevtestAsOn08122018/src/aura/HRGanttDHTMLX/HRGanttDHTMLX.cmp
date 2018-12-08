@@ -1,0 +1,20 @@
+<aura:component access="GLOBAL" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes">
+     
+   <ltng:require scripts="{!$Resource.dhtmlxgantt}" afterScriptsLoaded="{!c.afterScriptsLoaded}" />
+    <ltng:require styles="{!$Resource.dhtmlxganttCSS}" />
+    
+    <aura:attribute name="scriptsLoaded" type="Boolean" default="{!false}"/>
+    <aura:attribute name="chartRendered" type="Boolean" default="{!false}"/>
+    <aura:attribute name="loadMessage" type="Boolean" default="{!false}"/>
+    
+    <!-- <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+     <div id="gantt_here1" style='width:100%; height:100%;'></div>
+          src="{!$Resource.dhtmlxgantt}"    
+     <lightning:container aura:id="MyGanttApp"
+                           src="{!$Resource + 'GCBasicINIT.html'}"
+                          onmessage="{!c.handleMessage}"/> !-->
+    
+    
+<div aura:id="ganttContainer" style="width: 100%; height: 100%; background-color: #FFFFFF;" ></div>
+
+</aura:component>
