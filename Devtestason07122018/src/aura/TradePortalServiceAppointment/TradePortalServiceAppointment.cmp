@@ -34,9 +34,11 @@
       <tbody>
         <aura:iteration items="{!v.listOfAllServices}" var="AllSa">  
         <tr>
+         
+            
           <td scope="row">			
             <div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
-                <!--<a style="border-bottom: 1px dotted;" href="{!'/t/s/detail/'+AllSa.Id}"> {!AllSa.Account.Name}</a>-->
+               <a style="border-bottom: 1px dotted;" href="{!'/t/s/detail/'+AllSa.Id}"> {!AllSa.Account.Name}</a>
                {!if(AllSa.Service_Resource__c != null, AllSa.Service_Resource__r.Contact__r.Account.Name, AllSa.Tier_2_Trade_Account__r.Name)}
             </div>
           </td> 
@@ -47,9 +49,9 @@
             </div>
           </td>
             <td scope="row">			
-            <!--<div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
+            <div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
                <a href="{!'/t/s/detail/'+if(AllSa.Service_Resource__c!= null, AllSa.Service_Resource__c, AllSa.Tier_2_Trade_Account__c)}"> {!if(AllSa.Service_Resource__c != null, AllSa.Service_Resource__r.Contact__r.Name, AllSa.Tier_2_Trade_Account__r.Name)}</a>
-            </div>-->
+            </div>
             <div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
                {!if(AllSa.Service_Resource__c != null, AllSa.Service_Resource__r.Contact__r.Name, AllSa.Tier_2_Trade_Account__r.Name)}
             </div>

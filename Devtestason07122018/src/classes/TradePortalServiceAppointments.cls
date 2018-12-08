@@ -80,7 +80,7 @@ VERSION        AUTHOR         DATE           DETAIL   Description
             Map<Id,ServiceAppointment> woServiceAppointments = new Map<Id, ServiceAppointment>( [ SELECT Id
                                                                                                   FROM ServiceAppointment
                                                                                                   WHERE ParentRecordId = :parentId]);
-            allServiceAppointmentsList = [SELECT Id, Account.Name, WorkType.Name, Service_Resource__c, Service_Resource__r.Contact__r.Name,
+            allServiceAppointmentsList = [SELECT Id,AppointmentNumber, Account.Name, WorkType.Name, Service_Resource__c, Service_Resource__r.Contact__r.Name,
                                                  Service_Resource__r.Contact__r.MobilePhone, Service_Resource__r.Contact__r.Phone,
                                                  SchedStartTime, SchedEndTime, Tier_2_Trade_Account__r.Name, Tier_2_Trade_Account__c,
                                                  Tier_2_Trade_Account__r.Accounts_Email_Address__c, Tier_2_Trade_Account__r.Accounts_Phone__c,Service_resource__r.Contact__r.Account.Name

@@ -1,0 +1,31 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	
+    <ltng:require scripts="{!join(',',$Resource.amchart + '/amcharts/amcharts.js', $Resource.amchart + '/amcharts/serial.js',$Resource.amchart + '/amcharts/themes/light.js', $Resource.amchart + '/amcharts/plugins/export/export.js',$Resource.amchart + '/amcharts/gantt.js')}"  afterScriptsLoaded="{!c.scriptsLoaded}" />
+    <aura:attribute name="scriptsLoaded" type="Boolean" default="{!false}"/>
+    <aura:attribute name="chartRendered" type="Boolean" default="{!false}"/>
+    
+    <aura:attribute name="type" type="String" required="{!true}" description="Type of the chart user wants to render."/>
+    <aura:attribute name="data" type="Object" required="{!true}" description="The data used by chart to render."/>
+   
+    <aura:attribute name="ganttMarginRight" type="Integer" required="{!true}" description="The right hand margin"/>
+    <aura:attribute name="ganttCursorColor" type="String" required="{!true}" description="The color of value box appearing on Y-axis at the time of hovering."/>
+    <aura:attribute name="ganttValueBalloonsEnabled" type="Boolean" required="{!true}" description="Option to enable hovering text when cursor points to chart area."/>
+    <aura:attribute name="ganttCursorAlpha" type="Integer" required="{!true}" description="Opacity of the cursor line.."/>
+    <aura:attribute name="ganttValueLineAlpha" type="Decimal" required="{!true}" description="Opacity of value line. Will use cursorAlpha value if not set.."/>
+    <aura:attribute name="ganttValueLineBalloonEnabled" type="Boolean" required="{!true}" description="Specify if value balloon next to value axes labels should be displayed.."/>
+    <aura:attribute name="ganttValueLineEnabled" type="Boolean" required="{!true}" description="Specify if cursor of Serial chart should display horizontal (or vertical if chart is rotated) line."/>
+    <aura:attribute name="ganttZoomable" type="Boolean" required="{!true}" description="Specify if the user can zoom-in the chart. If pan is set to true, zoomable is switched to false automatically."/>
+    <aura:attribute name="ganttValueZoomable" type="Boolean" required="{!true}" description="Specify if the user can zoom-in value axes of a serial chart.."/>
+    <aura:attribute name="ganttBrightnessStep" type="Integer" required="{!true}" description="Lightness increase of each subsequent bar of one series. Value range is from -255 to 255."/>
+    <aura:attribute name="ganttRotate" type="Boolean" required="{!true}" description="If you set this to true, the chart will be rotated by 90 degrees (the columns will become bars).."/>
+    <aura:attribute name="ganttStartDate" type="String" required="{!true}" description="Initial date of value axis."/>
+    <aura:attribute name="ganttFillAlphas" type="Integer" required="{!true}" description="Specify Opacity of plot area."/>
+    <aura:attribute name="ganttLineAlpha" type="Integer" required="{!true}" description="Specify opacity of the line (or column border). Value range is 0 - 1."/>
+    <aura:attribute name="ganttLineColor" type="String" required="{!true}" description="Specify color of the line (or column border)."/>
+    <aura:attribute name="ganttAutoGridCount" type="Boolean" required="{!true}" description="Specify true to enable axis labels."/>
+    <aura:attribute name="ganttColumnWidth" type="Decimal" required="{!true}" description="Specify relative width of columns. Value range is 0 - 1."/>
+    
+    <aura:attribute name="graphtitles" type="String" description="Specify title of the graph."/>
+    <aura:attribute name="typesofbullets" type="String" description="Specify type of the bullets."/>
+	<div aura:id="chartContainer" style="width: 100%; height: 100%; background-color: #FFFFFF;" ></div>
+</aura:component>

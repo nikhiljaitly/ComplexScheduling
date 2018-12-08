@@ -12769,6 +12769,40 @@
     {
         "attributes": {
             "type": "AuraDefinition",
+            "url": "/services/data/v36.0/tooling/sobjects/AuraDefinition/0Ad5D000000AxZ6SAK"
+        },
+        "Id": "0Ad5D000000AxZ6SAK",
+        "AuraDefinitionBundleId": "0Ab5D0000009FvISAU",
+        "AuraDefinitionBundle": {
+            "attributes": {
+                "type": "AuraDefinitionBundle",
+                "url": "/services/data/v36.0/tooling/sobjects/AuraDefinitionBundle/0Ab5D0000009FvISAU"
+            },
+            "DeveloperName": "Tier2ServiceAppointment"
+        },
+        "DefType": "COMPONENT",
+        "Format": "XML"
+    },
+    {
+        "attributes": {
+            "type": "AuraDefinition",
+            "url": "/services/data/v36.0/tooling/sobjects/AuraDefinition/0Ad5D000000AxZBSA0"
+        },
+        "Id": "0Ad5D000000AxZBSA0",
+        "AuraDefinitionBundleId": "0Ab5D0000009FvISAU",
+        "AuraDefinitionBundle": {
+            "attributes": {
+                "type": "AuraDefinitionBundle",
+                "url": "/services/data/v36.0/tooling/sobjects/AuraDefinitionBundle/0Ab5D0000009FvISAU"
+            },
+            "DeveloperName": "Tier2ServiceAppointment"
+        },
+        "DefType": "CONTROLLER",
+        "Format": "JS"
+    },
+    {
+        "attributes": {
+            "type": "AuraDefinition",
             "url": "/services/data/v36.0/tooling/sobjects/AuraDefinition/0Ad5D000000CfmpSAC"
         },
         "Id": "0Ad5D000000CfmpSAC",
