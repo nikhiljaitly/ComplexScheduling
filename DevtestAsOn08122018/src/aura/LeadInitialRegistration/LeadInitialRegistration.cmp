@@ -1,0 +1,379 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="EOI_Controller">
+  <aura:attribute name="abn" type="String" default="17162913911"/>
+  <aura:attribute name="firstPartLead" type="Lead" default="{sobjectType : 'Lead'}"/>
+  <aura:attribute name="abnData" type="Object" />
+  <aura:attribute name="valError" type="Boolean" default="false"/>
+  <aura:attribute name="tradeTypeList" type="Object[]"/>
+  <aura:attribute name="tradeType" type="Object"/>
+  <aura:attribute name="objInfo" type="Trade_Type__c" default="{sobjectType : 'Trade_Type__c'}" />
+  <aura:attribute name="busStructureOptions" type="Object[]" />
+  <aura:attribute name="objInfo1" type="Lead" default="{sobjectType : 'Lead'}" />
+  <aura:attribute name="licenseAttachments" type="Object[]"/>
+  <aura:attribute name="CommDateValidationError" type="boolean"/>
+
+    <aura:attribute name="validationErrorIds" type="List" 
+      default="[{'label': 'firstname', 'value': 'firstname'},
+                {'label': 'lastname', 'value': 'lastname'},
+                {'label': 'email', 'value': 'email'},
+                {'label': 'pos', 'value': 'pos'},
+                {'label': 'phone', 'value': 'phone'},
+                {'label': 'addStreet', 'value': 'addStreet'},
+                {'label': 'addCity', 'value': 'addCity'},
+                {'label': 'postalStreet', 'value': 'postalStreet'},
+                {'label': 'postalCity', 'value': 'postalCity'},
+                {'label': 'postalZip', 'value': 'postalZip'},
+                {'label': 'postalState', 'value': 'postalState'},
+                {'label': 'businessStruc', 'value': 'businessStruc'},
+                {'label': 'altphone', 'value': 'altphone'},
+                {'label': 'busphone', 'value': 'busphone'}
+              ]"/>  
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	<aura:handler name="AddTradeTypeEvt" event="c:AddTradeType" action="{!c.AddTradeTypeInstance}"/>
+	<aura:handler name="EditRowEvt" event="c:EditTradeTypeRowEvt" action="{!c.EditTradeTypeInstance}"/>
+    <aura:handler name="DeleteRowEvt" event="c:DeleteTradeTypeRowEvt" action="{!c.removeDeletedRow}"/>
+    <aura:handler name="change" value="{!v.firstPartLead.Phone}" action="{!c.phoneChangeValidation}"/>
+    <aura:handler name="change" value="{!v.firstPartLead.AlternatePhone}" action="{!c.phoneChangeValidation}"/>
+    <aura:handler name="change" value="{!v.firstPartLead.BusinessPhone}" action="{!c.phoneChangeValidation}"/> 
+
+    
+    <div class="wrapper" style="background-color: #fff;margin: 15px;border: 1px solid #CCC;border-radius: 5px;padding: 15px;">
+
+    <div class="enquiry-container">
+        <div class="slds-grid slds-wrap slds-small-size--6-of-8 slds-medium-size-6-of-8 slds-large-size--10-of-12">
+            <div class="slds-size--1-of-1 introduction-message">
+                
+                <!--
+                The <b style="color:#1fc3df;">HomeRepair</b> team would love to review your EOI submission with sufficient data being added into the fields below. -->
+
+                Please complete the below form to express your interest in working with <b style="color:#1fc3df;">HomeRepair</b>, if approved you will be required to provide additional information<br/> such as :
+                <br/><br/>
+                <ul>
+                    <li class="li-items"> • answer questions about previous criminal convictions</li>
+                    <li class="li-items"> • copies of your current insurances</li>
+                    <li class="li-items"> • copies of Safe Work Method Statements, or agreement to complete the template provided upon acceptance of your registration</li>
+                    <li class="li-items"> • copies of additional licenses</li> 
+                    <li class="li-items"> • A Police Check (Less than 3 months)</li>                    
+                </ul>
+                <br/>
+
+<div class="slds-form-element">
+  <span class="slds-form-element__label">Privacy Statement</span>
+  <div class="slds-form-element__control slds-border_top slds-border_bottom">
+    <div class="slds-form-element__static">
+      <p>HomeRepair is part of the Suncorp Group of Companies. Any information collected by HomeRepair belongs to the Suncorp Group. HomeRepair is collecting your personal information to conduct and manage its business relationship with you. For more information about how we collect and handle personal information, including how you can access, or seek correction of, your information or contact us with any feedback, please see our Privacy Policy available on <a href="https://www.homerepair.com.au/">www.homerepair.com.au</a>.</p>
+    </div>
+  </div>
+</div>                
+
+                <br/>
+                <b style="color:red;">*</b> Indicates a required field<br/>
+                Please email us on <a href="mailto:trades@homerepair.com.au">trades@homerepair.com.au</a> or call us on our Trade Line No: 03 8533 2510 incase of any technical issues. 
+                           
+
+
+            </div>
+            <div class="slds-size--1-of-1">
+                <div class="slds-grid slds-wrap registration-details">
+                    <div class="slds-size--6-of-6">
+                           <h3 class="slds-section-title--divider">Contact Details For This Application</h3>
+                            <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
+                                
+                                <div class="slds-form-element">
+
+     								<lightning:input aura:id="firstname" name="firstName" label="First Name"
+                     				value="{!v.firstPartLead.FirstName}" required="true"/>
+                                </div>
+                                
+                                <div class="slds-form-element">
+
+                               		<lightning:input aura:id="lastname" name="lastName" label="Last Name"
+                     				value="{!v.firstPartLead.LastName}" required="true"/>
+                                </div>
+
+                                <div class="slds-form-element">
+
+                               		<lightning:input aura:id="pos" name="pos" label="Position in the Company"
+                     				value="{!v.firstPartLead.Position}" required="true"/>
+                                </div>                                
+
+                                <div class="slds-form-element">
+                               		<lightning:input aura:id="email" type="Email" name="email" label="Contact Email Address" value="{!v.firstPartLead.Email}" required="true"/>
+
+                                </div>                               
+
+                                <div class="slds-form-element">
+                               		<lightning:input aura:id="phone" name="phone" label="Contact Phone"
+                     				value="{!v.firstPartLead.Phone}" type="tel" required="true" messageWhenBadInput="Enter a valid Australian Mobile or Landline number"/>
+                                </div>
+
+                                <div class="slds-form-element">
+                               		<lightning:input aura:id="altphone" name="altphone" label="Alternate Phone"
+                     				value="{!v.firstPartLead.AlternatePhone}" messageWhenBadInput="Enter a valid Australian Mobile or Landline number"/>
+                                </div>
+
+                                <div class="slds-form-element">
+                               		<lightning:input aura:id="busphone" name="busphone" label="Main Business Phone"
+                     				value="{!v.firstPartLead.BusinessPhone}" messageWhenBadInput="Enter a valid Australian Mobile or Landline number"/>
+                                </div> 
+                                <div class="slds-form-element">
+                                    <lightning:textarea aura:id="addComments" name="addComments" label="Additional comments  for your application " value="{!v.firstPartLead.AddComments}"/>
+                                </div> 
+
+                            </div>
+                            
+                    </div>
+
+                </div>
+                <div class="slds-grid slds-wrap business-details">
+                	<div class="slds-size--6-of-6">
+                		<h3 class="slds-section-title--divider">Business Details</h3>
+
+                		<div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
+                                 
+                      <div class="slds-form-element slds-p-around_small" aura:id="abnForm">
+                          <label class="slds-form-element__label" for="abn">
+                            <abbr class="slds-required" title="required">*</abbr>ABN
+                          </label>
+                          <div class="slds-form-element__control">
+                              <input id="00N5D000000iNGK" maxlength="11" name="00N5D000000iNGK" size="20" type="text" class="slds-input" placeholder="Enter a valid ABN" aura:id="abn" required="true" onchange="{!c.searchABNChange}"/>                                       
+                          </div>
+                          <div class="slds-form-element__help slds-hide" id="abnformat-id" aura:id="abnHelp">ABN should be 11 digits</div>
+                          <div class="slds-form-element__help slds-hide" id="invalidabn-id" aura:id="abnError">Invalid ABN. Please enter a valid ABN</div>
+                          <div class="slds-form-element__help slds-hide" id="inactiveabn-id" aura:id="abnInactiveError">Please enter a active ABN to proceed</div>
+
+                      </div>
+                  <div class="slds-form-element slds-hide">
+                    <div class="slds-p-around_small">
+									         <lightning:input aura:id="abnstatus" name="abnstatus" label="ABN Status"
+                     				value="{!v.firstPartLead.AbnStatus}" disabled="True"/>
+                    </div> 
+                  </div>                              
+                  <div class="slds-form-element slds-hide">
+                    <div class="slds-p-around_small">
+									       <lightning:input aura:id="businessName" name="businessName" label="Registered Business Name" value="{!v.firstPartLead.EntityName}" disabled="True"/>
+                    </div>
+                  </div>
+								  <div class="slds-form-element slds-hide">
+                    <div class="slds-p-around_small">
+									     <lightning:input aura:id="regForGst" name="regForGst" label="Registered For GST" value="{!v.firstPartLead.RegisteredForGst}" disabled="True"/>
+                    </div>
+                  </div>
+                  <div class="slds-form-element slds-hide">
+                    <div class="slds-p-around_small">
+									     <lightning:input aura:id="addPostCode" name="addPostCode" label="Address Post Code" value="{!v.firstPartLead.AddressPostcode}" disabled="True"/>
+                    </div>
+                  </div>                               
+                  <div class="slds-form-element slds-hide">
+                    <div class="slds-p-around_small">
+									     <lightning:input aura:id="addState" name="addState" label="Address State"
+                     		value="{!v.firstPartLead.AddressState}" disabled="True"/>
+                    </div>
+                  </div>
+                  
+                  <div class="slds-form-element">
+                    <div class="slds-p-around_small"> 
+									
+                      <lightning:input aura:id="addStreet" name="addStreet" label="Business Address Number and Street (cannot be a PO Box)" value="{!v.firstPartLead.addStreet}" required="true"/>
+                    </div>
+                  </div>
+
+                  <div class="slds-form-element">
+                    <div class="slds-p-around_small"> 
+									     <lightning:input aura:id="addCity" name="addCity" label="Registered Business Address City"
+                     				value="{!v.firstPartLead.addCity}" required="true"/>
+                    </div> 
+                  </div>                                   
+
+                  <div class="slds-form-element">
+                    <div class="slds-p-around_small">  
+                      <lightning:input aura:id="regTradingName" name="regTradingName" label="Preferred Trading Name" value="{!v.firstPartLead.PrefTradeName}"/>
+                    </div>
+                  </div>
+
+								  <div class="slds-form-element">
+                    <div class="slds-p-around_small">  
+									<lightning:input aura:id="acn" name="acn" label="ACN" value="{!v.firstPartLead.ACN}" maxlength="9"/>
+                    </div>
+                  </div>
+                  <!--Business Structure-->
+
+                  <div class="slds-form-element">
+                      <div class="slds-p-around_small">
+
+                          <lightning:select name="businessStructure" label="Business Structure" aura:id="businessStruc" value="{!v.firstPartLead.businessStructure}" required="true">
+                            <aura:iteration items="{!v.busStructureOptions}" var="item">
+                                <option value="Hybrid Trust">Hybrid Trust</option>
+                                <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                            </aura:iteration>
+                          </lightning:select>
+                      </div>
+                                  
+                  </div>
+                <!--Business Structure-->
+                
+                <!--Commencement Date-->
+
+                      <div class="slds-form-element">
+                        <div class="slds-p-around_small">
+                          <lightning:input class="{! v.CommDateValidationError ? 'slds-has-error' : ''}"
+                                                             type="date"
+                                                             label="When did your business commence trading?"
+                                                             value="{!v.firstPartLead.commenceDate}"
+                                                             name="licenceExpiry"
+                                                             onchange="{!c.commenceDateUpdate}" required="true"/>
+                                            
+                          <aura:if isTrue="{!v.CommDateValidationError}">
+                              <div class="slds-text-color_error slds-p-left_x-small">
+                                  Date must be in the Past.
+                              </div>
+                          </aura:if>    
+                          <br/>
+                        </div>                                   
+                      </div>
+                <!--Commencement Date-->  
+
+
+
+                  <h3 class="slds-section-title--divider">Postal Address</h3>
+                                <!--Checkbox to copy business address to postal address-->
+
+                                <div class="slds-form-element">
+                                    <ui:inputCheckbox label="Copy Business Address to Postal Address" click="{!c.copyAddress}" value="{!v.firstPartLead.CopyAddress}" />
+                                </div>
+
+                                <!--Checkbox-->
+
+
+                                <!--postal address-->
+                              <div class="slds-form-element">
+                                <div class="slds-p-around_small">
+									                 <lightning:input aura:id="postalStreet" name="postalStreet" label="Street Number and Name (or PO Box)" value="{!v.firstPartLead.postalStreet}" required="True"/>
+                                </div>
+                              </div>
+
+                              <div class="slds-form-element">
+                                <div class="slds-p-around_small">
+									                 <lightning:input aura:id="postalCity" name="postalCity" label="City"
+                     				       value="{!v.firstPartLead.postalCity}" required="true"/>
+                                </div>
+                              </div>
+
+                              <div class="slds-form-element">
+                                <div class="slds-p-around_small">
+									                 <lightning:input aura:id="postalZip" name="postalZip" label="Post Code"
+                     				       value="{!v.firstPartLead.postalZip}" required="true" maxlength="4" />
+                                </div> 
+                              </div>
+
+                              <div class="slds-form-element">
+                                <div class="slds-p-around_small">
+									                 <!--<lightning:input aura:id="postalState" name="postalState" label="State"
+                     				       value="{!v.firstPartLead.postalState}" required="true"/>-->
+                                    <lightning:select aura:id="postalState" name="postalState" label="State" required="true" value="{!v.firstPartLead.postalState}">
+                                      <option value="QLD">QLD</option>
+                                      <option value="NSW">NSW</option>
+                                      <option value="VIC">VIC</option>
+                                      <option value="WA">WA</option>
+                                      <option value="SA">SA</option>
+                                      <option value="TAS">TAS</option>
+                                    </lightning:select>                                   
+                                </div> 
+                              </div>
+                                <!--Postal Address-->
+                                <!--<div class="slds-form-element">
+                                    <lightning:input aura:id="businessEmail" type="Email" name="businessEmail" label="Business Email Address" value="{!v.firstPartLead.businessEmail}" required="true"/>
+                                </div> 
+                                  
+                                <div class="slds-form-element">
+                                    <lightning:input aura:id="accountsEmail" type="Email" name="accountsEmail" label="Accounts Email Address" value="{!v.firstPartLead.accountsEmail}" required="true"/>
+                                </div>--> 
+
+                                <!--Business Structure-->
+
+                          <!--<div class="slds-form-element">
+                                  <div class="slds-p-around_small">
+
+                                      <lightning:select name="businessStructure" label="Business Structure" aura:id="businessStruc" value="{!v.firstPartLead.businessStructure}" required="true">
+                                          <aura:iteration items="{!v.busStructureOptions}" var="item">
+                                              <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                                           </aura:iteration>
+                                      </lightning:select>
+                                  </div>
+                                  
+                               </div>-->
+                               <!--Business Structure-->
+                                                                          
+                                <!--Commencement Date-->
+
+                                <!--<div class="slds-form-element">
+
+ 
+                                         <div class="slds-p-around_small">
+                                         
+                                            <lightning:input class="{! v.CommDateValidationError ? 'slds-has-error' : ''}"
+                                                             type="date"
+                                                             label="When did your business commence trading?"
+                                                             value="{!v.firstPartLead.commenceDate}"
+                                                             name="licenceExpiry"
+                                                             onchange="{!c.commenceDateUpdate}" required="true"/>
+                                            
+                                            <aura:if isTrue="{!v.CommDateValidationError}">
+                                                <div class="slds-text-color_error slds-p-left_x-small">
+                                                    Date must be in the Past.
+                                                </div>
+                                            </aura:if>    
+                                            
+                                            <br/>
+                                            
+
+                                            
+                                          </div>                                   
+
+                                </div>-->
+
+                                 <!--Commencement Date-->                               
+
+
+                		</div>
+                	</div>
+                </div>
+                <!--Border Added-->
+                <div class="wrapper" style="background-color: #fff;margin: 15px;border: 1px solid #CCC;border-radius: 5px;padding: 15px;">
+                <div class="slds-grid slds-wrap your-services">
+                	<div class="slds-size--6-of-6">
+                		<h3 class="slds-section-title--divider">Your Services</h3>
+                			<div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
+                				
+        								<aura:if isTrue="{!and(v.tradeTypeList != null, v.tradeTypeList.length > 0)}">
+        								  <!-- fields that you want to only show for valid users -->
+        								 <c:TradeTypeTable tradeTypeList="{!v.tradeTypeList}"/>
+
+        								<aura:set attribute="else">
+        								    <!--other fields-->
+        								<div class="slds-form-element">
+        								<p>Describe each service you provide...</p>
+                        </div>								    	
+        								</aura:set>
+        								</aura:if>
+
+                				<!--<c:TradeTypeDetail tradeTypeDet="{!v.tradeType}" aura:id="detail"/>-->
+
+                        <c:TradeTypeDetailV1 tradeTypeDet="{!v.tradeType}" aura:id="detail"  attachments="{!v.licenseAttachments}"/>
+
+                        <div class="slds-text-color_error slds-p-left_x-small">
+                          Please add atleast one trade type.
+                        </div>
+                        </div>                                  
+
+                	</div>
+                </div>
+                </div>
+
+                <lightning:button type="submit" name="submit" variant="brand" label="Submit Application" disabled="{!v.valError}" onclick="{!c.onSubmit}" class="slds-align_absolute-center"/>
+
+            </div>
+        </div>
+    </div>
+    </div>
+</aura:component>

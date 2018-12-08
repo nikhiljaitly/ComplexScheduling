@@ -1,0 +1,30 @@
+<aura:component >
+    <div class="slds-size--1-of-1 introduction-message">  
+        Please complete the below form to express your interest in working with <b style="color:#1fc3df;">HomeRepair</b>, if approved you will be required to provide additional information<br/> such as :
+        <br/><br/>
+        <ul>
+            <li class="li-items"> • answer questions about previous criminal convictions</li>
+            <li class="li-items"> • copies of your current insurances</li>
+            <li class="li-items"> • copies of Safe Work Method Statements, or agreement to complete the template provided upon acceptance of your registration</li>
+            <li class="li-items"> • copies of additional licenses</li> 
+            <li class="li-items"> • A Police Check (Less than 3 months)</li>                    
+        </ul>
+        <br/>
+        
+        <div class="slds-form-element">
+            <span class="slds-form-element__label">Privacy Statement</span>
+            <div class="slds-form-element__control slds-border_top slds-border_bottom">
+                <div class="slds-form-element__static">
+                    <p>HomeRepair is part of the Suncorp Group of Companies. Any information collected by HomeRepair belongs to the Suncorp Group. HomeRepair is collecting your personal information to conduct and manage its business relationship with you. For more information about how we collect and handle personal information, including how you can access, or seek correction of, your information or contact us with any feedback, please see our Privacy Policy available on <a href="https://www.homerepair.com.au/">www.homerepair.com.au</a>.</p>
+                </div>
+            </div>
+        </div>                
+        
+        <br/>
+        <b style="color:red;">*</b> Indicates a required field<br/>
+        Please email us on <a href="mailto:trades@homerepair.com.au">trades@homerepair.com.au</a> or call us on our Trade Line No: 03 8533 2510 incase of any technical issues. 
+        
+        
+        
+    </div>
+</aura:component>

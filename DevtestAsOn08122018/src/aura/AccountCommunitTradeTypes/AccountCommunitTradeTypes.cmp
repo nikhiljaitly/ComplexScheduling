@@ -1,0 +1,310 @@
+<!--Trade Final Registration lightning component                               -->
+<!--This function allows trade to fill in following                            -->
+<!-- Business Details                                                          -->
+<!-- Account Details                                                           -->
+<!-- Insurance Policy Details                                                  -->  
+<!-- Workplace Health & Safety Agreement                                       -->  
+<!--This form link is sent as an email link to Trade when HR Operations team   -->
+<!--approves initial registration details                                      -->
+<!--Copyright © 2018  Tquila ANZ                                               -->
+<!--=======================================================                    -->
+<!--History                                                                    --> 
+<!--                                                                           -->
+<!--VERSION AUTHOR  DATE        DETAIL  RELEASE/CSR                            -->
+<!--1.0 -   Vasu   09/02/2018  Created  Home Repairs Claims                    -->
+<aura:component controller="AccountCommunitTradeTypes_CC" implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="wizardSetting" type="Object" />
+    <aura:attribute name="sections" type="Object" />
+    <aura:attribute name="cacheData" type="Object" />
+    <aura:attribute name="valueMap" type="Object"  />
+    <aura:attribute name="rowIndex" type="Integer"  />
+    <!--Attachments-->
+    <aura:attribute name="thisAttachment" type="ContentVersion"/>
+    <aura:attribute name="attachments" type="ContentVersion[]"/>
+    <aura:attribute name="tradeTypeList" type="Object[]"/>
+    <aura:attribute name="tradeType" type="Object"/>
+    <aura:attribute name="previousIssuesAdded" type="boolean" default="false"/>
+    <aura:attribute name="previousComplaintsAdded" type="boolean" default="false"/> 
+    <aura:attribute name="workCoverDocAdded" type="boolean" default="false"/>
+    <aura:attribute name="publicLiabilityDocAdded" type="boolean" default="false"/> 
+    <aura:attribute name="otherInsuranceDocAdded" type="boolean" default="false"/> 
+    <aura:attribute name="bankDepositDocAdded" type="boolean" default="false"/> 
+    <aura:attribute name="policeCheckDocAdded" type="boolean" default="false"/>
+    <aura:attribute name="objInfo" type="Trade_Type__c" default="{sobjectType : 'Trade_Type__c'}" />
+    <aura:attribute name="busStructureOptions" type="Object[]" />
+    <aura:attribute name="objInfo1" type="Account" default="{sobjectType : 'Account'}" />
+    <aura:attribute name="licenseAttachments" type="Object[]"/>
+    <aura:attribute name="isTradeAvailable" type="boolean" default="false"/>
+    <aura:attribute name="compliances" type="Object" />
+    <aura:dependency resource="markup://force:editRecord" type="EVENT" />
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    
+    
+    <aura:attribute name="wcDateValidationError" type="boolean" />
+    <aura:attribute name="plDateValidationError" type="boolean" />    
+    
+    <aura:handler name="EditRowEvt" event="c:EditTradeTypeRowEvt" action="{!c.EditTradeTypeInstance}"/>
+    <aura:handler name="DeleteRowEvt" event="c:DeleteTradeTypeRowEvt" action="{!c.removeDeletedRow}"/>
+    <aura:handler name="dataChanged" event="c:Message" action="{!c.customActions}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <aura:attribute name="acc" type="Account" default="{sobjectType : 'Account','Work_Cover_Insurance_Provider__c':''}"/>
+    <aura:attribute access="public" name="recordId" type="String" default="" />
+    <aura:attribute name="isAvailable" type="boolean" default="false"/>
+    <aura:attribute name="areasYouWorkareasYouWorkValue" type="List"/>
+    <aura:attribute name="areasYouWorkareasYouWorkpreviouslyValue" type="List" />
+    <aura:attribute name="SWMSOptions" type="List" 
+                    default="[{'label': 'Yes', 'value': 'Yes'},
+                             {'label': 'No', 'value': 'No'}
+                             ]"/>    
+    <aura:attribute name="areasYouWork" type="List" 
+                    default="[{'label': 'Insurers', 'value': 'Insurers'},
+                             {'label': 'Loss Adjusters', 'value': 'Loss Adjusters'},
+                             {'label': 'Builders within Insurance Industry', 'value': 'Builders within Insurance Industry'}
+                             ]"/>
+    <aura:attribute name="validationErrorIds" type="List" 
+                    default="[
+                             {'label': 'mainAccountEmail', 'value': 'mainAccountEmail'},
+                             {'label': 'mainAccountPhone', 'value': 'mainAccountPhone'},
+                             {'label': 'mainAccountAlternatePhone', 'value': 'mainAccountAlternatePhone'},
+                             {'label': 'PositionInCompany', 'value': 'PositionInCompany'},
+                             {'label': 'JobRelatedFirstName', 'value': 'JobRelatedFirstName'},
+                             {'label': 'JobRelatedLastName', 'value': 'JobRelatedLastName'},
+                             {'label': 'JobRelatedPositionInCompany', 'value': 'JobRelatedPositionInCompany'},
+                             {'label': 'JobEmail', 'value': 'JobEmail'},
+                             {'label': 'JobPhone', 'value': 'JobPhone'},
+                             {'label': 'JobAlternatePhone', 'value': 'JobAlternatePhone'},
+                             {'label': 'AccountFirstName', 'value': 'AccountFirstName'},
+                             {'label': 'AccountLastName', 'value': 'AccountLastName'},
+                             {'label': 'AccountPositionInCompany', 'value': 'AccountPositionInCompany'},
+                             {'label': 'AccountEmail', 'value': 'AccountEmail'},
+                             {'label': 'AccountPhone', 'value': 'AccountPhone'},
+                             {'label': 'AccountAlternatePhone', 'value': 'AccountAlternatePhone'},
+                             {'label': 'BankAccountName', 'value': 'BankAccountName'},
+                             {'label': 'BSB', 'value': 'BSB'},
+                             {'label': 'AccountNumber', 'value': 'AccountNumber'},
+                             {'label': 'WorkCoverInsuranceProvider', 'value': 'WorkCoverInsuranceProvider'},
+                             {'label': 'WorkCoverInsuranceState', 'value': 'WorkCoverInsuranceState'},
+                             {'label': 'WorkCoverAmount', 'value': 'WorkCoverAmount'},
+                             {'label': 'PublicLiabilityInsuranceProvider', 'value': 'PublicLiabilityInsuranceProvider'},
+                             {'label': 'PublicLiabilityCoverAmount', 'value': 'PublicLiabilityCoverAmount'},
+                             {'label': 'SWMS', 'value': 'SWMS'},
+                             {'label': 'AnyPreviousIssues', 'value': 'AnyPreviousIssues'},
+                             {'label': 'AnyPreviousComplaints', 'value': 'AnyPreviousComplaints'},
+                             {'label': 'AnyCurrentWorkOrders', 'value': 'AnyCurrentWorkOrders'},
+                             {'label': 'AnyPreviousWork', 'value': 'AnyPreviousWork'},
+                             {'label': 'Referred', 'value': 'Referred'}
+                             ]"/>  
+    <aura:handler name="DeleteRowEvt" event="c:DeleteFileRow" action="{!c.removeDeletedRow}"/>
+    
+    <aura:handler name="UpdateContentEvt" event="c:updateContent" action="{!c.updateDocumentList}"/>
+    
+    <aura:If isTrue="{!v.isAvailable}">
+        <div class="wrapper" style="background-color: #fff;margin: 15px;border: 1px solid #CCC;border-radius: 5px;padding: 15px;">
+            <div class="slds-text-body_regular"><!--If your final registration form is accepted you will be contacted by <b style="color:#1fc3df;">HomeRepair</b> to discuss training and our system and processes.--> </div>
+            <fieldset class="slds-form-element">
+                <legend class="slds-form-element__label slds-text-title" style="padding: 10px;background-color: rgb(249, 249, 250);width: 100%;border-radius: 5px;margin-bottom: 11px;">
+                    <h1 style="font-size: 16px;">Your Insurance Policy Details</h1>
+                </legend>
+                <div class="slds-text-body_regular slds-p-around_small">Describe and provide copies of the requested insurance policies.</div>
+            </fieldset>
+            <div class="slds-form slds-form_compound" style="width: 1200px;">
+                <c:CollapsibleSection title="Work Cover Insurance Details" >                                    
+                    <fieldset class="slds-form-element">                           
+                        <div class="slds-form-element__group">                      
+                            <div class="slds-form-element__row">                  
+                                <div class="slds-form-element slds-size_1-of-2">
+                                    <div class="slds-p-around_small">
+                                        <lightning:input aura:id="WorkCoverInsuranceProvider" name="WorkCoverInsuranceProvider" label="Insurance Provider"
+                                                         value="{!v.acc.Work_Cover_Insurance_Provider__c}" type="text" required="true"/>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element slds-size_1-of-2"> 
+                                    <div class="slds-p-around_small">
+                                        <lightning:select aura:id="WorkCoverInsuranceState" name="WorkCoverInsuranceState" label="Work Cover Insurance State" required="true" value="{!v.acc.Work_Cover_Insurance_State__c}">
+                                                 <option value="">Select</option>
+                                                 <option value="VIC">VIC</option>
+                                                 <option value="QLD">QLD</option>
+                                                 <option value="NSW">NSW</option>
+                                                 <option value="TAS">TAS</option>
+                                                 <option value="SA">SA</option>
+                                                 <option value="WA">WA</option>
+                                                 <option value="NT">NT</option>
+                                                 <option value="ACT">ACT</option>
+                                        </lightning:select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-form-element__row">                  
+                                <div class="slds-form-element slds-size_1-of-2">
+                                    <!--<div class="slds-form-element">-->
+                                    <div class="slds-p-around_small">
+                                        <lightning:input aura:id="WorkCoverAmount" name="WorkCoverAmount" label="Cover amount"
+                                                         value="{!v.acc.Work_Cover_Amount__c}" type="Number" required="true" min="0" formatter="currency"/>
+                                    </div>
+                                </div>
+                                <div class="slds-form-element slds-size_1-of-2">  
+                                    <div class="slds-p-around_small">
+                                        <lightning:input class="{! v.wcDateValidationError ? 'slds-has-error' : ''}"
+                                                         type="date"
+                                                         label="Expiry"
+                                                         value="{!v.acc.Work_Cover_Expiry__c}"
+                                                         name="WorkCoverExpiry"
+                                                         onchange="{!c.expiryDateUpdate}" required="true"/>
+                                        
+                                        <aura:if isTrue="{!v.wcDateValidationError}">
+                                            <div class="slds-text-color_error slds-p-left_x-small">
+                                                Date must be in present or in future..
+                                            </div>
+                                        </aura:if>    
+                                        <br/>
+                                    </div>                                   
+                                </div>
+                            </div> 
+                            
+                            <div class="slds-form-element__row" id="workCoverUpload">                                         
+                                <!--file upload component-->
+                                <!--Upload work cover related attachments {!and((!v.workCoverDocAdded),v.acc.ContentDocumentLinks.length > 0)} -->
+                                <aura:if isTrue="{!v.workCoverDocAdded}">
+                                    <aura:if isTrue="{!v.acc.ContentDocumentLinks.length > 0}">                                            
+                                        <aura:iteration items="{!v.acc.ContentDocumentLinks}" var="cd">
+                                            <aura:if isTrue="{!cd.ContentDocument.LatestPublishedVersion.Description == 'Work Cover Insurance Policy'}">
+                                                <c:ContentVersionFileUpload fileName='{!cd.ContentDocument.LatestPublishedVersion.Title}' recordId='{!cd.ContentDocumentId}' parentId="{!v.acc.Id}" fileDescription="Work Cover Insurance Policy" attachmentList="{!v.attachments}" workCoverInsurance="{!v.workCoverDocAdded}" aura:id="workCoverUpload" documentHeader="Work Cover Insurance Policy"/>
+                                            </aura:if>                                                
+                                        </aura:iteration>
+                                    </aura:if>                                            
+                                    <aura:set attribute="else">
+                                        <c:ContentVersionFileUpload recordId='' parentId="{!v.acc.Id}" fileDescription="Work Cover Insurance Policy" attachmentList="{!v.attachments}" workCoverInsurance="{!v.workCoverDocAdded}" documentHeader="Work Cover Insurance Policy"/>
+                                    </aura:set>                                            
+                                </aura:if>
+                            </div>                                    
+                        </div>                            
+                    </fieldset>
+                </c:CollapsibleSection>
+                <c:CollapsibleSection title="Public Liability Insurance Details" open="false">
+                    <fieldset class="slds-form-element">                                
+                        <div class="slds-form-element__row">                  
+                            <div class="slds-form-element slds-size_1-of-2">
+                                <div class="slds-form-element slds-p-around_small">
+                                    <lightning:input aura:id="PublicLiabilityInsuranceProvider" name="PublicLiabilityInsuranceProvider" label="Insurance Provider"
+                                                     value="{!v.acc.Public_Liability_Insurance_Provider__c}" type="text" required="true"/>
+                                </div>
+                            </div>
+                            <div class="slds-form-element slds-size_1-of-2">  
+                                <div class="slds-form-element slds-p-around_small">
+                                    <lightning:input aura:id="PublicLiabilityCoverAmount" name="PublicLiabilityCoverAmount" label="Cover amount"
+                                                     value="{!v.acc.Public_Liability_Cover_Amount__c}"  type="Number" required="true" min="0" formatter="currency"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-form-element__row">                
+                            <div class="slds-form-element slds-size_1-of-2">  
+                                <div class="slds-p-around_small">
+                                    <lightning:input class="{! v.plDateValidationError ? 'slds-has-error' : ''}"
+                                                     type="date"
+                                                     label="Expiry"
+                                                     value="{!v.acc.Public_Liability_Expiry__c}"
+                                                     name="PublicLiabilityExpiry"
+                                                     onchange="{!c.expiryDateUpdate}" required="true"/>
+                                    
+                                    <aura:if isTrue="{!v.plDateValidationError}">
+                                        <div class="slds-text-color_error slds-p-left_x-small">
+                                            Date must be in present or in future..
+                                        </div>
+                                    </aura:if>    
+                                    <br/>
+                                </div>                                   
+                            </div>
+                        </div>
+                        <div class="slds-form-element__row" id="publicLiabUpload">
+                            <!--file upload component-->
+                            <!--Upload public liability related attachments-->
+                            <aura:if isTrue="{!v.publicLiabilityDocAdded}">
+                                <aura:if isTrue="{!v.acc.ContentDocumentLinks.length > 0}">
+                                    <aura:iteration items="{!v.acc.ContentDocumentLinks}" var="cd">
+                                        <aura:if isTrue="{!cd.ContentDocument.LatestPublishedVersion.Description == 'Public Liability Insurance Policy'}">
+                                            <c:ContentVersionFileUpload fileName='{!cd.ContentDocument.LatestPublishedVersion.Title}' 
+                                                                        recordId='{!cd.ContentDocumentId}' parentId="{!v.acc.Id}" 
+                                                                        fileDescription="Public Liability Insurance Policy" 
+                                                                        attachmentList="{!v.attachments}" workCoverInsurance="{!v.publicLiabilityDocAdded}" aura:id="publicLiabUpload" documentHeader="Public Liability Insurance Policy"/>
+                                        </aura:if>
+                                    </aura:iteration>
+                                </aura:if>                                        
+                                <aura:set attribute="else">
+                                    <c:ContentVersionFileUpload recordId='' parentId="{!v.acc.Id}" 
+                                                                fileDescription="Public Liability Insurance Policy" 
+                                                                attachmentList="{!v.attachments}" workCoverInsurance="{!v.publicLiabilityDocAdded}" 
+                                                                aura:id="publicLiabUpload" documentHeader="Public Liability Insurance Policy"/>
+                                </aura:set>                                            
+                            </aura:if>
+                        </div>                                    
+                    </fieldset>
+                </c:CollapsibleSection>
+                <c:CollapsibleSection title="Police Check Document Details" open="false">
+                    <fieldset class="slds-form-element">
+                    <aura:if isTrue="{!v.policeCheckDocAdded}"> 
+                        <aura:if isTrue="{!v.acc.ContentDocumentLinks.length > 0}">
+                                    <aura:iteration items="{!v.acc.ContentDocumentLinks}" var="cd">
+                                        <aura:if isTrue="{!cd.ContentDocument.LatestPublishedVersion.Description == 'Police Check Document'}">
+                                            <c:ContentVersionFileUpload fileName='{!cd.ContentDocument.LatestPublishedVersion.Title}' 
+                                                                        recordId='{!cd.ContentDocumentId}' parentId="{!v.acc.Id}" 
+                                                                        fileDescription="Police Check Document" 
+                                                                        attachmentList="{!v.attachments}" workCoverInsurance="{!v.policeCheckDocAdded}" aura:id="policeCheckUpload" documentHeader="a Police Check (Less than 3 months)"/>
+                                        </aura:if>
+                                    </aura:iteration>
+                                </aura:if>                                    
+                                <aura:set attribute="else">   
+                                    <c:ContentVersionFileUpload recordId='' parentId="{!v.acc.Id}" 
+                                                                fileDescription="Police Check Document" 
+                                                                attachmentList="{!v.attachments}" workCoverInsurance="{!v.policeCheckDocAdded}" 
+                                                                aura:id="policeCheckUpload" documentHeader="a Police Check (Less than 3 months)"/>
+                                    
+                                                                                  
+                                    </aura:set>
+                                </aura:if>
+                         </fieldset>
+                </c:CollapsibleSection>
+                <c:CollapsibleSection title="Other Insurance Details" open="false">
+                    <div class="slds-form-element__row">                  
+                        <div class="slds-form-element slds-size_1-of-2">  
+                            <div class="slds-form-element">
+                                <lightning:input aura:id="OtherInsurancePolicies" name="OtherInsurancePolicies" label="Other Insurance Policies"
+                                                 value="{!v.acc.Other_Insurance_Policies__c}" type="text"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-form-element__row" id="otherInsuranceUpload">
+                        <!--file upload component-->
+                        <!--Upload public liability related attachments-->
+                        <aura:if isTrue="{!v.otherInsuranceDocAdded}">
+                            <aura:if isTrue="{!v.acc.ContentDocumentLinks.length > 0}">
+                                <aura:iteration items="{!v.acc.ContentDocumentLinks}" var="cd">
+                                    <aura:if isTrue="{!cd.ContentDocument.LatestPublishedVersion.Description == 'Other Insurance Policy'}">
+                                        <c:ContentVersionFileUpload fileName='{!cd.ContentDocument.LatestPublishedVersion.Title}' recordId='{!cd.ContentDocumentId}' parentId="{!v.acc.Id}" fileDescription="Other Insurance Policy" attachmentList="{!v.attachments}" workCoverInsurance="{!v.otherInsuranceDocAdded}" aura:id="otherInsuranceUpload" documentHeader="Other Insurance Policy"/>
+                                    </aura:if>
+                                </aura:iteration>
+                            </aura:if>                                        
+                            <aura:set attribute="else">
+                                <c:ContentVersionFileUpload recordId='' parentId="{!v.acc.Id}" fileDescription="Other Insurance Policy" attachmentList="{!v.attachments}" workCoverInsurance="{!v.otherInsuranceDocAdded}" aura:id="otherInsuranceUpload" documentHeader="Other Insurance Policy"/>
+                            </aura:set>                                            
+                        </aura:if>
+                    </div>
+                </c:CollapsibleSection>
+                <c:Card sections="{!v.sections}" cacheData="{!v.cacheData}" aura:id="card" valueMap="{!v.valueMap}" />
+                <div class="complianceWrapper">
+                    <c:TradeComplianceAdder aura:id="compliance" />
+                </div>
+                <br/>
+                <div class="slds-form-element__row">                  
+                    <div class="slds-form-element slds-size_1-of-1">
+                        <div class="slds-form-element">
+                            <lightning:button type="submit" name="submit" 
+                                              class="slds-align_absolute-center" variant="brand" 
+                                              label="Save" onclick="{!c.updateAccountJs}"/>
+                        </div>
+                    </div>                         
+                </div>
+            </div>
+        </div>
+    </aura:If>             
+</aura:component>

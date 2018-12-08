@@ -1,0 +1,28 @@
+<aura:component >
+    
+    <aura:attribute name="iconName" type="String" />
+    <aura:attribute name="summarisedStatus" type="String" default="None" />
+    <aura:attribute name="appointmentCount" type="String" default="1" />
+    
+    <aura:attribute name="alternativeText" type="String"/>
+    
+    <lightning:layoutItem padding="around-small" flexibility="auto">	
+        
+        <div class="cp-summary-item ">
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem size="12" class="slds-align_absolute-center" padding="around-small">
+                	<lightning:icon iconName="{!v.iconName}" size="medium" alternativeText="{!v.alternativeText}"/>
+                </lightning:layoutItem >
+               
+                <lightning:layoutItem size="12" class="slds-align_absolute-center">
+                	<p class="slds-p-vertical_xx-small slds-text-heading_small">{!v.summarisedStatus}</p>
+                </lightning:layoutItem>
+              
+                <lightning:layoutItem size="12" class="slds-align_absolute-center">
+                	<p class="slds-p-vertical_xx-small slds-text-font_monospace slds-text-heading_small">{!v.appointmentCount}</p>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </div>
+    </lightning:layoutItem>
+    
+</aura:component>

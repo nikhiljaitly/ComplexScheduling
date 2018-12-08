@@ -1,0 +1,165 @@
+<aura:component controller="paginationPriceBookWkType" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+   
+    <ltng:require styles="{!$Resource.SLDS275 + '/styles/lightning-design-system-ltng.css'}"/>
+
+    <!--declare attributes--> 
+    <aura:attribute name="selectedRecord" type="sObject" default="{}" description="Use,for store SELECTED sObject Record"/>
+    <aura:attribute name="listOfSearchRecords" type="List" description="Use,for store the list of search records which returns from apex class"/>
+    <aura:attribute name="SearchKeyWord" type="string"/>
+    <aura:attribute name="objectAPIName" type="string" default="PricebookEntry"/>
+    <aura:attribute name="IconName" type="string" default="standard:pricebook"/>
+    <aura:attribute name="label" type="string" default="Product Name"/>
+    <aura:attribute name="Message" type="String" default=""/>
+    <aura:attribute name="WOWorkType" type="string" default="Electrician"/>
+    <aura:attribute name="woState" type="string" default="VIC"/>
+    <aura:attribute name="woRecordId" type="String" default=""/>
+    <aura:attribute name="priceBookId" type="string"/>
+    <aura:attribute name="labourPrice" type="decimal"/>
+    <aura:attribute name="materialPrice" type="decimal"/>
+    <aura:attribute name="labourTime" type="decimal"/>
+    
+    <aura:attribute name="pricebookentry" type="PricebookEntry[]"/>
+  <!--  <aura:handler name="init" value="{!this}" action="{!c.getPriceBookEntry}" />  !--> 
+    <aura:attribute name="offset" type="integer" />     
+    <aura:attribute name="next" type="boolean" />
+    <aura:attribute name="prev" type="boolean" />
+    
+    <aura:attribute name="class" type="String" description="CSS classname for the SVG element" />
+    <aura:attribute name="xlinkHref" type="String" description="SLDS icon path. Ex: /assets/icons/utility-sprite/svg/symbols.svg#download" />
+    <aura:attribute name="ariaHidden" type="String" default="true" description="aria-hidden true or false. defaults to true" />
+    
+      
+    <aura:attribute name="subHeadingFieldsAPI"
+                    type="String[]"
+                    default="ProductCode"
+                    description="Field API for the fields to be shown under the record Name.
+                    Must be comma separated. Example: Email,Phone"/>
+    
+	<!--Register the component level event-->
+    <aura:registerEvent name="handleClearedPriceBookEntryEvent" type="c:handleClearedPriceBookEntryEvent"/>    
+    
+    <!--declare events hendlers-->  
+    <aura:handler name="SelectedRecordEvent" event="c:selectedsObjectRecordEvent" action="{!c.handleComponentEvent}"/>
+   	
+ <!--   <aura:handler name="init" value="{!this}" action="{!c.getPriceBookEntry}"/> !-->
+    
+    <!-- https://www.lightningdesignsystem.com/components/lookups/ --> 
+    
+    <div onmouseleave="{!c.onblur}" aura:id="searchRes" class="slds-form-element slds-lookup slds-is-close" data-select="single">
+        <label class="slds-form-element__label" for="lookup-348">{!v.label}</label>
+        <!--This part is for display search bar for lookup-->  
+        <div class="slds-form-element__control">
+            
+            <div class="slds-input-has-icon slds-input-has-icon--right">
+                <!-- This markup is for when an record is selected -->                 
+                <div aura:id="lookup-pill" class="slds-pill-container slds-hide">
+                   <span class="slds-badge slds-float_right">Press 'X' icon to Clear</span>
+                     <lightning:pill class="pillSize" label="{!v.selectedRecord.Name}" name="{!v.selectedRecord.Name}" onremove="{! c.clear }">
+                         <aura:set attribute="media">
+                            <lightning:icon iconName="{!v.IconName}" size="x-small" alternativeText="{!v.IconName}"/>                             
+                          </aura:set>
+                      </lightning:pill>
+                </div>
+                <div aura:id="lookupField" class="slds-show">
+                    <lightning:icon class="slds-input__icon slds-show" iconName="utility:search" size="x-small" alternativeText="search"/>
+                    <span class="slds-icon_container  slds-combobox__input-entity-icon" title="record">
+                        <lightning:icon class="slds-icon slds-icon slds-icon_small slds-icon-text-default" iconName="{!v.IconName}" size="x-small" alternativeText="icon"/>
+                        <span class="slds-assistive-text"></span>
+                    </span>
+                    <ui:inputText click="{!c.onfocus}" updateOn="keyup" keyup="{!c.keyPressController}" class="slds-lookup__search-input slds-input leftPaddingClass" value="{!v.SearchKeyWord}" placeholder="Search Products.."/>
+                </div>   
+            </div>
+        </div>
+        <!--This part is for Display typehead lookup result List-->    
+        <table class="slds-table slds-table--bordered slds-max-medium-table--stacked-horizontal"><!--Table must be responsive-->
+            <thead>
+                <tr class="slds-text-heading--label ">                    
+                    <th class="" scope="col">PriceBook Name</th>         
+                </tr>  
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.pricebookentry}" var="pricebkentry" indexVar="index">
+                    
+                    <tr id ="{!index}" class="slds-hint-parent">                    
+                        <td data-label="PriceBookEntry Name" > <!-- {!pricebkentry.Name} !-->
+                            <a onclick="{!c.selectPriceBkEntry}" data-record="{!index}">
+                               <!-- <lightning:icon variant="" iconName="utility:check" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                                <span class="slds-assistive-text">Select Icon</span> !-->
+                                {!pricebkentry.Name}
+                            </a>
+                        </td>      
+                    </tr>
+                 
+                </aura:iteration>
+            </tbody>
+        </table>
+                
+        <ui:button class="slds-button slds-button--neutral slds-p-horizontal--xx-small slds-m-right--x-small slds-float--right" press="{!c.Next}" disabled="{!v.next}">
+            <span class="slds-icon slds-icon-text-default">
+                <c:svg class="slds-button__icon slds-button__icon--large" xlinkHref="/resource/SLDS275/icons/utility-sprite/svg/symbols.svg#chevronright" />
+                <span class="slds-assistive-text">Next</span>
+            </span>                 
+        </ui:button>
+        <ui:button class="slds-button slds-button--neutral slds-p-horizontal--xx-small slds-m-right--x-small slds-float--right" press="{!c.Previous}" disabled="{!v.prev}">
+            <span class="slds-icon slds-icon-text-default">
+                <c:svg class="slds-button__icon slds-button__icon--large" xlinkHref="/resource/SLDS275/icons/utility-sprite/svg/symbols.svg#chevronleft" />
+                <span class="slds-assistive-text">Previous</span>
+            </span>               
+        </ui:button>      
+  </div>
+    
+    <br/>
+    <br/>
+    
+  
+    <div class="slds-page-header">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container slds-icon-standard-product" title="product">
+                            <c:svg class="slds-button__icon slds-button__icon--large" xlinkHref="/resource/SLDS275/icons/utility-sprite/svg/symbols.svg#work_order_type" />                           
+                            <span class="slds-assistive-text" style="color:red">product</span>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <div class="slds-page-header__name">
+                            <div class="slds-page-header__name-title">
+                                <h1>
+                                    <span class="slds-page-header__title slds-truncate" title="Product Costs">Product Costs</span>
+                                </h1>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    
+    <div>
+        <lightning:recordEditForm
+                                  onload="{!c.overrideCosts}"
+                                  onsubmit=""
+                                  onsuccess=""
+                                  recordId="{!v.priceBookId}"
+                                  objectApiName="Pricebook2">
+            <!-- the messages component is for error messages -->
+            <lightning:messages />
+            
+            <lightning:inputField aura:id="labourprice" fieldName="Labour_Price__c" />
+            <lightning:inputField aura:id="materialprice" fieldName="Material_Price__c" />
+            <lightning:inputField aura:id="labourtime" fieldName="Labour_TIME_mins__c" formatter="decimal"/>
+            <lightning:input aura:id="quantity"
+                             type="number"
+                             name="quantity"
+                             label="Quantity"
+                             min = "1.00"                         
+                             step="0.01"
+                             value="1"
+                             messageWhenRangeUnderflow="Enter an quantity that's at least 1."/>        
+        </lightning:recordEditForm>        
+    </div>
+    
+    
+</aura:component>

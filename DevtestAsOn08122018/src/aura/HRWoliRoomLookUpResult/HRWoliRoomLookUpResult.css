@@ -1,0 +1,11 @@
+.THIS.scrollerSize1 {
+    height: 300px;
+    border-radius: 10px;
+}
+
+.THIS.scrollerSize {
+    background-color: lightblue;
+    height: 40px;
+    width: 200px;
+    overflow-y: scroll;
+}

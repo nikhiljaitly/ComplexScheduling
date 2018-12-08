@@ -1,0 +1,50 @@
+global class invWorkOrderLineItemWrapper{
+    public String workOrderLineItemId;
+    public String WorkOrderId;
+    public String Status;
+    public String roomId;
+    public String roomName;
+    public String workTypeId;
+    public String workTypeName;
+    public String productId;
+    public String productName;
+    public Decimal LabourAmount;
+    public Decimal MaterialAmount;
+    public string ProductDescription;
+    public string uom;
+    public string InvoiceType;
+    public Boolean cashSettled;
+    public String contentsType;
+    public Decimal unitPrice;
+    public Decimal totalPrice;
+    public Decimal Subtotal;
+    public Decimal TotalIncGST;    
+    public Decimal quantity;
+    public String description;
+    public boolean isDeleted;
+    public invWorkOrderLineItemWrapper(WorkOrderLineItem woli){
+        this.workOrderLineItemId  = woli.id;
+        this.Status  = woli.Status;   
+        this.WorkOrderId = woli.WorkOrderId;
+      //  this.roomId=woli.Room__r.Id;
+       // this.roomName=woli.Room__r.Name;
+        this.workTypeId= woli.WorkTypeId;
+        this.workTypeName=woli.WorkType.Name;
+     //   this.productId= woli.PricebookEntryId;
+     //   this.productName =woli.PricebookEntry.Name;
+    //    this.cashSettled =woli.Cash_Settled__c;  
+    //    this.contentsType =woli.Contents_Type__c; 
+        this.unitPrice =woli.UnitPrice ;  
+        this.totalPrice=woli.TotalPrice;
+        this.Subtotal=woli.Subtotal;
+        this.TotalIncGST=woli.Total_inc_GST__c;        
+        this.quantity =woli.Quantity;  
+        this.description =woli.Description;
+        this.isDeleted=false;
+        this.LabourAmount=woli.Labour_Amount__c;
+        this.MaterialAmount=woli.Material_Amount__c;
+        this.ProductDescription=woli.Product_Description__c;
+        this.uom=woli.UOM__c;
+        this.InvoiceType=woli.Invoice_Type__c;
+    }
+}

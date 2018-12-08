@@ -1,0 +1,9 @@
+.THIS.slds-spinner_container {  
+  z-index: 10000;
+  position: fixed;   
+}
+
+.THIS .sWrapTest {
+    height:100px;
+   /* width:100px; */
+}

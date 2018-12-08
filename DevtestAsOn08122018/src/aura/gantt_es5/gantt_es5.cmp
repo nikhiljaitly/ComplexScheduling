@@ -1,0 +1,15 @@
+<aura:component  implements="flexipage:availableForAllPageTypes" access="global" >
+    
+    <!-- src="{!$Resource.gantt_chart + '/index.html'}" -->
+    
+    <lightning:card title="LCC Gantt Sample">
+        
+        <!--<p>Under Construction...</p>-->
+        
+        <lightning:container aura:id="jsApp" src="{!$Resource.gantt_chart + '/index.html'}"
+            onmessage="{!c.handleMessage}"
+            onerror="{!c.handleError}"/>
+
+    </lightning:card>
+	
+</aura:component>

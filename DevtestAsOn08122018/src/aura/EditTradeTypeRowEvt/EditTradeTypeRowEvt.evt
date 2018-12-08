@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT" description="Use For Add New Row">
+	<aura:attribute name="TradeType" type="Object" description="Use to add trade type" />
+    <aura:attribute name="indexVar" type="Integer" description="Use For Delete Row" />
+</aura:event>

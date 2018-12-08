@@ -1,0 +1,73 @@
+<aura:component >
+    <!-- attributes -->
+    <aura:attribute name="associatedWO" type="workOrder"/>
+    <aura:attribute name="newWOLI" type="WorkOrderLineItem"/>
+	<!--WOLI Form-->
+    <lightning:layout>
+        
+            <div aria-labelledby="newWOLI">
+                <legend id="newWOLI" class="slds-text-title--small slds-p-vertical--medium">
+                    Create New
+                </legend>
+                
+                <form class="slds-form--stacked">
+                    <h1 class="slds-text-title_caps slds-line-height_reset">Information</h1>
+                    <div class="slds-grid">
+                        
+                        <div class="slds-row">
+                        <div class="slds-col slds-size_1-of-2">
+                        <!--have to setup lookup field-->
+                        <lightning:input aura:id="createWOLI" label="Work Type"
+                                         name="workType"
+                          
+                                         value="{!v.newWOLI.Work_Type__c}"/>
+                        
+                        <!--have to get picklist values-->
+                        <lightning:input aura:id="createWOLI" label="Status"
+                                         name="Status"
+                                         value="{!v.newWOLI.Status}"/>
+                        
+                        <lightning:input aura:id="createWOLI" label="Site Visit Number"
+                                         name="Site_Visit_Number"
+                                         value="{!v.newWOLI.Site_Visit_Number__c}"/>
+                        </div>
+                        
+                        
+                        <div class="slds-col slds-size_1-of-2">
+                        <lightning:input aura:id="createWOLI" label="Service Appointment Sort Order"
+                                         name="SA_Sort_Order"
+                                         value="{!v.newWOLI.Sort_Order__c}"/>
+                        <!--lookup field-->
+                        <lightning:input aura:id="createWOLI" label="Work Order"
+                                         name="workOrder"
+                                         value="{!v.associatedWO.id}"/>
+                        <!--Lookup field-->
+                        <lightning:input aura:id="createWOLI" label="Service Appointment"
+                                         name="ServiceApp"
+                                         value="{!v.newWOLI.Service_Appointment__c}"/>
+                        </div>
+                        </div>
+                        
+                        
+                        <div class="slds-row">
+                        <h1 class="slds-text-title_caps slds-line-height_reset">Line Item Amounts</h1>
+                        <div class="slds-col">
+                        	<lightning:input aura:id="createWOLI" label="Labour Cost"
+                                             name="LabourCost"
+                                             value="{!v.newWOLI.Labour_Cost__c}"/>
+                            
+                            <lightning:input aura:id="createWOLI" label="Labour Time"
+                                             name="LabourTime"
+                                             value="{!v.newWOLI.Labour_Time__c}"/>
+                            
+                            <lightning:input aura:id="createWOLI" label="Material Cost"
+                                             name="MaterialCost"
+                                             value="{!v.newWOLI.Material_Cost_c}"/>
+                        </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+    </lightning:layout>
+</aura:component>

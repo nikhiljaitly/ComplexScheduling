@@ -1,0 +1,15 @@
+<aura:component >
+    <aura:attribute name="helpText" type="string" access="global" />
+	<aura:if isTrue="{!and(v.helpText != '',v.helpText != null, v.helpText != 'null')}">  
+        <div class="slds-icon_container">
+            <c:popover >
+                <aura:set attribute="popoverBody">                                           
+                    <ui:outputRichText value="{!v.helpText}"
+                                               aura:id="helpText" />
+                </aura:set>  
+                <lightning:icon iconName="utility:info" size="xx-small" />
+            </c:popover>					
+        
+        </div>
+    </aura:if>
+</aura:component>

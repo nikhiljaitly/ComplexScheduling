@@ -176,7 +176,7 @@
                 var appointResponse = response.getReturnValue();
                 var appoints = [];
                 for(var cnt = 0 ; cnt < appointResponse.length ; cnt++) {
-                    appoints.push({ label : appointResponse[cnt].servApp.Work_Type_Name__c+' - '+appointResponse[cnt].servApp.AppointmentNumber, 
+                    appoints.push({ label : appointResponse[cnt].servApp.Work_Type_Name__c+' - '+appointResponse[cnt].servApp.AppointmentNumber + ' - ' + appointResponse[cnt].servApp.Status, 
                                     value : appointResponse[cnt].servApp.Id});
                 }
                 component.set("v.options",appoints);

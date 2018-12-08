@@ -1,54 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>HRGanttChildController</members>
-        <members>HRGanttChildController_Test</members>
-        <members>HomeRepairTestDataFactory</members>
-        <members>HomeRepairUtil</members>
-        <members>NJ_ClaimAppointmentsController</members>
-        <members>NJ_ClaimAppointmentsControllerTest</members>
-        <members>NJ_ClaimPlannerController</members>
-        <members>NJ_ClaimPlannerControllerTest</members>
-        <members>NJ_Constants</members>
-        <members>NJ_HRGanttChildController</members>
-        <members>NJ_OwnServiceAppointments</members>
-        <members>NJ_SelectOptionLightning</members>
-        <members>NJ_ServiceAppointmentManagerController</members>
-        <members>NJ_ServiceAppointmentMngrControllerTest</members>
-        <members>NJ_UnscheduleAppointmentJob</members>
-        <members>NJ_UnscheduleAppointmentJob_Test</members>
-        <members>NJ_Utilities</members>
-        <members>ServiceAppointmentHandler</members>
-        <members>ServiceAppointmentHelper</members>
-        <members>ServiceAppointmentManagerController</members>
-        <members>ServiceAppointmentService</members>
-        <members>TradePortalServiceAppointments</members>
-        <members>TradePortalServiceAppointmentsTest</members>
-        <members>TriggerFactory</members>
-        <members>WorkOrderLineItemHandler</members>
-        <members>WorkOrderLineItemListController</members>
-        <members>WorkOrderLineItemService</members>
-        <members>WorkOrderService</members>
+        <members>*</members>
         <name>ApexClass</name>
     </types>
     <types>
-        <members>ClaimSrvApptManagerSelectionEvent</members>
-        <members>HRGanttChart</members>
-        <members>HRGanttChartApp</members>
-        <members>HRGanttChartChild</members>
-        <members>HRGanttDHTMLX</members>
-        <members>HRGanttDhtmlxApp</members>
-        <members>NJ_ClaimAppointments</members>
-        <members>NJ_ClaimPlanner</members>
-        <members>NJ_ClaimPlannerGanttMiddle</members>
-        <members>NJ_GenericToast</members>
-        <members>NJ_HRGanttChart</members>
-        <members>NJ_HRGanttChartChild</members>
-        <members>NJ_HighlightPanel</members>
-        <members>NJ_HighlightPanelItem</members>
-        <members>NJ_ServiceAppointmentManager</members>
-        <members>SvcApptMgrScheduledEvent</members>
-        <members>TradePortalServiceAppointment</members>
+        <members>*</members>
         <name>AuraDefinitionBundle</name>
     </types>
     <version>36.0</version>

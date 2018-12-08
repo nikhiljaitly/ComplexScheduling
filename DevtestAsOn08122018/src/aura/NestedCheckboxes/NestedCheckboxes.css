@@ -1,0 +1,8 @@
+.THIS {
+}
+.THIS .inlinFlex {
+    display: inline-flex;
+}
+.THIS .regions {
+    max-width: 150px;
+}

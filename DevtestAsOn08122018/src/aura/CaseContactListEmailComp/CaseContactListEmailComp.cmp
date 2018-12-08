@@ -1,0 +1,134 @@
+<aura:component controller="ListEmailClaimController" implements="force:hasRecordId,flexipage:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global">
+    <aura:handler name="init" value="{!this}" action="{!c.loadComponent}"/> 
+    <aura:attribute name="errorMsg" type="String" description=""/>
+    <aura:attribute name="shoMsg" type="boolean" default="false" description=""/>
+    <aura:attribute name="shwSucesMsg" type="boolean" default="false" description=""/>
+    <aura:attribute name="showLoader" type="boolean" default="false" description=""/> 
+    <aura:attribute name="Opportunity" type="Opportunity" 
+                    default="{ 'sobjectType': 'Opportunity', 'SampleRichText__c':''}"/>
+    
+    <aura:attribute name="disableTemplate" type="boolean" default="false" description=""/>
+    <aura:attribute name="selTempl" type="String" description=""/>
+    <aura:attribute name="templates" type="EmailTemplate[]" default="[]"/>
+    <aura:attribute name="addnlEmails" type="String" default="" description=""/>
+    <aura:attribute name="subjTxt" type="String" default="" description=""/>
+    <aura:attribute name="msgReview" type="String" default="" description=""/>
+    <aura:attribute name="accIds" type="String" access="GLOBAL" default="" description=""/>
+    <aura:attribute name="oppIds" type="String" access="GLOBAL" default="" description=""/>
+    <aura:attribute name="accRecords" type="sObject[]" default="[]" />
+    <aura:attribute name="templDetail" type="EmailTemplate" default="{}" />
+    
+    <div class="slds-page-header" role="banner">
+        <div class="slds-grid">
+            <div class="slds-col slds-has-flexi-truncate">
+                <!-- SEARCH AREA -->
+                <p class="slds-text-title--caps slds-line-height--reset">
+                    
+                    <span title="lead Standard Icon">
+                        
+                    </span>&nbsp;&nbsp;Send Email</p>
+                <!-- / SEARCH AREA -->
+            </div>
+            
+        </div>
+    </div>
+    
+    
+    
+    <br/><br/>
+    <!-- Connection 1 Section -->
+    <div class="slds-grid slds-grid_vertical">
+        <div class="slds-box slds-box--small slds-theme--shade slds-text-align--left">Email Message</div>
+        <br/>
+        <div class="slds-col">
+            
+            <div class="slds-form-element slds-size--1-of-1">
+                <!-- <label class="slds-form-element__label" for="input-02">Recipients<span color="red"><b>*</b></span></label> -->
+                
+                <!--  <input type="Text" autocomplete="off" style="border-left:4px solid red;" value=""  class="slds-input" /> -->
+                
+                
+                
+               <!-- <c:reUsableMultiSelectLookup objectAPIName="account"
+                                             IconName="standard:account"
+                                             lstSelectedRecords="{!v.accRecords}"
+                                             label="Recipients" 
+                                             aura:id="lookupRes" /> -->
+            </div>
+            
+        </div> <br/><br/>
+        
+        <div class="slds-col">
+            <lightning:select disabled="{!v.disableTemplate}" onchange="{!c.loadTemplate}"  name="SelectDivision" label="Select a Template:" aura:id="templateId" value="{!v.selTempl}">
+                <option text="None" value=""/>
+                
+                <aura:iteration items="{!v.templates}" var="item">
+                    <option text="{!item.Name}" value="{!item.Id}"/>
+                </aura:iteration> 
+            </lightning:select>
+        </div> <br/><br/> 
+        
+        <div class="slds-col">
+            <div class="slds-form-element slds-size--1-of-1">
+                <label class="slds-form-element__label" for="input-02">Subject:</label>
+                
+                <input id="subjMatter" type="Text" autocomplete="off" value="{!v.subjTxt}"  class="slds-input" />
+            </div>  
+            
+        </div><br/><br/>
+        
+        <div class="slds-col" aura:id="emailBodyDiv">   
+            <div class="slds-form-element slds-size--1-of-1">
+                <label class="slds-form-element__label" for="input-02">Content :</label>
+                <span></span>
+                <force:inputField class="richTxt" value="{!v.Opportunity.SampleRichText__c}"/>
+            </div>
+        </div><br/><br/>
+        
+        <aura:if isTrue="{!!empty(v.selTempl)}" >
+            <lightning:textarea name="myTextArea" value="{!v.templDetail.Body}" 
+                                label="Content:" maxlength="700" 
+                                class="txtAreaCls" disabled="true" />
+            <br/><br/>
+        </aura:if>
+        
+        
+    </div>    
+    
+    <br/>
+    
+    <!-- Error message area -->
+    
+    <br/><br/>
+    <aura:if isTrue="{!v.shoMsg}" >
+        <ui:message aura:id="errPanel"  title="Error" severity="error" closable="false">
+            {!v.errorMsg}
+        </ui:message>
+        <br/><br/>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.shwSucesMsg}" >
+        <ui:message aura:id="errPanel"  title="Success!" severity="confirm" closable="false">
+            Email has been sent!
+        </ui:message>
+        <br/><br/>
+    </aura:if>	
+    
+    <!-- Buttons and Loader section -->
+    <div class="slds-align_absolute-center " style="padding:2%;">
+        
+        <lightning:button variant="brand" label="Send Email" onclick="{!c.sendEmailAction}" />
+        
+        <input type="button" value="Cancel" class="slds-button slds-button--neutral" onclick="{!c.closeDialog}"/>
+        <aura:if isTrue="{!v.showLoader}">
+            <div class="demo-only" style="height: 6rem;">
+                <div role="status" class="slds-spinner_brand slds-spinner slds-spinner_small">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </aura:if>  
+        
+    </div>     
+</aura:component>

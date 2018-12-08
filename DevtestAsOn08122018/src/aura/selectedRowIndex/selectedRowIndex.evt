@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="by this event we are capturing the selected row">
+    <aura:attribute name="rowIndexfromevent" type="string"/>
+</aura:event>

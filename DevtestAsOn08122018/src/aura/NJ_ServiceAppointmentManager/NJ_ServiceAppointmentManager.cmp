@@ -151,23 +151,24 @@
                                            type="datetime" 
                                          />
                         </aura:if>
-                        </div>
-                    
-                    <div style="text-align:center;" class="slds-m-top_x-small">
-                    
-                   
-                      <lightning:button variant="brand" 
-                                      label="Find Candidates" 
-                                      title="Get Candidates" 
-                                      onclick="{! c.getCandidates }" />
                     </div>
                     
-                    <div style="text-align: center;margin-top:10px" class="slds-m-top_x-medium">
+                    <aura:if isTrue="{!v.currSrvAppointment.status == 'New'}">
+                      <div style="text-align:center;" class="slds-m-top_x-small">
                         <lightning:button variant="brand" 
-                                      label="Find Tier 2 Candidates" 
-                                      title="Get Candidates" 
-                                      onclick="{! c.getTempCandidates }" />
-                    </div>
+                                        label="Find Candidates" 
+                                        title="Get Candidates" 
+                                        onclick="{! c.getCandidates }" />
+                      </div>
+                    </aura:if>
+                    <aura:if isTrue="{!v.currSrvAppointment.status == 'New'}">
+                      <div style="text-align: center;margin-top:10px" class="slds-m-top_x-medium">
+                          <lightning:button variant="brand" 
+                                        label="Find Tier 2 Candidates" 
+                                        title="Get Candidates" 
+                                        onclick="{! c.getTempCandidates }" />
+                      </div>
+                    </aura:if>
 
                     <div style="text-align:center;margin-top:25px" class="slds-m-top_x-small">
                         <!--<lightning:textarea name="specIns" label="Special Instructions" value="{!v.currSrvAppointment.wo.Special_Instructions__c}" />-->

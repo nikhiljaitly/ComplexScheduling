@@ -1,0 +1,12 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	
+    <aura:attribute name="object" type="String" default="WorkOrderLineItem" access="public"></aura:attribute>
+    <aura:attribute name="lookupField" type="String" default="Room__c" access="public"></aura:attribute>   
+    <aura:attribute name="selectedRecordId" type="String" access="public"></aura:attribute>
+        
+    <aura:registerEvent name="sendRoomId" type="c:RoomLookupEvent" />
+    
+    <lightning:recordEditForm objectApiName="{! v.object }">
+    	<lightning:inputField fieldName="{! v.lookupField }" onchange="{!c.handleOnChange }"/>
+    </lightning:recordEditForm>
+</aura:component>

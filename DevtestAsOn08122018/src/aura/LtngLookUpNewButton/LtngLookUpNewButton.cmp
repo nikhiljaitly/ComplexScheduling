@@ -1,0 +1,54 @@
+<aura:component controller="CreateRoom" implements="force:appHostable">
+    <aura:attribute name="room" type="Room__c" default="{'sobjectType':'Room__c',
+                                                        'Name':'',
+                                                        'Height__c':'0',
+                                                        'Length__c':'0',
+                                                        'Width__c':'0'
+                                                        }"/>
+    <aura:attribute name="woRecordId" type="String" default=""/>
+    <aura:attribute name="IconName" type="string" default="standard:lead"/>  
+    
+    
+    <!--Register the component level event-->
+    <aura:registerEvent name="HRHideCreateRoomComp" type="c:HRHideCreateRoomComp"/>   
+
+    <article class="slds-card slds-p-left_large">
+      <div class="slds-p-around_medium">  
+        <div class="slds-card__body slds-card__body_inner">                      
+            <lightning:input style="width:300px" aura:id="roomname" label="Room Name"
+                             required="true"
+                             name="roomname"
+                             value="{!v.room.Name}"                      
+                             placeholder="Please enter room name"/> 
+            <lightning:input style="width:200px" type="number" aura:id="height" label="Height"
+                             name="height"                             
+                             min="0"
+                             step="0.01"                             
+                             value="{!v.room.Height__c}"
+            				 messageWhenRangeUnderflow="Enter an number that's at least greater than 0."/>
+            <lightning:input style="width:200px" type="number" aura:id="length" label="Length"
+                             name="length"                             
+                             min="0"
+                             step="0.01"
+                             value="{!v.room.Length__c}"
+                             messageWhenRangeUnderflow="Enter an number that's at least greater than 0."/>
+            <lightning:input style="width:200px" type="number" aura:id="width" label="Width"
+                             name="weight"                             
+                             min="0"
+                             step="0.01"
+                             value="{!v.room.Width__c}"
+                             messageWhenRangeUnderflow="Enter an number that's at least greater than 0."/>            
+            
+            <div class="slds-p-top_medium">
+                <div class="slds-box slds-box_xx-small slds-theme_shade" style="width:127px">
+                <!--<lightning:button class="slds-button slds-button_brand" label="SaveRoom" onclick="{!c.createRoom}"/>
+                	<lightning:button class="slds-button slds-button_brand" label="CancelRoom" onclick="{!c.cancelRoom}"/> !-->
+                    <lightning:buttonIcon class="slds-button slds-button_icon slds-button_icon-brand slds-m-right_xx-large" iconName="utility:check" size="large" alternativeText="Save Room" onclick="{!c.createRoom}"/>
+                    <lightning:buttonIcon class="slds-button slds-button_icon slds-button_icon-error" iconName="utility:close" size="large" alternativeText="Cancel Room" onclick="{!c.cancelRoom}"/>
+                </div>
+            </div>  
+        </div>
+      </div> 
+    </article>
+    
+  </aura:component>

@@ -31,12 +31,14 @@ public without sharing class WorkOrderLineItemService {
         Decimal labourTime;
         String mapKey;
         VisitNumberInfo tempInfo;
-        for(WorkOrder wo : [Select id, WorkType.Name,(Select id from ServiceAppointments),(Select Id,Site_Visit_Number__c,Service_Appointment__c, Labour_Time__c, Sort_Order__c
+        Boolean createServiceAppointment = false;
+        for(WorkOrder wo : [Select id, WorkType.Name,(Select id from ServiceAppointments),(Select Id,Site_Visit_Number__c,Service_Appointment__c,Cash_Settled__c, Labour_Time__c, Sort_Order__c
                                       from WorkOrderLineItems) from WorkOrder where id IN: workOrderIds]){
             
             //Sort_Order__c
             if(wo.WorkOrderLineItems.size() > 0){
                 labourTime = 0;
+                createServiceAppointment = false;
                 for(WorkOrderLineItem woli: wo.WorkOrderLineItems){
                     if (woli.Site_Visit_Number__c != null){
                         ServiceAppointment sa=new ServiceAppointment();
@@ -54,6 +56,9 @@ public without sharing class WorkOrderLineItemService {
                           tempInfo.sortOrder = woli.Sort_Order__c;
                         }
                         visitNoMap.put(mapKey, tempInfo); 
+                        if(!woli.Cash_Settled__c) {
+                          createServiceAppointment = true;
+                        }
                    }
                   
                 }
@@ -62,7 +67,7 @@ public without sharing class WorkOrderLineItemService {
                   labourTime.setScale(2);
                 }
                 if(wo.ServiceAppointments.size() == siteVisitCountMap.get(wo.Id)){                
-                }else{
+                }else if(createServiceAppointment) {
                     system.debug('wo :'+wo.ServiceAppointments.size());
                     if(wo.ServiceAppointments.size() == 0){
                         for(Integer i=0;i<siteVisitCountMap.get(wo.Id);i++){  

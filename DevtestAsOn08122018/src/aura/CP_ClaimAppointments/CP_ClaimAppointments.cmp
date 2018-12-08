@@ -1,0 +1,36 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" 
+                access="global"
+                controller="CP_ClaimAppointmentsController">
+    
+    <!-- Id of the Claim we are working on -->
+    <aura:attribute name="claimId" type="Id" />
+    
+    <!-- List of Work Orders and Service Appointments we are working on -->
+    <aura:attribute name="claimServiceData" type="Object" />
+    
+    <!-- toggle for spinner -->
+    <aura:attribute name="isProcessing" type="Boolean" default="false" />
+    
+    <!-- fire code when component first created -->
+    <aura:handler name="init" value="{!this }" action="{!c.init }"/>
+    
+    <!-- handle application event for a Service Appointment being scheduled in another component -->
+    <aura:handler event="c:SvcApptMgrScheduledEvent" action="{!c.handleSvcApptMgrScheduledEvent}"/>
+    
+    <div  >
+    	<lightning:card title="Claim Appointments"
+                        iconName="utility:task" >
+                <div style="padding: 2px;" >
+                    <lightning:tree items="{! v.claimServiceData }" 
+                                    onselect="{! c.handleClaimServiceDataTreeSelect }" class=".slds-has-flexi-truncate" />
+                </div>        
+    	</lightning:card>
+    </div>
+    
+    <aura:if isTrue = "{!v.isProcessing}">
+            
+            <lightning:spinner alternativeText="Loading" size="medium" />
+            
+    </aura:if>
+	
+</aura:component>

@@ -1,0 +1,6 @@
+.THIS {
+}
+.THIS .drawable-X {
+    max-height: calc((1.5rem + 1rem) * 5);
+    overflow-y: auto;
+}

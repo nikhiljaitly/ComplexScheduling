@@ -1,0 +1,161 @@
+<aura:component >
+
+    <aura:attribute name="_repair_items" 
+                    type="Object[]"/>
+    <!-- set required to true if mandatory -->
+    <!--<aura:attribute name="headers" 
+                    type="Object[]" 
+                    default="[{label: 'Product', required: false, showIcons: false}, 
+                             {label: 'Quantity', required: false, showIcons: false}, 
+                             {label: 'Sales Price', required: false, showIcons: false}, 
+                             {label: 'Date', required: false, showIcons: false},
+                             {label: 'Line Description', required: false, showIcons: false}]"
+                    access="private"
+                    />-->
+    <aura:attribute name="headers" 
+                    type="Object[]" 
+                    default="[{label: 'Trade', required: false, showIcons: false}, 
+                             {label: 'Product', required: false, showIcons: false}, 
+                             {label: 'Work Item Description', required: false, showIcons: false},
+                             {label: 'Room', required: false, showIcons: false},
+                             {label: 'Quantity', required: false, showIcons: false},
+                             {label: 'Unit Price', required: false, showIcons: false},
+                             {label: 'Actions', required: false, showIcons: false}]"
+                    access="private"
+                    />
+    <aura:attribute name="_error" type="String" />
+    
+    <aura:method name="handleError" action="{!c.handleErrors}" >
+		<aura:attribute name="_server_response" type="Object" />
+    </aura:method>
+    
+    <aura:registerEvent name="handleRepairItems" type="c:homeRepRepairItemEvent"/>
+
+    <div class="slds-grid">
+        <div class="slds-col subHeader">
+            <div class="slds-p-top_small slds-p-bottom_small slds-p-left_small 
+                                                slds-text-heading_medium">
+               New Repair Items
+            </div>
+        </div>
+        <div class="subHeader slds-grid--vertical-align-end">
+            <div class="slds-button-group" role="group">
+                <div class="slds-button-group" role="group">
+                    <button class="slds-button slds-button--neutral"
+                            onclick="{!c.cancel}" 
+                            name="cancel">
+                        Cancel
+                    </button>
+                    <button class="slds-button slds-button--neutral slds-button--brand"
+                            onclick="{!c.save}" 
+                            name="select">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <aura:if isTrue="{!v._error.length > 0}">
+        <div class="slds-notify--alert slds-theme--error">
+            {!v._error}
+        </div>
+    </aura:if>
+    <table class="slds-table slds-table--bordered slds-table--fixed-layout" role="grid">
+        <thead>
+            <tr class="">
+                <aura:iteration items="{!v.headers}" var="header">
+                	<c:tqaopa_TableHeader label="{!header.label}" 
+                                   showIcons="{!header.showIcons}"
+                                   required="{!header.required}"
+                                   orderBy="{!v.orderBy}"
+                                   disableOrderBy="true" />
+                </aura:iteration>                
+            </tr>
+        </thead>
+        <tbody>
+            <aura:iteration items="{!v._repair_items}" var="item" indexVar="index" >
+                <tr id="{!'Item_Row_' + index}">
+
+                    <th scope="row" data-label="Trade">
+                        <div class="slds-cell-wrap" title="{!item.pBEntry.Product2.Work_Action_Description__c}">
+                            <ui:outputText value="{!item.pBEntry.Product2.Work_Action_Description__c}"/>
+                        </div>
+                    </th>
+
+                    <th scope="row" data-label="Product Name">
+                        <div class=" slds-grid slds-cell-wrap slds-grid--pull-padded" title="{!item.pBEntry.Product2.Name}">
+                            <div class="slds-p-horizontal--small slds-size--9-of-12 slds-medium-size--9-of-12 slds-large-size--9-of-12">
+                                <ui:outputText value="{!item.pBEntry.Product2.Name}"/>
+                            </div>
+                            <div class="slds-p-horizontal--small 
+                                        slds-size--2-of-12 
+                                        slds-medium-size--2-of-12 
+                                        slds-large-size--2-of-12">
+	                            <c:tqaopa_Tooltip context="{!item.errors.message}"/>
+                            </div>
+                            <div class="slds-p-horizontal--small 
+                                        slds-size--1-of-12
+                                        slds-medium-size--1-of-12 
+                                        slds-large-size--1-of-12">
+                            </div>
+                        </div>
+
+                    </th>
+                    
+                    <th scope="row" data-label="Work Item Description">
+                        <div class="slds-truncate" title="{!item.pBEntry.Product2.Work_Item_Description__c}">
+                            <ui:outputText value="{!item.pBEntry.Product2.Work_Item_Description__c}"/>
+                        </div>
+                    </th>
+                    
+                    
+                    <th scope="row" data-label="Room">
+                        <div class="slds-truncate" title="Room">
+                            <ui:outputText value="{!item.room.Name + '\n' + item.room.Length__c 
+                            + ' x ' + item.room.Width__c + ' x ' + item.room.Height__c}"/>
+                        </div>
+                    </th>
+                    
+                    <th scope="row" data-label="Quantity">
+                        <div class="slds-truncate" title="Quantity Required">
+                            <!--<ui:inputNumber value="{!item.Quantity}"/>-->
+                            <lightning:input type="number" name="{!'Quantity_' + index}" 
+                                value="{!item.Quantity}"/>
+                        </div>
+                    </th>
+
+                    <th scope="row" data-label="Unit Price">
+                        <div class="slds-truncate" title="Price per Unit">
+                            <lightning:input type="number" name="{!'UnitPrice_' + index}" 
+                                value="{!item.UnitPrice}" formatter="currency" 
+                                step="0.01"/>
+                            <!--<ui:inputCurrency value="{!item.pBEntry.UnitPrice}"
+                              aura:id="{!index}" change="{!c.priceChanged}" />-->
+                        </div>
+                    </th>
+
+                    <!--  change="{!c.priceChanged}" -->
+                    
+                    
+                    <th scope="row" data-label="Actions">
+                        <div class="slds-cell-wrap" title="Actions">
+                            <lightning:buttonIcon name="{!index}" title="{!'Use Floor ' + item.room.Floor__c}"
+                            onclick="{!c.useFloor}" iconName="utility:apps" variant="bare" />
+                            <lightning:buttonIcon name="{!index}" title="{!'Use Wall ' + item.room.Wall__c}"
+                            onclick="{!c.useWall}" iconName="utility:stop" variant="bare" />
+                            <lightning:buttonIcon name="{!index}" title="{!'Use Perimeter ' + item.room.Perimeter__c}"
+                            onclick="{!c.usePerimeter}" iconName="utility:standard_objects" variant="bare" />
+                            <lightning:buttonIcon name="{!index}" title="Delete Item"
+                            onclick="{!c.deleteItem}" iconName="utility:clear" variant="bare" />
+                        </div>
+                    </th>
+                </tr>
+            </aura:iteration>
+
+        </tbody>
+        
+        
+    </table>
+
+</aura:component>

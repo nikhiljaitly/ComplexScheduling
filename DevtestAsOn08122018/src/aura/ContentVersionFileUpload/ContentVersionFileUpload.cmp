@@ -1,0 +1,74 @@
+<!-- 
+   * Mathew Jose
+   * Date : 06/03/2018
+   * Locker Service Ready.
+   -->
+<aura:component controller="ContentVersionFileUploadController">
+  
+  <aura:attribute name="attachmentList" type="ContentVersion[]"/>	 
+  <aura:attribute name="comunitityName" type="String" default=""/>
+  <aura:attribute name="isExist" type="boolean"/>
+  <aura:attribute name="previousIssues" type="boolean"/>
+  <aura:attribute name="previousComplaints" type="boolean"/>
+  <aura:attribute name="workCoverInsurance" type="boolean"/> 
+  <aura:attribute name="publicLiabilityInsurance" type="boolean"/>
+  <aura:attribute name="otherInsurance" type="boolean"/>
+  <aura:attribute name="bankDeposit" type="boolean"/>
+  <aura:attribute name="policeCheck" type="boolean"/>
+  <aura:attribute name="documentHeader" type="String"/>
+
+ <aura:attribute name="recordId" type="String" default=""/>
+ <!-- 'parentId' Aura Attribute for store the Id for Parent Record where we are attach our file -->  
+  <aura:attribute name="parentId" type="Id" default="0016F000024nYzwQAE" />
+ <!-- 'showLoadingSpinner' attribute for show/hide the uploading image and msg in aura:if-->
+  <aura:attribute name="showLoadingSpinner" type="boolean" default="false"/>
+ <!-- 'fileName' attribute for display the selected file name -->  
+ <aura:attribute name="fileName" type="String" default="No File Selected.." />
+ <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+ <aura:registerEvent name="UpdateContentEvt" type="c:updateContent"/> 
+    
+ <!-- Lightning Input with file type and on file change call the 'handleFilesChange' controller --> 
+  <aura:attribute name="fileDescription" type="String" default="No File Description.." />
+ 
+    <div class="slds-form-element slds-size_1-of-1">  
+        <aura:if isTrue="{!v.recordId ==''}">
+            <div class="slds-p-around_small">
+                <!--<lightning:input aura:id="fileId" onchange="{!c.handleFilesChange}" type="file" name="file" 
+                    label="{!'Add '+v.documentHeader}" multiple="false"/>-->
+               <lightning:fileUpload  aura:id="fileId" name="fileUploader"
+                                  label= "{!'Add '+v.documentHeader}"
+                                  multiple="false"
+                                  accept="['.pdf','.csv', '.jpg', '.png', '.gif']"
+                                  recordId="{!v.parentId}"
+                                  onuploadfinished="{! c.handleUploadFinished }"/> 
+                
+                <div class="slds-text-body_small slds-text-color_error">{!v.fileName} </div>
+                <!--use aura:if for show-hide the loading spinner image--> 
+               <aura:if isTrue="{!v.showLoadingSpinner}">
+                  <div class="slds-text-body_small slds-text-color_error">Uploading... 
+                     <img src="/auraFW/resources/aura/images/spinner.gif" class="spinner-img" alt="Loading"/>'
+                  </div>
+               </aura:if>
+            </div>
+            <aura:set attribute="else">
+                <div class="slds-p-around_small" style="float: left;display: inline-flex;">
+                    <div class="slds-m-left_small slds-m-right_small slds-m-left_small boxBorder">
+                        <lightning:icon class="slds-m-around_xx-small" iconName="doctype:attachment"/>
+                        <ui:outputURL aura:id="oURL" value="{!'/'+v.comunitityName +'/s/contentdocument/'+v.recordId}" label="{!v.fileName}" target="_blank"/>
+                        <a onclick="{!c.removeRow}">
+                            <lightning:icon variant="error" iconName="utility:delete" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                            <span class="slds-assistive-text">Delete Icon</span>                            
+                        </a>
+                        <aura:if isTrue="{!v.showLoadingSpinner}">
+                          Deleting... 
+                             <img src="/auraFW/resources/aura/images/spinner.gif" class="spinner-img" alt="Loading"/>'
+                        </aura:if>
+                    </div>         
+                </div>
+            </aura:set>
+        </aura:if>
+    </div>
+ <br/>
+
+<!--  <button class="slds-button slds-button_brand" onclick="{!c.doSave}">Upload {!v.fileDescription}</button> -->
+</aura:component>

@@ -1,0 +1,12 @@
+<aura:component implements="force:hasRecordId,force:lightningQuickAction">
+    <lightning:layout>
+        <c:CP_HighlightPanelItem iconName="utility:description" summarisedStatus="New" appointmentCount="1" alternativeText="New appointments"/>
+        <c:CP_HighlightPanelItem iconName="utility:info_alt" summarisedStatus="Tentative" appointmentCount="4" alternativeText="Tentative appointments"/>
+        <c:CP_HighlightPanelItem iconName="utility:rating" summarisedStatus="Awaiting Confirmation" appointmentCount="0" alternativeText="Awaiting Confirmation appointments"/>
+        <c:CP_HighlightPanelItem iconName="utility:approval" summarisedStatus="Confirmed" appointmentCount="0" alternativeText="Confirmed appointments"/>
+        <c:CP_HighlightPanelItem iconName="utility:like" summarisedStatus="Completed" appointmentCount="0" alternativeText="Completed appointments"/>
+        <c:CP_HighlightPanelItem iconName="utility:dislike" summarisedStatus="Cannot Complete" appointmentCount="0" alternativeText="Cannot complete appointments"/>
+        <c:CP_HighlightPanelItem iconName="utility:multi_picklist" summarisedStatus="Total" appointmentCount="5" alternativeText="Total appointments"/>
+    </lightning:layout>
+	
+</aura:component>

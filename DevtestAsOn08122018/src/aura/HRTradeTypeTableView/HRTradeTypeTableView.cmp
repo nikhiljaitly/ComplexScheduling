@@ -1,0 +1,38 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:lightningQuickAction"
+                controller="HRWorkTypeController"
+                access="global" >
+  
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="showDetails" type="boolean" default="false" />
+    <aura:attribute name="tradeTypes" type="String[]" default="[Id,Work_Type__c,License_Number__c,License_Type__c,License_Expiry__c,Id]" />
+
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+
+    <lightning:layout>
+        <lightning:layoutItem size="8" padding="around-small">
+            <lightning:card title="All Trade Types">
+                <lightning:datatable
+                                     columns="{! v.columns }"
+                                     data="{! v.data }"
+                                     keyField="id"
+                                     onsave ="{!c.doSave}"
+                                     hideCheckboxColumn="true"
+                                     onrowaction="{! c.handleRowAction }" />
+            </lightning:card>
+         </lightning:layoutItem>
+        <lightning:layoutItem size="4" padding="around-small">
+            <aura:if isTrue="{!v.showDetails}">
+                <lightning:card title="Record Detail">
+                    <lightning:recordForm
+                                          recordId="{!v.recordId}"
+                                          objectApiName="Trade_Type__c"
+                                          fields="{!v.tradeTypes}"
+                                          columns="1"
+                                          mode="view" />
+                </lightning:card>
+            </aura:if>
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>

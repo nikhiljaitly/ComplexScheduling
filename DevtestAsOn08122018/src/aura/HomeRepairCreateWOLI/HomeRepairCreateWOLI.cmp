@@ -1,0 +1,22 @@
+<aura:component >
+    
+    
+    
+    <!--HEADER-->
+    <lightning:layout class="slds-page-header slds-page-header--object-home">
+        <lightning:layoutItem padding="horizontal-small">
+        	<div class="page-section page-header">
+                <h1 class="slds-text-heading--medium">New Work Order Line Item</h1>
+            </div>
+        </lightning:layoutItem>
+    </lightning:layout>
+    
+    <!--Form Component-->
+    <lightning:layout>
+        <lightning:layoutItem padding="around-small" size="6">
+        	<c:HomeRepairCreateWOLIForm/>
+        </lightning:layoutItem>
+    </lightning:layout>
+    
+    
+</aura:component>

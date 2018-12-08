@@ -1,0 +1,38 @@
+<!-- Child Lightning Component for Create New Row Instance-->
+<aura:component >    
+    <!-- Aura Attribute for store single Contact[standard Object] Instance
+         And Store Index of Particular Instance --> 
+    <aura:attribute name="attachmentInstance" type="Object"/>
+    <aura:attribute name="rowIndex" type="String"/>
+    <!-- Register 2 Lightning Event for handle add or Delete rows on Parent Component  --> 
+    <aura:registerEvent name="DeleteRowEvt" type="c:DeleteFileRow"/> 
+    <aura:attribute name="comunitityName" type="String" default=""/>
+    <!--Handler for add trade type-->
+
+        <!-- Table Row -->   
+    <tr class="slds-text-title_caps">
+        <!--<td> 
+            {!v.rowIndex + 1}
+        </td>-->
+        <td>
+            <!--<ui:outputText class="slds-input" value="{!v.attachmentInstance.fileName}"/>-->
+                                <div class="slds-m-left_small slds-m-right_small slds-m-left_small boxBorder">
+                                     <lightning:icon class="slds-m-around_xx-small slds-m-right_large" iconName="doctype:attachment"/><ui:outputURL aura:id="oURL" value="{!'/servlet/servlet.FileDownload?file='+v.attachmentInstance.Id}" label="{!v.attachmentInstance.fileName}" target="_blank"/>
+                                     <!--<a class="slds-m-around_small" onclick="{!c.removeRow}" href="javascript:void(0);">[X]</a>-->
+                                </div>            
+        </td>        
+        <td>
+            <ui:outputText value="{!v.attachmentInstance.Description}"/>
+        </td>
+        <td>
+            <!-- conditionally Display Add or Delete Icons
+                 if rowIndex is 0 then show Add New Row Icon else show delete Icon
+             -->   
+                 <a onclick="{!c.removeRow}">
+                   <lightning:icon variant="error" iconName="utility:delete" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                   <span class="slds-assistive-text">Delete Icon</span>
+                 </a>
+
+        </td> 
+    </tr>
+</aura:component>

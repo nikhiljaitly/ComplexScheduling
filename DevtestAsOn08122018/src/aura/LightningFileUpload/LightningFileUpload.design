@@ -1,0 +1,4 @@
+<design:component>
+	<design:attribute name="isWorkOrder" label="isWorkOrder" default="false" description="Work Order record or not" />
+    <design:attribute name="Platform" label="Platform" default="" description="Platform From Custom Metadata type" />
+</design:component>

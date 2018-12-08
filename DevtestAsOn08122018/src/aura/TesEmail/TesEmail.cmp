@@ -1,0 +1,9 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"  description="My Lightning Component">
+    <lightning:quickActionAPI aura:id="quickActionAPI" />
+    <aura:attribute name="recordId" type="Id" />
+    <div>
+        <lightning:button label="Select Update Case Action" onclick="{!c.selectUpdateCaseAction}"/>
+        <lightning:button label="Update Case Status Field" onclick="{!c.updateCaseStatusAction}"/>
+        <lightning:button label="Email " onclick="{!c.sendEmailAction}"/>
+    </div>
+</aura:component>

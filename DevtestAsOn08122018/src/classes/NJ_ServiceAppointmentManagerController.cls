@@ -184,25 +184,25 @@ public class NJ_ServiceAppointmentManagerController {
            system.debug('****** Grade - ' + thisso.Grade); 
          }
         }
-        String assignedResourceId;
-        for(AssignedResource ar : [SELECT Id,ServiceResourceId
+        String assignedResourceAccountId;
+        for(AssignedResource ar : [SELECT Id,ServiceResourceId, ServiceResource.RelatedRecord.Contact.AccountId
                                    FROM AssignedResource
                                    WHERE ServiceAppointment.ParentRecordId = :workOrderId
                                    AND ServiceAppointment.WorkType.Name = :workType]) {
 
-            assignedResourceId = ar.ServiceResourceId != null ? ar.ServiceResourceId : null;
+            assignedResourceAccountId = ar.ServiceResource.RelatedRecord.Contact.AccountId != null ? ar.ServiceResource.RelatedRecord.Contact.AccountId : null;
         }
         
         // Get Service Resource details
         Set<Id> timeSlots = mySRGradedTimeSlotMap.keySet();
         String srQuery = ' SELECT Id, Name, IsCapacityBased, Contact__r.Name,Capacity_Used__c ';
         srQuery += ' FROM ServiceResource ';
-        if(assignedResourceId != null) {
-            srQuery += ' WHERE Id = :assignedResourceId';
+        if(assignedResourceAccountId != null) {
+            srQuery += ' WHERE RelatedRecord.Contact.AccountId = :assignedResourceAccountId';
         } else {
             srQuery += ' WHERE Id IN :timeSlots ';
         }
-        System.debug('Nikhil srQuery '+srQuery + ' assignedResourceId '+assignedResourceId);
+        System.debug('Nikhil srQuery '+srQuery + ' assignedResourceAccountId '+assignedResourceAccountId);
         List<ServiceResource> resourceList = Database.query(srQuery);
         
         // Now Build the Return Dataset

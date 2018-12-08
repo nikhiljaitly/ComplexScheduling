@@ -1,0 +1,167 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" 
+                 access="global"
+                 controller="ClaimServiceAppointmentCmpController">
+    
+    <aura:attribute name="claimAppointments" type="Object" />
+    <aura:attribute name="tableColumns" type="List"/>
+
+    <aura:attribute name="recordId" type="Id" />
+    
+    <!--use boolean attribute for Store true/false value,
+    make default to "false" so modal box are not display on the load of component. 
+    --> 
+    <aura:attribute name="isEditOpen" type="boolean" default="false"/>
+    <aura:attribute name="currentRow" type="Object" />
+    
+    <!-- properties for Scheduling Dialog -->
+    <aura:attribute name="isSchedOpen" type="boolean" default="false"/>
+    <aura:attribute name="schedTableColumns" type="List"/>
+    <aura:attribute name="srvAppointmentSlots" type="Object" />
+    
+    
+    <aura:handler name="init" value="{!this }" action="{!c.init }"/>
+    
+    <p><b><lightning:formattedText value="Service Appointments for Current Claim" /></b></p>
+    <lightning:datatable data="{!v.claimAppointments}" 
+        columns="{!v.tableColumns}" 
+        keyField="id"
+        hideCheckboxColumn="true" 
+        onrowaction="{! c.handleRowAction }" />  
+    
+    
+    	<!--Use aura:if tag to display Model Box, on the bese of conditions. [isOpen boolean attribute] -->   
+        <aura:if isTrue="{!v.isEditOpen}">
+            
+            <!--###### MODAL BOX Start######--> 
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- ###### MODAL BOX HEADER Start ######-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeEditModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Edit Appointment</h2>
+                    </header>
+                    <!--###### MODAL BOX BODY Part Start######-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <lightning:input name="AppointmentNumber" label="Appointment Number" value="{!v.currentRow.AppointmentNumber}" />
+                        <lightning:input name="Status" label="Status" value="{!v.currentRow.Status}" disabled="true" />
+                        <lightning:input name="WorkType" label="Work Type" value="{!v.currentRow.WorkType}" type="search" />
+                        <lightning:input name="Subject" label="Subject" value="{!v.currentRow.Subject}" />
+                        <lightning:input name="EarliestStartTime" label="Earliest Start" 
+                                         value="{!v.currentRow.EarliestStartTimeRaw}"
+                                         type="datetime" />
+                        <lightning:input name="DueDate" label="Due Date" 
+                                         value="{!v.currentRow.DueDateRaw}"
+                                         type="datetime" />
+                        <lightning:input name="SchedStartTime" label="Scheduled Start" 
+                                         value="{!v.currentRow.SchedStartTimeRaw}"
+                                         type="datetime"
+                                         disabled="true" />
+                        <lightning:input name="SchedEndTime" label="Scheduled End" 
+                                         value="{!v.currentRow.SchedEndTimeRaw}"
+                                         type="datetime" 
+                                         disabled="true" />
+                        <lightning:inputAddress
+            				addressLabel="Address"
+            				streetLabel="Street"
+            				cityLabel="City"
+            				countryLabel="Country"
+            				provinceLabel="State"
+            				postalCodeLabel="PostalCode"
+            				street="{!v.currentRow.Address.street}"
+            				city="{!v.currentRow.Address.city}"
+            				country="{!v.currentRow.Address.country}"
+            				province="{!v.currentRow.Address.state}"
+            				postalCode="{!v.currentRow.Address.postalCode}"
+        				/>
+                    </div>
+                    <!--###### MODAL BOX FOOTER Part Start ######-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" 
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.closeEditModel }"/>
+                        <lightning:button variant="brand" 
+                                          label="Save"
+                                          title="Save"
+                                          onclick="{! c.saveAppt }"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+            <!--###### MODAL BOX Part END Here ######-->
+            
+        </aura:if>
+    
+    	<!--Use aura:if tag to display Model Box, on the bese of conditions. [isOpen boolean attribute] -->   
+        <aura:if isTrue="{!v.isSchedOpen}">
+            
+            <!--###### MODAL BOX Start######--> 
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- ###### MODAL BOX HEADER Start ######-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeSchedModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Schedule Appointment</h2>
+                    </header>
+                    <!--###### MODAL BOX BODY Part Start######-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <lightning:input name="AppointmentNumber" label="Appointment Number" value="{!v.currentRow.AppointmentNumber}" disabled="true" />
+                        <!--<lightning:input name="WorkType" label="Work Type" value="{!v.currentRow.WorkType}" type="search" />-->
+                        <lightning:input name="Subject" label="Subject" value="{!v.currentRow.Subject}" disabled="true" />
+                        <!--<lightning:input name="EarliestStartTime" label="Earliest Start" 
+                                         value="{!v.currentRow.EarliestStartTimeRaw}"
+                                         type="datetime" />-->
+                        
+                        <lightning:datatable data="{!v.srvAppointmentSlots}" 
+        					columns="{!v.schedTableColumns}" 
+        					keyField="slotNumber"
+        					hideCheckboxColumn="true" 
+                        />
+                        
+                        <!--
+                        <lightning:input name="DueDate" label="Due Date" 
+                                         value="{!v.currentRow.DueDateRaw}"
+                                         type="datetime" />
+                        <lightning:inputAddress
+            				addressLabel="Address"
+            				streetLabel="Street"
+            				cityLabel="City"
+            				countryLabel="Country"
+            				provinceLabel="State"
+            				postalCodeLabel="PostalCode"
+            				street="{!v.currentRow.Address.street}"
+            				city="{!v.currentRow.Address.city}"
+            				country="{!v.currentRow.Address.country}"
+            				province="{!v.currentRow.Address.state}"
+            				postalCode="{!v.currentRow.Address.postalCode}"
+        				/> -->
+                    </div>
+                    <!--###### MODAL BOX FOOTER Part Start ######-->
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" 
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.closeSchedModel }"/>
+                        <lightning:button variant="brand" 
+                                          label="Get Appointments"
+                                          title="Get Appointments"
+                                          onclick="{! c.scheduleAppt }"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+            <!--###### MODAL BOX Part END Here ######-->
+            
+        </aura:if>
+    
+    
+	
+</aura:component>

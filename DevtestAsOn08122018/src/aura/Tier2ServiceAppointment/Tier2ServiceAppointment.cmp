@@ -1,0 +1,82 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" controller="TradePortalServiceAppointments" access="global" >
+    <lightning:spinner aura:id="mySpinner" alternativeText="Loading" class="slds-hide"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="numRecords" type="Integer" default="0" />
+    <aura:attribute name="listOfAllServices" type="Object[]"/>
+    <aura:attribute name="recordId" type="String" description="Record to which the files should be attached" />
+   
+    <lightning:card title="{!'Others Service Appointments ('+v.numRecords+')'}" iconName="standard:service_appointment">    
+    <div style="overflow-x: scroll;">
+    <table class="slds-table slds-table--bordered slds-cell-wrap slds-table--cell-buffer" width="151px">
+      <thead>
+        <tr class="slds-text-title--caps"> 
+           <th class="slds-is-sortable slds-text-title--caps" scope="col">
+              <span class="slds-truncate" style="width:51px;" title="CompanyName">Company Name</span>  
+           </th> 
+            <th class="slds-is-sortable slds-text-title--caps" scope="col">
+              <span class="slds-truncate" style="width:101px;" title="WorkType">Work Type</span>  
+           </th> 
+            <th class="slds-is-sortable slds-text-title--caps" scope="col">
+              <span class="slds-truncate" style="width:51px;" title="ServiceResource">Service Resource</span>  
+           </th>
+           <th class="slds-is-sortable slds-text-title--caps" scope="col">
+              <span class="slds-truncate" style="width:101px;" title="Sortorder">Phone</span>  
+           </th> 
+            <th class="slds-is-sortable slds-text-title--caps" scope="col">
+              <span class="slds-truncate" style="width:101px;" title="Sortorder">Mobile</span>  
+           </th>           
+           
+            <th class="slds-is-sortable slds-text-title--caps" scope="col">
+              <span class="slds-truncate" style="width:51px;" title="ScheduledStart">Scheduled Start</span>  
+           </th>
+         </tr>
+      </thead>
+      <tbody>
+        <aura:iteration items="{!v.listOfAllServices}" var="AllSa">  
+        <tr>
+          <td scope="row">			
+            <div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
+                <!--<a style="border-bottom: 1px dotted;" href="{!'/t/s/detail/'+AllSa.Id}"> {!AllSa.Account.Name}</a>-->
+               {!if(AllSa.Service_Resource__c != null, AllSa.Service_Resource__r.Contact__r.Account.Name, AllSa.Tier_2_Trade_Account__r.Name)}
+            </div>
+          </td> 
+          
+          <td scope="row">			
+            <div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
+                {!AllSa.WorkType.Name}
+            </div>
+          </td>
+            <td scope="row">			
+            <!--<div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
+               <a href="{!'/t/s/detail/'+if(AllSa.Service_Resource__c!= null, AllSa.Service_Resource__c, AllSa.Tier_2_Trade_Account__c)}"> {!if(AllSa.Service_Resource__c != null, AllSa.Service_Resource__r.Contact__r.Name, AllSa.Tier_2_Trade_Account__r.Name)}</a>
+            </div>-->
+            <div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
+               {!if(AllSa.Service_Resource__c != null, AllSa.Service_Resource__r.Contact__r.Name, AllSa.Tier_2_Trade_Account__r.Name)}
+            </div>
+
+          </td>
+            <td scope="row">			
+            <div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
+                {!if(AllSa.Service_Resource__c != null , AllSa.Service_Resource__r.Contact__r.Phone, AllSa.Tier_2_Trade_Account__r.Accounts_Phone__c)}
+            </div>
+          </td>
+            <td scope="row">			
+            <div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
+                {!AllSa.Service_Resource__r.Contact__r.MobilePhone}
+            </div>
+          </td>
+           
+          <td scope="row">			
+            <div class="slds-truncate" style="text-transform: uppercase;white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
+                <lightning:formattedDateTime value="{!AllSa.SchedStartTime}" year="numeric" month="numeric" day="numeric" hour="2-digit"
+                                 minute="2-digit" hour12="true"/>
+            </div>
+          </td>
+        </tr>
+       </aura:iteration>
+     </tbody>
+    </table> 
+    </div>
+    </lightning:card>
+   
+</aura:component>

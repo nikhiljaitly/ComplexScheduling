@@ -1,0 +1,28 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:appHostable,flexipage:availableForRecordHome,force:lightningQuickAction,force:hasRecordId,force:hasSObjectName,lightning:availableForFlowScreens" access="global" 
+                controller="CompLookupController">
+    
+    <aura:attribute name="object" type="String" default="PricebookEntry" access="public"></aura:attribute>
+    <aura:attribute name="lookupField" type="String" default="Product2Id" access="public"></aura:attribute> 
+  <!--  <aura:attribute name="lookupField" type="String" default="Pricebook2Id" access="public"></aura:attribute> !-->   
+    <aura:attribute name="selectedRecordId" type="String" access="public"></aura:attribute>
+        
+    <aura:attribute name="recordId" type="Id" access="public"/>
+    <aura:attribute name="woRecordID" type="Id" access="public"/>
+    
+    <aura:attribute name="sLabCost" type="double" default="0.00"/>
+    <aura:attribute name="sMatCost" type="double" default="0.00"/>
+   
+    <aura:registerEvent name="moveCosts" type="c:ProductPricesEvent"/>
+   <!--  <aura:handler name="HrWorkOrderIDEvent" event="c:HrWorkOrderIDEvent" action="{!c.fetchWorkOrderID}" includeFacets="true" /> 
+    <aura:registerEvent name="HrWorkOrderIDEvent" type="c:HrWorkOrderIDEvent"/> !-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    
+    <ui:scrollerWrapper class="sWrapTest">
+        <div aura:id='sfdcDiv'>             
+            <lightning:recordEditForm objectApiName="{! v.object }">
+                <lightning:inputField fieldName="{! v.lookupField }" onchange="{!c.handleOnChange }"/>
+            </lightning:recordEditForm>
+        </div>
+    </ui:scrollerWrapper>
+
+</aura:component>

@@ -1,0 +1,63 @@
+<aura:component >
+    <aura:attribute type="Object[]" name="sections" />
+    <aura:iteration items="{!v.sections}" var="section">
+        <c:CollapsibleSection title="{!section.name}" open="{!section.open}">
+            <div class="slds-grid slds-wrap slds-grid_pull-padded">
+                <div class="slds-p-horizontal_small slds-size_6-of-12">
+                    <aura:iteration items="{!section.fields.left}" var="field">
+                        <c:FormField label="{#field.label}" required="{#field.required}"
+                                     helpText="{#field.helpText}"  >
+                            <c:FieldInput type="{#field.type}" 
+                                          placeholder="{#field.placeholder}"
+                                          aura:id="fieldInput"
+                                          field="{#field}"
+                                          dependentOptions="{#field.dependentOptions}"
+                                          dependentField="{#field.dependentField}"
+                                          apiName="{#field.apiName}"
+                                          options="{#field.options}"
+                                          required="{#field.required}"
+                                          readOnly="{#field.readOnly}"
+                                          displayDatePicker="{#field.displayDatePicker}" />
+                        </c:FormField>
+                    </aura:iteration>
+                </div>
+                <div class="slds-p-horizontal_small slds-size_6-of-12">
+                    <aura:iteration items="{!section.fields.right}" var="field">
+                        <c:FormField label="{#field.label}" required="{#field.required}"
+                                     helpText="{#field.helpText}"  >
+                            <c:FieldInput aura:id="fieldInput"
+                                          type="{#field.type}"
+                                          placeholder="{#field.placeholder}"
+                                          field="{#field}"
+                                          options="{#field.options}"
+                                          dependentOptions="{#field.dependentOptions}"
+                                          dependentField="{#field.dependentField}"
+                                          apiName="{#field.apiName}"
+                                          required="{#field.required}"
+                                          readOnly="{#field.readOnly}"
+                                          displayDatePicker="{#field.displayDatePicker}" />
+                        </c:FormField>
+                    </aura:iteration>  
+                </div>
+                <div class="slds-p-horizontal_small slds-size_12-of-12" >
+                    <aura:iteration items="{!section.fields.end}" var="field">
+                        <c:FormField label="{#field.label}" required="{#field.required}"
+                                     helpText="{#field.helpText}" >
+                            <c:FieldInput aura:id="fieldInput"
+                                          type="{#field.type}" 
+                                          placeholder="{#field.placeholder}"
+                                          field="{#field}"
+                                          dependentOptions="{#field.dependentOptions}"
+                                          dependentField="{#field.dependentField}"
+                                          apiName="{#field.apiName}"
+                                          options="{#field.options}"
+                                          required="{#field.required}"
+                                          readOnly="{#field.readOnly}"
+                                          displayDatePicker="{#field.displayDatePicker}" />
+                        </c:FormField>
+                    </aura:iteration>
+                </div>
+            </div>
+        </c:CollapsibleSection>
+    </aura:iteration>
+</aura:component>

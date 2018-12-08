@@ -1,0 +1,18 @@
+<aura:component >
+    <aura:attribute name="value" type="String" />
+    <aura:attribute name="valueMap" type="Object" default="{}" />
+    <aura:attribute name="options" type="Object[]" />
+    <aura:attribute name="change" type="Object" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="dataChanged" event="c:Message" action="{!c.updateValue}" /> 
+    
+    <aura:method name="initiate" action="{!c.doInit}" >
+    </aura:method>
+    
+    
+	<aura:method name="updateOptions" action="{!c.updateOptions}" >
+        <aura:attribute name="options" type="list" />
+    </aura:method>
+    
+    <c:NestedCheckboxes aura:id="nestedOptions" valueMap="{!v.valueMap}" options="{!v.options}" />
+</aura:component>

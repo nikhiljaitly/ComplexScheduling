@@ -1,0 +1,56 @@
+<!-- Child Lightning Component for Create New Row Instance-->
+<aura:component >    
+    <!-- Aura Attribute for store single TradeType[Trade_Type__c] Instance
+         And Store Index of Particular Instance --> 
+    <aura:attribute name="TradeTypeInstance" type="Trade_Type__c"/>
+    <aura:attribute name="rowIndex" type="String"/>
+    <aura:attribute name="selectedWorkTypeLookUpRecord" type="sObject" default="{}"/>
+    
+    <!-- Register 2 Lightning Event for handle add or Delete rows on Parent Component  --> 
+    <aura:registerEvent name="DeleteRowEvt" type="c:DeleteRowEvt"/> 
+    <aura:registerEvent name="AddRowEvt" type="c:AddNewRowEvt"/> 
+    
+    <aura:handler name="SelectedRecordEvent" event="c:selectedsObjectRecordEvent" action="{!c.handleComponentEvent}"/>
+
+    
+    <!-- Table Row -->   
+    <tr class="slds-text-title_caps">
+        <td> 
+            {!v.rowIndex + 1}
+        </td>
+        <td>
+            <!-- <ui:inputText class="slds-input" value="{!v.TradeTypeInstance.Work_Type__c}"/> !-->
+            <c:HRWorkTypeLookupEOI objectAPIName="WorkType" 
+                                   subHeadingFieldsAPI="Name"
+                                   IconName="standard:work_type" 
+                                   selectedRecord="{!v.selectedWorkTypeLookUpRecord}" 
+                                   label="WorkType Name"/>
+        </td>
+        <td>
+            <lightning:input label="License Number" value="{!v.TradeTypeInstance.License_Number__c}"/>
+        </td>
+        <td>
+           <lightning:input label="License Type" value="{!v.TradeTypeInstance.License_Type__c}" />
+        </td>
+        <td>
+            <lightning:input type="date" label="License Expiry" value="{!v.TradeTypeInstance.License_Expiry__c}" />
+        </td>
+        <td>
+            <!-- conditionally Display Add or Delete Icons
+                 if rowIndex is 0 then show Add New Row Icon else show delete Icon
+             --> 
+            <aura:if isTrue="{!v.rowIndex == 0}">
+                <a onclick="{!c.AddNewRow}">
+                  <lightning:icon iconName="utility:add" class="slds-icon slds-icon_small" size="small" alternativeText="add"/>
+                  <span class="slds-assistive-text">Add Icon</span>
+                </a>    
+              <aura:set attribute="else">
+                  <a onclick="{!c.removeRow}">
+                   <lightning:icon variant="error" iconName="utility:delete" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                   <span class="slds-assistive-text">Delete Icon</span>
+                  </a>
+              </aura:set> 
+            </aura:if>
+        </td> 
+    </tr>
+</aura:component>

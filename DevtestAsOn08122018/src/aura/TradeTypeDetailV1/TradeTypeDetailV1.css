@@ -1,0 +1,9 @@
+.THIS .area-container{
+    display:flex;
+}
+.THIS .hideModal {
+display:none !important;
+}
+.THIS .makesafe-container{
+    display:flex;
+}
