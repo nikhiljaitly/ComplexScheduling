@@ -31,14 +31,13 @@ public without sharing class WorkOrderLineItemService {
         Decimal labourTime;
         String mapKey;
         VisitNumberInfo tempInfo;
-        Boolean createServiceAppointment = false;
+        Boolean canCreateServiceApppointment;
         for(WorkOrder wo : [Select id, WorkType.Name,(Select id from ServiceAppointments),(Select Id,Site_Visit_Number__c,Service_Appointment__c,Cash_Settled__c, Labour_Time__c, Sort_Order__c
                                       from WorkOrderLineItems) from WorkOrder where id IN: workOrderIds]){
             
             //Sort_Order__c
             if(wo.WorkOrderLineItems.size() > 0){
                 labourTime = 0;
-                createServiceAppointment = false;
                 for(WorkOrderLineItem woli: wo.WorkOrderLineItems){
                     if (woli.Site_Visit_Number__c != null){
                         ServiceAppointment sa=new ServiceAppointment();
@@ -55,10 +54,8 @@ public without sharing class WorkOrderLineItemService {
                         if(woli.Sort_Order__c != null) {
                           tempInfo.sortOrder = woli.Sort_Order__c;
                         }
+                        tempInfo.canCreateSA = tempInfo.canCreateSA || !woli.Cash_Settled__c;
                         visitNoMap.put(mapKey, tempInfo); 
-                        if(!woli.Cash_Settled__c) {
-                          createServiceAppointment = true;
-                        }
                    }
                   
                 }
@@ -67,38 +64,47 @@ public without sharing class WorkOrderLineItemService {
                   labourTime.setScale(2);
                 }
                 if(wo.ServiceAppointments.size() == siteVisitCountMap.get(wo.Id)){                
-                }else if(createServiceAppointment) {
+                }else {
                     system.debug('wo :'+wo.ServiceAppointments.size());
                     if(wo.ServiceAppointments.size() == 0){
                         for(Integer i=0;i<siteVisitCountMap.get(wo.Id);i++){  
+                            canCreateServiceApppointment = true;
                             ServiceAppointment sa=HomeRepairUtil.createServiceAppointment(Wo.Id);
                             mapKey = String.valueOf(i+1)+wo.Id;
                             if(visitNoMap.containsKey(mapKey)) {
                               sa.Duration = visitNoMap.get(mapKey).totalDuration / 60.0;   
                               sa.Sort_Order__c = visitNoMap.get(mapKey).sortOrder;
+                              canCreateServiceApppointment = visitNoMap.get(mapKey).canCreateSA;
                             }
                             if(sa.Duration > 8) {
                               sa.FSL__IsMultiDay__c = true;
                             }     
                             sa.Work_Type_Name__c = wo.WorkType.Name;
                             workOrderLineItemMap.put(mapKey,sa);
-                            serviceAppointmentList.add(sa);
+                            if(canCreateServiceApppointment) {
+                              serviceAppointmentList.add(sa);
+                            }
                         }
                     }else{
                         if (siteVisitCountMap.containsKey(wo.Id)){
                            for(Integer i=0;i< (siteVisitCountMap.get(wo.Id)-wo.ServiceAppointments.size());i++){
+                               canCreateServiceApppointment = true;
                                ServiceAppointment sa=HomeRepairUtil.createServiceAppointment(wo.Id);  
                                mapKey = String.valueOf(wo.ServiceAppointments.size()+1)+wo.Id;
                                if(visitNoMap.containsKey(mapKey)) {
                                 sa.Duration = visitNoMap.get(mapKey).totalDuration / 60.0;   
                                 sa.Sort_Order__c = visitNoMap.get(mapKey).sortOrder;
+                                canCreateServiceApppointment = visitNoMap.get(mapKey).canCreateSA;
+
                                }
                                if(sa.Duration > 8) {
                                 sa.FSL__IsMultiDay__c = true;
                                }  
                                sa.Work_Type_Name__c = wo.WorkType.Name;
                                workOrderLineItemMap.put(mapKey,sa);
-                               serviceAppointmentList.add(sa);
+                               if(canCreateServiceApppointment) {
+                                  serviceAppointmentList.add(sa);
+                               }
                                System.debug('SA to be creatd:'+sa);
                            }
                         }
@@ -135,8 +141,10 @@ public without sharing class WorkOrderLineItemService {
     public class VisitNumberInfo {
       Decimal totalDuration;
       Decimal sortOrder;
+      Boolean canCreateSA;
       public VisitNumberInfo() {
         totalDuration = 0;
+        canCreateSA = false;
       }
     }
  }

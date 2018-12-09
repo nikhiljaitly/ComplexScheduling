@@ -24,7 +24,7 @@
     <aura:attribute name="ganttLineColor" type="String" required="{!true}" description="Specify color of the line (or column border)."/>
     <aura:attribute name="ganttAutoGridCount" type="Boolean" required="{!true}" description="Specify true to enable axis labels."/>
     <aura:attribute name="ganttColumnWidth" type="Decimal" required="{!true}" description="Specify relative width of columns. Value range is 0 - 1."/>
-    
+    <aura:handler event="c:ClaimSrvApptManagerSelectionEvent" action="{!c.handleClaimManager}"/>
     <aura:attribute name="graphtitles" type="String" description="Specify title of the graph."/>
     <aura:attribute name="typesofbullets" type="String" description="Specify type of the bullets."/>
 	<div aura:id="chartContainer" style="width: 100%; height: 100%; background-color: #FFFFFF;" ></div>

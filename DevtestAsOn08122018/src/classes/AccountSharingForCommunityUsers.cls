@@ -43,7 +43,7 @@ public class AccountSharingForCommunityUsers{
 	        }
         }
 		if(!accountShareList.IsEmpty()){
-			insert accountShareList;
+		//	insert accountShareList;
 		}        
 		system.debug('Exiting createAccountShareForCommunityUsers ==> VOID ');
     }

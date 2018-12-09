@@ -272,8 +272,8 @@
    // New code for current assignment of Dates       
    
                 if(currAppt.committedStartDate != null){
-        newSegment.start = moment(currAppt.committedStartDate).format("DD-MM-YYYY HH:mm");
-        newSegment.end = moment(currAppt.committedEndDate).format("DD-MM-YYYY HH:mm");
+        newSegment.start = moment(currAppt.committedStartDate).format("YYYY-MM-DD HH:mm");
+        newSegment.end = moment(currAppt.committedEndDate).format("YYYY-MM-DD HH:mm");
 
         if (currAppt.assignedToName != null) {
                 newSegment.assignedToName = currAppt.assignedToName;
@@ -295,8 +295,8 @@
 
         else if (currAppt.schedStart != null ) {
 
-        newSegment.start = moment(currAppt.schedStart).format("DD-MM-YYYY HH:mm");
-        newSegment.end = moment(currAppt.schedFinish).format("DD-MM-YYYY HH:mm");
+        newSegment.start = moment(currAppt.schedStart).format("YYYY-MM-DD HH:mm");
+        newSegment.end = moment(currAppt.schedFinish).format("YYYY-MM-DD HH:mm");
 
         if (currAppt.assignedToName != null) {
                 newSegment.assignedToName = currAppt.assignedToName;
@@ -318,9 +318,9 @@
 
                 
                 else{
-                    newSegment.start = moment(currAppt.earliestStart).format("DD-MM-YYYY HH:mm");
-                	newSegment.end = moment(currAppt.dueDate).format("DD-MM-YYYY HH:mm");
-                    newSegment.color = this.getGanttColor("New");
+                    newSegment.start = moment(currAppt.earliestStart).format("YYYY-MM-DD HH:mm");
+                	newSegment.end = moment(currAppt.dueDate).format("YYYY-MM-DD HH:mm");
+                    newSegment.color = this.getGanttColor(currAppt.srvApptStatus);
                     
                 }
                 //newSegment.start = moment(currAppt.schedStart).format("YYYY-MM-DD HH:mm");
@@ -403,8 +403,7 @@
                 break;     
                 
             case "Cancelled":
-                returnColor = "#18090E"
-                
+               returnColor = "#18090E"
                 
             default:
                 returnColor = "#cc4748";

@@ -4,6 +4,5 @@
 	},
 	handleSvcApptMgrScheduledEvent : function(component, event, helper) {
 		helper.getClaimData(component);
-	}
-
+	},
 })

@@ -71,7 +71,7 @@ public class HRGanttChildController {
     @AuraEnabled
     public static List<ServiceAppintmentWrap> getConfirmedAppointments(Id claimId) {
         List<ServiceAppintmentWrap> tentaAppointments = new List<ServiceAppintmentWrap>();
-        List<String> confirmStatus = new List<String> { SA_STATUS_CONFIRMED, SA_STATUS_AWAITING_CONFIRMATION};
+        List<String> confirmStatus = new List<String> { SA_STATUS_CONFIRMED, SA_STATUS_AWAITING_CONFIRMATION, SA_STATUS_TENTATIVE};
         for(ServiceAppointment sa : [SELECT Id, AppointmentNumber,Work_Type_Name__c, Service_Resource__r.IsCapacityBased, Status
                                      FROM ServiceAppointment
                                      WHERE Status IN :confirmStatus 

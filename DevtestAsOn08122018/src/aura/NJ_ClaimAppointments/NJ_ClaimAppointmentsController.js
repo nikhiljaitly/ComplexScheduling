@@ -4,6 +4,10 @@
         console.log("***[ClaimSrvApptManagerController.init] Claim Id = " + component.get("v.claimId"));
         helper.populateClaimServiceData(component);
 	},
+    changeExpandedView : function(component, event, helper) {
+        let expandView = component.get("v.expandedView");
+        component.set("v.expandedView", !expandView);
+    },
     
     // handle selection in tree
     // process selection and fire an application

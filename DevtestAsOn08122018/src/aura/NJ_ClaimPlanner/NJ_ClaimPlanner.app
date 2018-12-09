@@ -4,7 +4,6 @@
     
     <aura:handler name="init" value="{!this}" action="{!c.handleInit}"/>
     <aura:handler event="c:SvcApptMgrScheduledEvent" action="{!c.handleSvcApptMgrScheduledEvent}"/>
-
     <aura:attribute name="claimInfo" type="NJ_ClaimPlannerController.ClaimPlannerInitInfo" />
     <aura:attribute type="Boolean" name="showError" />
     <aura:attribute type="String" name="errorTitle" />
@@ -31,25 +30,22 @@
             </div>
         </div> 
         <aura:if isTrue="{!v.hasWorkOrder}">
-            <lightning:layout multipleRows="true">
+            <lightning:layout multipleRows="false">
                 <lightning:layoutItem size="12" flexibility="auto" >
                      <c:NJ_HighlightPanel summaries="{!v.claimInfo.summaries}"  />
                 </lightning:layoutItem>
-                
-                <lightning:layoutItem size="3" padding="around-small" flexibility="auto"  >
-                    <div class="page-section page-left" style="text-align:left" size="50%">
-                        <c:NJ_ClaimAppointments claimId="{!v.recordId}" />
-                    </div>
+            </lightning:layout>
+            <lightning:layout multipleRows="false">
+                <lightning:layoutItem padding="around-small" flexibility="auto"  >
+                    <c:NJ_ClaimAppointments claimId="{!v.recordId}" />
                 </lightning:layoutItem>
-                <lightning:layoutItem size="6" padding="around-small" flexibility="auto" >
-                    <div class="page-section page-main">
-                        <c:HRGanttChartChild claimId="{!v.recordId}" />
-                    </div>
-                </lightning:layoutItem>      
-                <lightning:layoutItem size="3" padding="around-small" flexibility="auto" >
-                            <div class="page-section page-right">
-                                <c:NJ_ServiceAppointmentManager />
-                            </div>
+                <lightning:layoutItem padding="around-small" flexibility="auto" >
+                    <c:HRGanttChartChild claimId="{!v.recordId}" />
+                </lightning:layoutItem>   
+                <lightning:layoutItem padding="around-small" flexibility="auto" >
+                     <div style="max-width:350px;">
+                        <c:NJ_ServiceAppointmentManager />
+                     </div>
                 </lightning:layoutItem>
             	
             </lightning:layout>

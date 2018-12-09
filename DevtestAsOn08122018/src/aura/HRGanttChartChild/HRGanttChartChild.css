@@ -8,6 +8,7 @@
     margin: 5px;
     border: 1px solid #ccc4c4; 
     padding:5px;
+    max-width: 98%;
 }
 .THIS.buttonDiv{
     width:100%;
