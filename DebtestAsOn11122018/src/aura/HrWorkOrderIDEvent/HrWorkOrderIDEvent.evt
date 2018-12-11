@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="event to send work order id" >
+    <aura:attribute name="sWorkOrder" type="Object"/>
+</aura:event>

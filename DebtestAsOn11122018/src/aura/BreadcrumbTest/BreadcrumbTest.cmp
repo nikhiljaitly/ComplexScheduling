@@ -1,0 +1,51 @@
+<aura:component >
+
+    <lightning:breadcrumbs >
+        <lightning:breadcrumb label="Parent Account" />
+        <lightning:breadcrumb label="Case" />
+        <lightning:breadcrumb label="Case." />
+        <lightning:breadcrumb label="Case..." />
+    </lightning:breadcrumbs>
+
+    <lightning:buttonMenu alternativeText="Toggle menu">
+        <lightning:menuItem label="Menu Item 1" value="menuitem1" iconName="utility:table" />
+    </lightning:buttonMenu>
+
+    <lightning:pill label="Pill Label" href="/path/to/some/where" onremove="{! c.handleRemove }"/>
+    <lightning:pill label="Pill Label2" href="/path/to/some/where" onremove="{! c.handleRemove }"/>
+    <lightning:pill label="Pill Label3" href="/path/to/some/where" onremove="{! c.handleRemove }"/>
+    <lightning:pill label="Pill Label" href="/path/to/some/where">
+        <aura:set attribute="media">
+            <lightning:icon iconName="standard:account"  alternativeText="Account"/>
+        </aura:set>
+    </lightning:pill>
+
+    <lightning:buttonMenu iconName="utility:settings" alternativeText="Settings" onselect="{!c.handleMenuSelect }">
+        <lightning:menuItem label="Font" value="font" />
+        <lightning:menuItem label="Size" value="size"/>
+        <lightning:menuItem label="Format" value="format" />
+    </lightning:buttonMenu>
+
+    <lightning:tile label="Salesforce UX" href="/path/to/somewhere">
+        <aura:set attribute="media">
+            <lightning:icon iconName="standard:groups"/>
+        </aura:set>
+        <dl class="slds-dl--horizontal">
+            <dt class="slds-dl--horizontal__label">
+                <p class="slds-truncate" title="Company">Company:</p>
+            </dt>
+            <dd class="slds-dl--horizontal__detail slds-tile__meta">
+                <p class="slds-truncate" title="Salesforce">Salesforce</p>
+            </dd>
+            <dt class="slds-dl--horizontal__label">
+                <p class="slds-truncate" title="Email">Email:</p>
+            </dt>
+            <dd class="slds-dl--horizontal__detail slds-tile__meta">
+                <p class="slds-truncate" title="salesforce-ux@salesforce.com">salesforce-ux@salesforce.com</p>
+            </dd>
+        </dl>
+    </lightning:tile>
+
+    
+
+</aura:component>

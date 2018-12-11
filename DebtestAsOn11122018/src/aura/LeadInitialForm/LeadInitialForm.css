@@ -1,0 +1,15 @@
+.THIS {
+}
+.THIS.leadWrapper {
+    background-color: #fff;
+    margin: 15px;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+    padding: 15px;
+}
+.THIS .complianceWrapper {
+    background-color: #fff;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+    padding: 15px;
+}

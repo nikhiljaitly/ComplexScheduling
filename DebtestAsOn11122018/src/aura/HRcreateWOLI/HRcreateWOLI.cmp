@@ -1,0 +1,69 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:appHostable,flexipage:availableForRecordHome,force:lightningQuickAction,force:hasRecordId,force:hasSObjectName" access="global" >
+    <!--<aura:handler name="init" value="{!this}" action="{!c.doInit}" />-->
+    
+   <aura:handler name="HRLabMatVal" event="c:HRLabMatVal" action="{!c.getValueFromCompEvent}"/>
+    
+    <aura:attribute name="labourCost" type="double" default="0.00"/>
+    <aura:attribute name="MaterialCost" type="double" default="0.00"/>
+    
+    <aura:attribute name="listOfPriceBookEntries" type="PricebookEntry[]"/>
+    <aura:attribute name="sObjectName" type="String" default="WorkOrderLineItem[]" />
+    <aura:attribute name="PricebookEntry" type="String[]" default="Name"/>
+    <lightning:card iconName="custom:custom19" title="New Work Order Line Item55">
+        <div class="slds-p-left_large slds-p-right_medium">	
+            <c:HRPricebookEntryLookup/>
+            <lightning:recordForm aura:id="recordViewForm" 
+								  objectApiName="WorkOrderLineItem"
+                                  fields="WorkOrder,LineItemNumber"
+                                  columns="2"
+                                  layoutType ="Full"
+                                  mode="edit"
+                                  onsuccess="{!c.onSuccess}"
+                                  onsubmit="{!c.onSubmit}"
+                                  onload="{!c.onLoad}"
+                                  onerror="{!c.onError}"
+                                  />   
+         	
+             <!--<lightning:inputField fieldName="PricebookEntry" aura:id="productLookup"/>-->       
+          
+            
+        </div>
+        
+    </lightning:card>
+  <!--  <lightning:card iconName="custom:custom19" title="Edit lightning:recordForm">
+        <div class="slds-p-left_large slds-p-right_medium">	
+            <lightning:recordForm aura:id="recordViewForm" 
+                                  objectApiName="{!v.sObjectName}"
+                                  columns="2"
+                                  fields="WorkOrder, LineItemNumber"
+                                  recordId="1WL5D0000008r7B"
+                                  layoutType ="Full"
+                                  mode="View"
+                                  onsuccess="{!c.onSuccess}"
+                                  onsubmit="{!c.onSubmit}"
+                                  onload="{!c.onLoad}"
+                                  onerror="{!c.onError}"
+                                  />   
+            
+        </div>
+    </lightning:card>
+    
+    <lightning:card iconName="custom:custom19" title="Read Only lightning:recordForm">
+        <div class="slds-p-left_large slds-p-right_medium">	
+            <lightning:recordForm aura:id="recordViewForm" 
+                                  objectApiName="{!v.sObjectName}"
+                                  columns="2"
+                                  fields="WorkOrder, LineItemNumber"
+                                  recordId="1WL5D0000008r7B"
+                                  layoutType ="Full"
+                                  mode="readonly"
+                                  onsuccess="{!c.onSuccess}"
+                                  onsubmit="{!c.onSubmit}"
+                                  onload="{!c.onLoad}"
+                                  onerror="{!c.onError}"
+                                  />   
+            
+        </div>
+    </lightning:card> !-->
+    
+</aura:component>

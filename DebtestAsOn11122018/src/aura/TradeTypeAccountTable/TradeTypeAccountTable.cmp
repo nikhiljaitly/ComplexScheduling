@@ -1,0 +1,48 @@
+<!--Parent Lightning Compomemt-->
+<aura:component Implements="forceCommunity:availableForAllPageTypes">
+    <aura:attribute name="attachmentList" type="ContentVersion[]"/>
+	<aura:attribute name="accRec" type="Account" default="{sobjectType : 'Account'}"/> 
+ 	<!--Header Part-->        
+    <div class="slds-page-header">
+        <h1 class="slds-page-header__title">Trade Types</h1>
+        <p class="slds-text-body_small slds-line-height_reset">Add Licenses below</p>
+    </div>
+    
+ 	<!--Table Part-->           
+    <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+        <thead>
+            <tr class="slds-text-title_caps">
+                <!--<th scope="col">
+                    <div class="slds-truncate">S.No</div>
+                </th>-->
+                <th scope="col">
+                    <div class="slds-truncate" title="fileName">Trade Type</div>
+                </th>               
+                <th scope="col">
+                    <div class="slds-truncate" title="fileType">License Expiry</div>
+                </th>
+
+            </tr>
+        </thead>   
+        <tbody>
+           <!--Iterate the child Component for display Table rows 
+               with pass the List Item Index for track the Every child Component 
+               and pass each List Contact Instance -->         
+            <aura:iteration items="{!v.accRec.Trade_Types__r}" var="item" indexVar="index">
+            	<tr class="slds-text-title_caps">
+            		<td>
+            			<ui:outputText value="{!item.Trade_Type__c}"/>
+            		</td>
+			         <td>
+			            <ui:outputText value="{!item.License_Expiry__c}"/>
+			        </td>
+
+			         <td>
+			            <c:TradeTypeAccountCell accountRecord="{!v.accRec}" attachments="{!v.attachmentList}" tradeTypeRec="{!item}"/>
+			        </td>
+				</tr>                 
+            </aura:iteration>
+        </tbody>
+    </table>
+    <br/>
+</aura:component>

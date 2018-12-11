@@ -1,0 +1,23 @@
+<aura:component >
+    <aura:attribute name="totalSize" type="Integer" default="0"/>
+    <aura:attribute name="selectedItemNum" type="Integer" default="0" />
+    <aura:attribute name="_rooms" type="Object[]" />
+    <aura:attribute name="selectedRoom" type="Object" />
+
+    <aura:handler name="init" 
+                  action="{!c.init}" 
+                  value="{!this}" />
+
+    <aura:handler name="change" value="{!v._rooms}" action="{!c.roomsChanged}" />
+
+    <aura:registerEvent name="roomChangedEvent" type="c:homeRepSelectedRoomChanged"/>
+    
+    <ul class="slds-list--horizontal slds-has-dividers--left" >
+        <li class="slds-item">{!v.totalSize} records</li>
+        <li class="slds-item">{!v.selectedItemNum}  items selected </li>
+        <li class="slds-item">
+            <ui:inputSelect label="Selected Room: " class="dynamic" aura:id="RoomSelectList" change="{!c.onChange}" />
+        </li>
+    </ul>
+
+</aura:component>

@@ -1,0 +1,9 @@
+.THIS .orderedList {
+    max-height: 153px;
+    overflow-y: auto;
+}
+.THIS .pillContainerListItem {
+    float: left;
+    list-style-type: none;
+    word-break: break-all;
+}

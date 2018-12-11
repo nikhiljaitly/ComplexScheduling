@@ -1,0 +1,174 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" controller="HRWorkTypeController" access="global">
+    <!-- List of tradetypes stored in attribute -->
+    <aura:attribute name="tradeTypeList" type="Trade_Type__c[]"/>
+    <aura:attribute name="PaginationList" type="Trade_Type__c[]"/>
+    <aura:attribute name="showFile" type="Boolean" default="false" />
+    <aura:attribute name="editSave" type="Boolean" default="false" />
+    <aura:attribute name="wkTypeName" type="string"/>
+    <aura:attribute name="attachments" type="List" default="[]" />
+    <aura:attribute name="selectedWorktypeEntryLookUpRecord" type="sObject" default="{}"/>
+    <aura:attribute name="rowIndex" type="string"/>
+    <aura:attribute name="selectedRowIndex" type="string"/>
+    <aura:attribute name="selectedFileContent" type="string"/>
+    
+    <!-- New TradeType Object -->
+    <aura:attribute name="tradetype" type="Trade_Type__c"
+                    default="{'sobjectType':'Trade_Type__c',
+							 'Work_Type__c':'',
+                             'WorkTypeName__c':'',
+                             'License_Number__c':'',
+                             'License_Type__c':'',
+                             'License_Expiry__c':'',
+                             'Status__c':''
+                             }">            
+    </aura:attribute>
+    
+    <!--declare events hendlers-->  
+    <aura:handler name="SelectedRecordEvent" event="c:selectedsObjectRecordEvent" action="{!c.handleComponentEvent}"/>
+
+  <!--  <aura:handler name="init" value="{!this}" action="{!c.doInit}" /> !-->
+    
+    <!-- Register 2 Lightning Event for handle add or Delete rows on Parent Component  --> 
+    <aura:registerEvent name="DeleteRowEvt" type="c:DeleteRowEvt"/> 
+    <aura:registerEvent name="AddRowEvt" type="c:AddNewRowEvt"/> 
+    
+ <!--  <aura:registerEvent name="selectedRowIndex" type="c:selectedRowIndex"/> !-->   
+    
+    
+    <!--Event handler for Add and Delete Row Event which is fire from Child Component-->    
+    <aura:handler name="DeleteRowEvt" event="c:DeleteRowEvt" action="{!c.removeDeletedRow}"/>
+    
+  <!--  <aura:handler name="selectedFileContent" event="c:selectedFileContent" action="{!c.setFileContent}"/> !-->
+    
+    
+    
+    <!-- Lightning card to show tradetype -->
+    <lightning:card title="Trades">
+        <!-- Body of lightning card starts here -->        
+        <!-- Lightning card actions -->
+        <aura:set attribute="actions">
+            <!-- New tradetype modal button added -->
+            <lightning:button name="tradetypeModal" label="Add Trades" onclick="{!c.openModal}" />
+        </aura:set>        
+    </lightning:card>
+    <!-- TradeTypes Modal Section -->
+    <div>
+        <section aura:id="tradetypeModal" role="dialog" tabindex="-1" aria-labelledby="tradetypeModalHeading" aria-modal="true" aria-describedby="tradetypeModalBody" class="slds-modal">
+            <!-- Modal Container -->
+            <div class="slds-modal__container">
+                <!-- Modal Header ( consists of close button and heading of modal ) -->
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon class="slds-modal__close" alternativeText="Close" iconName="utility:close" onclick="{!c.closeModal}" variant="bare-inverse" size="large"></lightning:buttonIcon>
+                    <h2 id="tradetypeModalHeading" class="slds-text-heading_medium slds-hyphenate">Compliance License</h2>
+                </header>
+                <!-- Modal Body ( consists of form ) -->
+                <div class="slds-modal__content slds-p-around_medium" id="tradetypeModalBody">
+                    <!-- List all available WorkTypes for selection !-->
+                    <c:HRWorkTypeLookupEOI aura:id="wktype"
+                                           objectAPIName="WorkType" 
+                                           subHeadingFieldsAPI="Name"
+                                           IconName="standard:work_type" 
+                                           selectedRecord="{!v.selectedWorktypeEntryLookUpRecord}" 
+                                           label="WorkType Name"
+                                           />                      
+                  <!--  <lightning:input label="WorkType Name" value="{!v.wkTypeName}" /> !-->
+                    <lightning:input aura:id="licNumber" label="License Number"  value="{!v.tradetype.License_Number__c}" />
+                    <lightning:input aura:id="licType" label="License Type" value="{!v.tradetype.License_Type__c}" />
+                    <lightning:input aura:id="licExp" type="date" label="License Expiry" value="{!v.tradetype.License_Expiry__c}" />
+                	
+                    <c:sampleFileUpload aura:id="licDoc" />
+                	
+                </div>
+                
+                <!-- Modal Footer ( consists of cancel and save buttons ) -->
+                <footer class="slds-modal__footer">
+                    <lightning:button onclick="{!c.closeModal}" variant="neutral">Cancel</lightning:button>
+                    <lightning:button onclick="{!c.storeTradeTypeData}" variant="brand" >Save</lightning:button>
+                </footer>
+            </div>
+        </section>
+        <!-- Modal Backdrop -->
+        <div aura:id="tradetypeModalBackdrop" class="slds-backdrop"></div>
+    </div>  
+    
+    <!--  <c:TradeTypeAttachmentTable aura:id="tradeTypeTable" 
+                                attachmentList="{!v.attachments}" 
+                                showFile="{!v.showFile}" 
+                                tradeTypes="{!v.tradeTypeList}" onrowaction="" /> !-->
+    
+    
+    <div class="slds-card__body">
+        <table class="slds-table slds-table_fixed-layout slds-table_bordered slds-no-row-hover slds-table_cell-buffer">
+            <thead>
+                <tr>
+                    <th id='sno'  data-dir='asc'  onclick="">S.No</th>
+                    <th id='worktypename'  data-dir='asc'  onclick="">TRADE TYPE</th>
+                    <th id='license number' data-dir='asc' onclick="">LICENSE NUMBER</th>
+                    <th id='license type'  data-dir='asc' onclick="">LICENSE EXPIRY</th>
+                    <th id='status'  data-dir='asc' onclick="">STATUS</th>
+                    <th id='license document'  data-dir='asc' onclick="">License Document</th>
+                    <th id='license document name'  data-dir='asc' onclick="">License Document Name</th>
+     
+                </tr>
+            </thead>
+            <tbody>
+                <aura:iteration items="{!v.tradeTypeList}" var="tt" indexVar="index">
+                  <tr id ="{!index}">
+                      <td>
+                          <p> {!index + 1}</p>
+                          
+                      </td>
+                     <td>
+                            <p>{!tt.WorkTypeName__c}</p>
+                            
+                        </td>
+                        <td>
+                            <p>{!tt.License_Number__c}</p>
+                            
+                        </td>
+                        
+                        <td>
+                            <p>{!tt.License_Expiry__c}</p>
+                            
+                        </td>
+                        <td>
+                            <p>{!tt.Status__c}</p>
+                            
+                        </td>
+                      
+                         <td>
+                            <p>{!tt.License_Document__c}</p>
+                            
+                        </td>
+                      
+                        <td>
+                           <p>{!tt.License_Document_Name__c}</p>
+                          
+                        </td> 
+                       
+                      
+                     <!-- <aura:if isTrue="{!index == 0}"> !-->
+                          <a onclick="{!c.removeRow}">
+                              <lightning:icon variant="error" iconName="utility:delete" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                              <span class="slds-assistive-text">Delete Icon</span>                              
+                          </a>                       
+                    <!--  </aura:if> !-->
+                      <a onclick="{!c.editModal}" data-record="{!index}">
+                          <lightning:icon variant="" iconName="utility:edit" class="slds-icon slds-icon_small" size="small" alternativeText="icon"/>
+                          <span class="slds-assistive-text">Edit Icon</span>
+                      </a>
+                      
+                    <!--  <td>
+                          <c:sampleFileUpload />
+                      </td> !-->
+                      
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </div>
+    
+    
+
+    
+</aura:component>

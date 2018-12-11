@@ -1,0 +1,25 @@
+<aura:component controller="LightningFileUploadModelController" Implements="force:hasRecordId,flexipage:availableForAllPageTypes,force:lightningQuickActionWithoutHeader,forceCommunity:availableForAllPageTypes">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="attachments" type="List" />
+    <aura:attribute name="uploadedAttachments" type="List" />
+    <aura:attribute name="columns" type="List" 
+                    default="[{label: 'Name', fieldName: 'Title', type: 'text'}]" />
+    <aura:method name="toggleAttachmentModal" action="{!c.toggleAttachmentModal}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div aura:id="attachmentModal"  class="slds-show">
+        <lightning:fileUpload  name="fileUploader"
+                              label= "Select Attachments"
+                              multiple="false"
+                              accept="['.pdf','.csv', '.jpg', '.png', '.gif', '.word','.xlsx', '.zip', '.rar']"
+                              disabled="{!v.disabled}"
+                              recordId="{!v.recordId}"
+                              onuploadfinished="{! c.handleUploadFinished }"/>
+        
+        <lightning:datatable aura:id="attId" 
+                             columns="{!v.columns}"
+                             data="{!v.attachments}"
+                             keyField="ContentDocumentId"
+                             onrowselection="{!c.updateSelectedText}" />    
+    </div>
+</aura:component>

@@ -1,0 +1,184 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" 
+                access="global"
+                controller="ServiceAppointmentManagerController">
+    
+    <!-- moment.js library to assist with date/time handling -->
+    <ltng:require scripts="{!$Resource.momentJS}" afterScriptsLoaded="{!c.afterMomentScriptsLoaded}" />
+    
+    <!-- indicator for whether a Service Appointment has been selected in another component -->
+    <!-- used to guide initial rendering before a Service Appointment is selected -->
+    <aura:attribute name="isApptSelected" type="Boolean" default="false" />
+    
+    <!-- Id of the Service Appointment we are working on -->
+    <aura:attribute name="srvApptId" type="Id" />
+    
+    <!-- Service Appointment we are working on -->
+    <aura:attribute name="currSrvAppointment" type="Object" />
+    
+    <!-- Candidate Appointment Slots returned from FSL Engine -->
+    <aura:attribute name="currSrvAppointmentCandidates" type="Object" />
+    
+    <!-- Currently selected Candidate Timeslot -->
+    <aura:attribute name="currSelectedCandidate" type="String" />
+    
+    <!-- mode for widget -->
+    <!-- possible values are:
+		"isEditing" - Service Appointment being edited
+		"isScheduling" - Service Appointment being scheduled (resource being selected)
+		"isScheduled" - Service Appointment has been scheduled -->
+    <aura:attribute name="isEditing" type="Boolean" default="true" />
+    <aura:attribute name="isScheduling" type="Boolean" default="false" />
+    <aura:attribute name="isScheduled" type="Boolean" default="false" />
+    
+    <!-- toggle for spinner -->
+    <aura:attribute name="isProcessing" type="Boolean" default="false" />
+    
+    <!-- toggle for Scheduling button -->
+    <aura:attribute name="isSchedBtnDisabled" type="Boolean" default="true" />
+    
+    <!-- Response from FSL Scheduling Request -->
+    <aura:attribute name="schedulingReponseMessage" type="Object" />
+    
+    <!-- fire code when component first created -->
+    <aura:handler name="init" value="{!this }" action="{!c.init }"/>
+    
+    <!-- handle application event for a Service Appointment being selected in another component -->
+    <aura:handler event="c:ClaimSrvApptManagerSelectionEvent" action="{!c.handleClaimSrvApptManagerSelectionEvent}"/>
+    
+    
+    <!-- only render component if an appointment has been selected and a message sent to this component -->
+    <aura:if isTrue = "{!v.isApptSelected}">
+    
+    <div style="height: 100%; width: 100%;">
+        
+        <aura:if isTrue = "{!v.isEditing}">
+        
+        	<div style="height: 100%; width: 100%; padding: 5px;">
+            <lightning:card title="{!v.currSrvAppointment.appointmentNumber}"
+                            iconName="standard:service_appointment">
+                <aura:set attribute="actions">
+            		<lightning:button label="Update" onclick="{! c.updateAppt }" />
+        		</aura:set>
+        		<div style="padding: 5px;">
+                    <!--<lightning:input name="Subject" label="Subject" value="{!v.currSrvAppointment.subject}" />-->
+                	<lightning:input name="Status" label="Status" value="{!v.currSrvAppointment.status}" disabled="true" />
+                	<lightning:input name="WorkType" label="Work Type" value="{!v.currSrvAppointment.workTypeName}" disabled="true" />
+                    <lightning:input name="EarliestStartTime" label="Earliest Start" 
+                                         value="{!v.currSrvAppointment.earliestStart}"
+                                         type="datetime" />
+                    <lightning:input name="DueDate" label="Due Date" 
+                                         value="{!v.currSrvAppointment.dueDate}"
+                                         type="datetime" />
+                    
+                    <aura:if  isTrue="{!v.currSrvAppointment.status !='None'}">
+                        <lightning:input name="ServiceResourceName" label="Service Resource Name" 
+                                         value="{!v.currSrvAppointment.serviceResourceName}"
+                                         disabled="true" />
+                    	<lightning:input name="SchedStartTime" label="Scheduled Start" 
+                        	                 value="{!v.currSrvAppointment.scheduledStartTime}"
+                            	             type="datetime"
+                                	         disabled="true" />
+                        <lightning:input name="SchedEndTime" label="Scheduled End" 
+                                         value="{!v.currSrvAppointment.scheduledFinishTime}"
+                                         type="datetime" 
+                                         disabled="true" />
+                    </aura:if>
+                    
+                    <div style="text-align: center;">
+                    	<lightning:button variant="brand" 
+                                      label="Find Candidates" 
+                                      title="Get Candidates" 
+                                      onclick="{! c.getCandidates }" />
+                        <lightning:button variant="brand" 
+                                      label="Find Temp Candidates" 
+                                      title="Get Candidates" 
+                                      onclick="{! c.getCandidates }" />
+                    </div>
+    				
+                    
+                </div>
+                
+                
+    		</lightning:card>
+            </div>
+        
+        </aura:if>
+        
+        <aura:if isTrue = "{!v.isScheduling}">
+            
+            <div style="height: 100%; width: 100%; padding: 5px;">
+            <lightning:card title="{!v.currSrvAppointment.appointmentNumber}"
+                            iconName="standard:service_appointment">
+                <aura:set attribute="actions">
+            		<lightning:button label="Back" onclick="{!c.backFromCandidates}" />
+        		</aura:set>
+                <div style="padding: 5px;">
+                    <lightning:tree items="{! v.currSrvAppointmentCandidates }" 
+                                    header="Candidates"
+                                    onselect="{! c.handleCandidateSelect }" />
+                </div>
+                <div style="text-align: center;">
+                    	<lightning:button variant="brand" 
+                                      label="Schedule Appointment" 
+                                      title="Schedule Appointment" 
+                                      onclick="{! c.scheduleAppointment }"
+                                      disabled="{!v.isSchedBtnDisabled}" />
+                </div>
+    		</lightning:card>
+            </div>
+            
+        </aura:if>
+        
+        <aura:if isTrue = "{!v.isScheduled}">
+            
+            <div style="height: 100%; width: 100%; padding: 5px;">
+            <lightning:card title="{!v.currSrvAppointment.appointmentNumber}"
+                            iconName="standard:service_appointment">
+                <div style="padding: 5px;">
+        			
+                    <lightning:tile label="Scheduling Request Completed">
+        				<aura:set attribute="media">
+            				<lightning:icon iconName="custom:custom31"/>
+        				</aura:set>
+        				<dl class="slds-dl_horizontal">
+            				<dt class="slds-dl_horizontal__label">
+                				<p class="slds-truncate" title="Result">Result:</p>
+            				</dt>
+            				<dd class="slds-dl_horizontal__detail slds-tile__meta">
+                				<p class="slds-truncate" title="ResultStatus">{!v.schedulingReponseMessage.schedulingStatus}</p>
+            				</dd>
+            				<dt class="slds-dl_horizontal__label">
+                				<p class="slds-truncate" title="Message">Message:</p>
+            				</dt>
+            				<dd class="slds-dl_horizontal__detail slds-tile__meta">
+                				<p class="slds-truncate" title="ResultMessage">{!v.schedulingReponseMessage.schedulingMessage}</p>
+            				</dd>
+        				</dl>
+    				</lightning:tile>
+                </div>
+                <div style="text-align: center;">
+                    	<lightning:button variant="brand" 
+                                      label="Close" 
+                                      title="Close" 
+                                      onclick="{! c.closeSchedulingScreen }" />
+                </div>
+    		</lightning:card>
+            </div>
+            
+        </aura:if>
+        
+      
+        <aura:if isTrue = "{!v.isProcessing}">
+            
+            <lightning:spinner alternativeText="Loading" size="medium" />
+            
+        </aura:if>
+    
+    	
+    
+    </div>
+        
+    <!-- conditional rendering if appointment selected in another component -->
+    </aura:if>  
+	
+</aura:component>

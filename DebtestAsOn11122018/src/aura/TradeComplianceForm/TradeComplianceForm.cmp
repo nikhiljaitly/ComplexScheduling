@@ -1,0 +1,17 @@
+<aura:component controller="TradeTypeController" >
+    <aura:attribute name="wizardSetting" type="Object" />
+    <aura:attribute name="sections" type="Object" />
+    <aura:attribute name="cacheData" type="Object" />
+    <aura:attribute name="valueMap" type="Object"  />
+    <aura:attribute name="rowIndex" type="Integer"  />
+    
+    <aura:method name="updateOptions" action="{!c.updateWorkTypeOptions}" >
+        <aura:attribute name="workTypes" type="String" />
+    </aura:method>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <div class="wrapper" >
+        <div class="enquiry-container">
+            <c:Card sections="{!v.sections}" cacheData="{!v.cacheData}" aura:id="card" valueMap="{!v.valueMap}" />
+        </div>
+    </div>
+</aura:component>

@@ -1,0 +1,25 @@
+<aura:component >
+
+    <aura:attribute name="_filter" 
+                    type="Object" />
+    <aura:attribute name="showFilterColumn"
+                    type="Boolean" default="false" />
+    <aura:attribute name="_filter_unit" 
+                    type="Object" />    
+    <aura:attribute name="_filter_list" 
+                    type="Object[]" 
+                    default="[]" />
+    <aura:attribute name="_top_size" 
+                    type="String" 
+                    default="" />
+    <aura:attribute name="showFilterLogic"
+                    type="Boolean"
+                    default="false" />
+    <aura:attribute name="_filter_logic"
+                    type="String"/>
+    <aura:attribute name="_keyword"
+                    type="String"/>
+    <aura:attribute name="showFilterBar"
+                    type="Boolean" />
+
+</aura:component>

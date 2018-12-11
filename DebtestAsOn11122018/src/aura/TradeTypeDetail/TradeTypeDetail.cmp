@@ -1,0 +1,194 @@
+<aura:component >
+<aura:attribute name="tradeTypeDet" type="Object" />
+<aura:attribute name="options" type="Object[]" />
+<aura:attribute name="tradeTypeValError" type="boolean" default="false"/>
+    <aura:attribute name="areaOptions" type="List" 
+      default="[{'label': 'National (all States)', 'value': 'National (all States)'},
+                {'label': 'QLD (all areas)', 'value': 'QLD (all areas)'},
+                {'label': 'Brisbane', 'value': 'Brisbane'},
+                {'label': 'Gold Coast', 'value': 'Gold Coast'},
+                {'label': 'Sunshine Coast', 'value': 'Sunshine Coast'},
+                {'label': 'NSW (all areas)', 'value': 'NSW (all areas)'},
+                {'label': 'Central Coast', 'value': 'Central Coast'},
+                {'label': 'Newcastle', 'value': 'Newcastle'},
+                {'label': 'Sydney', 'value': 'Sydney'},
+                {'label': 'Wollongong', 'value': 'Wollongong'},
+                {'label': 'VIC (all areas)', 'value': 'VIC (all areas)'},
+                {'label': 'Geelong', 'value': 'Geelong'},
+                {'label': 'Melbourne', 'value': 'Melbourne'},
+                {'label': 'Regional Victoria', 'value': 'Regional Victoria'}
+              ]"/> 
+    <aura:attribute name="makeSafeOptions" type="List" 
+      default="[{'label': '24/7', 'value': '24/7'},
+                {'label': 'Business hours only', 'value': 'Business hours only'},
+                {'label': 'After business hours only', 'value': 'After business hours only'}
+              ]"/>                            
+    <aura:attribute name="tradeTypeValErrorIds" type="List" 
+      default="[{'label': 'tradeTypeSel', 'value': 'tradeTypeSel'},
+                {'label': 'makeSafeSelect', 'value': 'makeSafeSelect'}
+              ]"/> 
+
+<!--<aura:attribute name="areaValue" type="List" default="option1"/>-->
+<aura:attribute name="makeSafeStatus" type="String" default="--Choose One--"/>
+<aura:handler name="change" value="{!v.makeSafeStatus}" action="{!c.handleMakeSafeChange}"/>
+
+<aura:registerEvent name="AddTradeTypeEvt" type="c:AddTradeType"/> 
+		     <!-- CREATE NEW Trade Type -->
+		    <lightning:button label="Add Trade Type" 
+		                              class="slds-m-top--medium"
+		                              variant="brand"
+		                              onclick="{!c.createTradeType}" aura:id="ttButton"/>
+		    <!-- / CREATE NEW Trade Type -->	           	
+        <div class="slds-size--1-of-1">
+        <div class="slds-box slds-theme--default slds-container--medium slds-hide" aura:id="ttDetail">            
+                    <div class="slds-size--6-of-6">
+                           <h3 class="slds-section-title--divider">Trade Type Details</h3>
+                            <div class="slds-form--stacked slds-p-around--medium slds-m-bottom--x-small">
+                            <!--Trade Type-->
+                               <div class="slds-form-element">
+
+                                     <!--<ui:inputSelect  aura:id="tradeTypeSel" class="slds-select"  change="{!c.onPicklistChange}"/>-->
+
+                                  <lightning:select name="mySelect" label="Select a trade type" aura:id="tradeTypeSel" value="{!v.tradeTypeDet.tradeTypeVal}" required="true">
+                                      <aura:iteration items="{!v.options}" var="item">
+                                          <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}"/>
+                                       </aura:iteration>
+                                  </lightning:select>
+
+                                  
+                               </div>
+                               <!--Trade Type-->
+                               <br/>
+                              <!--Service Areas-->
+                              <div class="slds-size--6-of-6 area-container">
+                                <div class="slds-form-element">
+                                        <lightning:checkboxGroup aura:id="serviceAreas"
+                                            name="serviceAreas"
+                                            label="Service Areas"
+                                            options="{!v.areaOptions}"
+                                            value="{!v.tradeTypeDet.areaValue}"
+                                            onchange="{!c.handleAreaChange }"
+                                            />
+                                </div>
+                                <div class="slds-form-element" aura:id="noOfJobs">
+                                    <h4 class="slds-section-title--divider"># of Jobs per week</h4>
+                                    <lightning:input aura:id="National (all States)" name="national" label="National (all States)" value="{!v.tradeTypeDet.national}"/>
+                                    <lightning:input aura:id="QLD (all areas)" name="QLD (all areas)" label="QLD (all areas)" value="{!v.tradeTypeDet.QLD}"/> 
+                                    <lightning:input aura:id="Brisbane" name="Brisbane" label="Brisbane" value="{!v.tradeTypeDet.Brisbane}"/>
+                                    <lightning:input aura:id="Gold Coast" name="Gold Coast" label="Gold Coast" value="{!v.tradeTypeDet.GoldCoast}"/>
+                                    <lightning:input aura:id="Sunshine Coast" name="Sunshine Coast" label="Sunshine Coast" value="{!v.tradeTypeDet.Sunshine}"/>
+                                    <lightning:input aura:id="NSW (all areas)" name="NSW (all areas)" label="NSW (all areas)" value="{!v.tradeTypeDet.NSW}"/>
+                                    <lightning:input aura:id="Central Coast" name="Central Coast" label="Central Coast" value="{!v.tradeTypeDet.Central}"/>
+                                    <lightning:input aura:id="Newcastle" name="Newcastle" label="Newcastle" value="{!v.tradeTypeDet.Newcastle}"/>
+                                    <lightning:input aura:id="Sydney" name="Sydney" label="Sydney" value="{!v.tradeTypeDet.Sydney}"/> 
+                                    <lightning:input aura:id="Wollongong" name="Wollongong" label="Wollongong" value="{!v.tradeTypeDet.Wollongong}"/>
+                                    <lightning:input aura:id="VIC (all areas)" name="VIC (all areas)" label="VIC (all areas)" value="{!v.tradeTypeDet.VIC}"/> 
+                                    <lightning:input aura:id="Geelong" name="Geelong" label="Geelong" value="{!v.tradeTypeDet.Geelong}"/>  
+                                    <lightning:input aura:id="Melbourne" name="Melbourne" label="Melbourne" value="{!v.tradeTypeDet.Melbourne}"/> 
+                                    <lightning:input aura:id="Regional Victoria" name="Regional Victoria" label="Regional Victoria" value="{!v.tradeTypeDet.RegionalVic}"/>                                  
+                                </div>                                                              
+                              </div>
+
+
+                               <!--Service Areas-->
+
+                               <!--Make Safe-->
+                               <br/> 
+                               <div class="slds-form-element">
+                                    <lightning:select aura:id="makeSafeSelect" name="select" label="Are you available for make safes?" onchange="{!c.handleMakeSafeChange}" value="{!v.tradeTypeDet.makeSafe}" required="true">
+                                        <!--<option value="">-Choose One-</option>-->
+                                        <option value="No">No</option>
+                                        <option value="Yes">Yes</option>
+                                        
+                                    </lightning:select>
+                               </div>
+                               <br/>
+                              
+                               <!--Make Safe-->
+
+                              <!--Make Safe type-->
+                              <div class="slds-size--6-of-6 area-container " aura:id="msYes">
+                                <div class="slds-form-element">
+                                        <!--<lightning:checkboxGroup aura:id="makeSafeTypes"
+                                            name="makeSafeTypes"
+                                            label="If yes, specify availability:"
+                                            options="{!v.makeSafeOptions}"
+                                            value="{!v.tradeTypeDet.makeSafeTypes}"
+                                            onchange="{!c.handleMakeSafeTypeChange }"
+                                            required="true" />-->
+                                            <lightning:radioGroup aura:id="makeSafeTypes"
+                                                name="makeSafeTypes"
+                                                label="If yes, specify availability:"
+                                                options="{! v.makeSafeOptions }"
+                                                value="{!v.tradeTypeDet.makeSafeType}"
+                                                onchange="{!c.handleMakeSafeTypeChange}"
+                                                required="true" />
+                                </div>
+
+
+                                <div class="slds-form-element" aura:id="rates">
+                                    <!--<h4 class="slds-section-title-divider">Rates For Each</h4>-->
+                                    <lightning:input aura:id="24/7" name="24/7" label="Rate $ (24/7)" value="{!v.tradeTypeDet.allDayRate}"/>
+                                    <lightning:input aura:id="Business hours only" name="businessHoursRate" label="Rate $ (Business Hrs)" value="{!v.tradeTypeDet.businessHoursRate}"/> 
+                                    <lightning:input aura:id="After business hours only" name="afterBusinessRate" label="Rate $ (After business hrs)" value="{!v.tradeTypeDet.afterBusinessRate}"/>
+                                </div> 
+                              </div>                                 
+                               <!--Make Safe type-->
+                               <br/>
+
+                                <div class="slds-form-element">
+                                    <lightning:input aura:id="licensetype" name="licencetype" label="Licence Type"
+                                     value="{!v.tradeTypeDet.licenceType}"/>
+                                </div>
+                                
+                                <div class="slds-form-element">
+                                     <lightning:input aura:id="licenceNo" name="licenceNo" label="Licence Number"
+                                     value="{!v.tradeTypeDet.licenceNo}"/>
+                                </div>
+
+                                <div class="slds-form-element">
+
+                                  <lightning:input aura:id="licenceExpiry" type="date" name="licenceExpiry" label="Licence Expiry" value="{!v.tradeTypeDet.licenceExpiry}" />
+                                </div>
+                                <br/>
+                                <!--Daily Rates-->
+                              <div class="slds-size--6-of-6 rate-container " aura:id="hourlyRates">
+                                <h4 class="slds-section-title--divider">Provide your hourly rates and fees for this service as applicable.</h4>
+
+                                <div class="slds-form-element">
+                                  <lightning:input type="number" aura:id="fullyQualRate" name="fullyQualRate" label="Fully qualified tradesperson Rate(per Hour)" value="{!v.tradeTypeDet.fullyQualifiedRate}" formatter="currency"/>
+                                </div>
+                                <div class="slds-form-element">
+                                  <lightning:input type="number" aura:id="labourerRate" name="labourerRate" label="Labourer Rate" value="{!v.tradeTypeDet.labourerRate}" formatter="currency"/>
+                                </div> 
+                                <div class="slds-form-element">
+                                  <lightning:input type="number" aura:id="afterHourRate" name="afterHourRate" label="After Hours Rate(Per Hour)" value="{!v.tradeTypeDet.afterHourRate}" formatter="currency"/>
+                                </div> 
+                                <div class="slds-form-element">
+                                  <lightning:input type="number" aura:id="callOutRate" name="callOutRate" label="Call Out Rate" value="{!v.tradeTypeDet.callOutRate}" formatter="currency"/>
+                                </div>  
+                                 <div class="slds-form-element">
+                                  <lightning:input type="number" aura:id="reportRate" name="reportRate" label="Report Rate" value="{!v.tradeTypeDet.reportRate}" formatter="currency"/>
+                                </div> 
+                                 <div class="slds-form-element">
+                                  <lightning:input type="text" aura:id="otherRate" name="otherRate" label="Other Rates" value="{!v.tradeTypeDet.otherRate}"/>
+                                </div>                                                                                                                                                               
+
+                              </div>  
+
+
+                      <lightning:button label="Add Trade" 
+                                        class="slds-m-top--medium"
+                                        variant="brand"
+                                        onclick="{!c.clickAdd}"/>
+                      <lightning:button label="Cancel" 
+                                        class="slds-m-top--medium"
+                                        variant="brand"
+                                        onclick="{!c.clickCancel}"/>
+                        </div>
+                            
+                    </div>
+
+                </div>
+            </div>
+</aura:component>

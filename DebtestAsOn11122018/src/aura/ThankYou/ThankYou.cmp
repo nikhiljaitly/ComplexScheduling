@@ -1,0 +1,46 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" >
+    <!--<aura:attribute name="formName" type="string" default="initial"/>-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="initialForm" type="boolean" />
+    <div class="thankyou-container">
+        <div class="slds-grid slds-wrap slds-small-size--6-of-8 slds-medium-size-6-of-8 slds-large-size--10-of-12">
+            <div class="slds-size--1-of-1">
+                <div role="alertdialog" aria-labelledby="prompt-heading-id" aria-describedby="prompt-message-wrapper" >
+                    <aura:if isTrue="{!v.initialForm}">
+                    <!--First Registration Form-->
+                            <div class="slds-modal__container">
+                                <div class="slds-modal__header slds-theme--success slds-theme--alert-texture header-text">
+                                    <h2 class="slds-text-heading--medium" id="prompt-heading-id">Initial registration completed successfully</h2>
+                                </div>
+                                <div class="slds-modal__content slds-p-around--medium">
+                                    <p>Thank you for completing initial registration. Our team of experts will review and will get back to you shortly.</p>
+                                </div>
+                                <!--<div class="slds-modal__footer slds-theme-default return-home">
+                                    <button class="slds-button slds-button-neutral" onclick="{!c.navigateToHome}">Close Window</button>                         
+                                </div>-->
+                            </div>
+                        <!--First Registration Form-->
+                        <aura:set attribute="else">
+                        <!--Final Registration Form-->
+                            <div class="slds-modal__container">
+                                <div class="slds-modal__header slds-theme--success slds-theme--alert-texture header-text">
+                                    <h2 class="slds-text-heading--medium" id="prompt-heading-id">Final registration completed</h2>
+                                </div>
+                                <div class="slds-modal__content slds-p-around--medium">
+                                    <p>Thank you for completing final registration. Our team of experts will review and will get back to you shortly.</p>
+                                </div>
+                                <!--<div class="slds-modal__footer slds-theme-default return-home">
+                                    <button class="slds-button slds-button-neutral" onclick="{!c.navigateToHome}">Close Window</button>                         
+                                </div>-->
+                            </div>
+                        </aura:set>
+                    </aura:if>
+
+                    <!--Second Form-->
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</aura:component>

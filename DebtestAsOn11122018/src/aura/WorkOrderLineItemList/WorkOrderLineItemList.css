@@ -1,0 +1,11 @@
+.THIS .slds-button_icon-border {
+    width: 20px;
+    height: 20px;
+}
+.THIS button.slds-button.slds-button_icon-border-filled {
+    width: 20px;
+    height: 20px;
+}
+.THIS .slds-modal__container button[title='Save & New'] {
+    display: none;
+}

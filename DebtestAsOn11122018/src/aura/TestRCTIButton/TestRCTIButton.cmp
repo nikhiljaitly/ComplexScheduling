@@ -1,0 +1,13 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="doOpp" type="Boolean" description="Create Opportunity during Lead Conversion" />
+  <!--  <aura:handler name="init" value="{!this}" action="{!c.invoke}" /> !-->
+    <lightning:workspaceAPI aura:id="workspace"/> 
+    
+    <div class="slds-align--absolute-center">      
+        <ui:button label="CreateNon-RCTIInvoice" press="{!c.invoke}"/>
+        <br/>
+    </div>
+    
+    
+</aura:component>

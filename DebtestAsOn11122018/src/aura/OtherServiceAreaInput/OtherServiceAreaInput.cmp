@@ -1,0 +1,42 @@
+<aura:component >
+    <aura:attribute name="items" type="List" default="[]"/>
+    <aura:attribute name ="value" type="String" />
+    <aura:attribute name ="initOnce" type="Boolean" default="false" />
+    <aura:attribute name ="change" type="Object"  />
+    
+    <aura:handler name="change" value="{!v.value}" action="{!c.initValues}" />
+    <aura:handler name="change" value="{!v.items}" action="{!c.updateValues}" />
+    <lightning:layout >
+        <lightning:layoutItem padding="around-small">
+            <ui:inputSelect class="single" aura:id="states" >
+                <ui:inputSelectOption text="NSW"/>
+                <ui:inputSelectOption text="QLD" value="true"/>
+                <ui:inputSelectOption text="VIC"/>
+                <ui:inputSelectOption text="SA"/>
+                <ui:inputSelectOption text="TAS"/>
+                <ui:inputSelectOption text="WA"/>
+                <ui:inputSelectOption text="ACT"/>
+            </ui:inputSelect>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small">
+            <ui:inputText aura:id="otherInput" />
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small">
+            <lightning:button label="Add" title="Add" onclick="{! c.addItem }" iconName="utility:add"/>
+        </lightning:layoutItem>
+    </lightning:layout>
+    <div aria-orientation="horizontal" id="listbox-selections-unique-id" role="listbox">
+         
+        <ul aria-label="Options:" 
+            class="slds-listbox slds-listbox_horizontal slds-p-top_xxx-small" 
+            role="group">
+            <aura:iteration items="{!v.items}" var="item" indexVar="index" >
+                <li class="slds-listbox__item" role="presentation" >
+                    <lightning:pill label="{!item}" 
+                                    onremove="{! c.removeItem }" />
+                </li>
+            </aura:iteration>
+        </ul>
+    </div>
+    
+</aura:component>

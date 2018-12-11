@@ -1,0 +1,95 @@
+<aura:component controller="ListEmailClaimController" implements="force:hasRecordId,flexipage:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global">
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="listOfCaseContact" type="Contact[]" />
+    <aura:attribute name="errorMsg" type="String" description=""/>
+    <aura:attribute name="shoMsg" type="boolean" default="false" description=""/>
+    <aura:attribute name="shwSucesMsg" type="boolean" default="false" description=""/>
+    <aura:attribute name="BodyContent" type="String" />
+    <aura:attribute name="OrderLookupList" type="sObject[]" access="global" />
+    <aura:attribute name="recipientContacts" type="Contact"  default="{ 'sobjectType': 'Contact' }" access="public"/>
+    <!-- Lookup Attribute -->
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
+    <aura:attribute name="selectedRecord" type="sObject" default="{}" description="Use,for store SELECTED sObject Record"/>
+    <aura:handler name="oSelectedRecordEvent" event="c:selectedsObjectRecordEvent" action="{!c.handleComponentEvent}"/>
+    <!-- attributes -->
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="conIds" type="List"/>
+    <aura:attribute name="selTemplate" type="String" description=""/>
+    <aura:attribute name="subjTxt" type="String" default="" description=""/>
+	<aura:attribute name="selectedRowsCount" type="Integer" default="0"/>
+    <aura:attribute name="rawData" type="Object" access="PRIVATE" />
+    <aura:attribute name="activeFilter" type="string" default="all" access="PRIVATE" />
+	<aura:attribute name="templates" type="EmailTemplate[]" default="[]"/>
+    <aura:attribute name="items" type="List" default="[]"/>
+    <aura:attribute name="templDetail" type="EmailTemplate" default="{}" />
+    <div style="display:flow-root;">
+        <h1 style="float:left;">Selected Rows: {!v.selectedRowsCount}</h1>
+        <div style="float:Right;" >
+        <lightning:button variant="brand" label="Send Email" onclick="{!c.sentEmail}" />
+    	</div>
+    </div>
+    <br/>
+    <!-- the container element determine the height of the datatable -->
+    <div style="height: 251px">
+        <lightning:datatable style="height: 90% !important;display: block;"
+            columns="{!v.columns}"
+            data="{!v.data}"
+            keyField="id"
+            selectedRows="{!v.selectedRows}"
+            onrowselection="{!c.updateSelectedText}" />        
+    </div>
+    <div aura:id="FileModal"  class="slds-modal slds-fade-in-open slds-hide" aria-hidden="false" role="dialog">
+        <div class="slds-modal__container" style="max-width:50rem;">
+            <div class="slds-modal__header">
+                <button class="slds-button slds-button--icon-inverse slds-modal__close" onclick="{!c.hideExampleModal}">
+                    <lightning:icon iconName="utility:close" size="medium" variant="bare"/>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 class="slds-text-heading--medium">Email Composer</h2>
+            </div>
+            <div class="slds-modal__content slds-p-around--medium">
+                <div class="modalContent">
+                    <aura:if isTrue="{!v.shoMsg}" >
+                        <ui:message aura:id="errPanel"  title="Error" severity="error" closable="false">
+                            {!v.errorMsg}
+                        </ui:message>                        
+                    </aura:if>                    
+                    <aura:if isTrue="{!v.shwSucesMsg}" >
+                        <ui:message aura:id="errPanel"  title="Success!" severity="confirm" closable="false">
+                            Email has been sent!
+                        </ui:message>                        
+                    </aura:if>
+                   <label class="slds-form-element__label">
+                         <span >Recipients</span>
+                    </label>
+                   <c:CustomLookup objectAPIName="Contact" IconName="standard:contact" selectedRecordId="{!v.recipientContacts.Id}" selectedRecord="" label="{!v.rowIndex + 1}"/>
+                   <lightning:pillContainer label="Recipients" items="{!v.items}" onitemremove="{!c.handleItemRemove}"></lightning:pillContainer>
+                   <lightning:select onchange="{!c.loadTemplate}" name="SelectDivision" label="Select a Template:" aura:id="templateId" value="{!v.selTemplate}">
+                        <option text="None" value=""/>            
+                        <aura:iteration items="{!v.templates}" var="item">
+                            <option text="{!item.Name}" value="{!item.Id}"/>
+                        </aura:iteration> 
+                    </lightning:select>                    
+                    <lightning:input id="subjMatter" type="Text" autocomplete="off" aura:id="subjectText" value="{!v.subjTxt}" label="Subject" />
+                    <aura:if isTrue="{!empty(v.selTemplate)}" >
+                        <br/>
+                        <lightning:inputRichText value="{!v.BodyContent}" label="Content:" 
+                                            class="txtAreaCls" placeholder="Type something interesting">
+                                <lightning:insertImageButton/>
+                       </lightning:inputRichText>
+                    </aura:if>
+                    <aura:if isTrue="{!!empty(v.selTemplate)}" >
+                        <lightning:textarea name="myTextArea"  disabled="true" value="{!v.templDetail.Body}" 
+                                label="Content:" maxlength="700" 
+                                class="txtAreaCls"/>                        
+                    </aura:if>
+                </div>
+            </div>
+            <div class="slds-modal__footer">
+                <lightning:button variant="brand" label="Send Email" onclick="{!c.sendEmailAction}" />
+                <button class="slds-button slds-button--neutral slds-button--brand" onclick="{!c.hideExampleModal}">Close</button>
+            </div>
+        </div>
+ </div>
+</aura:component>

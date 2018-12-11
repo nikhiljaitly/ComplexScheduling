@@ -1,0 +1,317 @@
+<aura:component controller="Lead_FinalRegistration_CC" implements="forceCommunity:availableForAllPageTypes" access="global" >
+	<aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <aura:attribute name="lead" type="Lead"/>
+    <aura:attribute access="public" name="recordId" type="String" default="" />
+    <aura:attribute name="isAvailable" type="boolean" default="false"/>
+    <aura:attribute name="isSaved" type="boolean" default="false"/>    
+    <aura:If isTrue="{!(!v.isSaved)}">        
+        <aura:If isTrue="{!v.isAvailable}">
+            <aura:If isTrue="{!v.lead.Status=='2nd Form Submitted'}">                
+                     <div class="slds-col slds-p-around_medium" style="background-color: #fff;margin: 15px;border: 1px solid #CCC;border-radius: 5px;padding: 15px;"> 
+                         <div class="slds-align_absolute-center" style="height: 21rem;"><h1>This lead is submitted already. Please contact Home Repair customer support.</h1></div>                 
+                     </div> 
+                <aura:set attribute="else"> 
+                   <div class="wrapper" style="background-color: #fff;margin: 15px;border: 1px solid #CCC;border-radius: 5px;padding: 15px;">
+          	<fieldset class="slds-form-element">
+              <legend class="slds-form-element__label slds-text-title_caps" style="padding: 10px;background-color: rgb(249, 249, 250);width: 100%;border-radius: 5px;margin-bottom: 11px;">
+                  <h1 style="font-size: 16px;">Business Details</h1>
+                </legend>
+            </fieldset>
+            <div class="slds-form slds-form_compound" style="width: 440px;">
+            <fieldset class="slds-form-element">             
+              <div class="slds-form-element__group">
+                <div class="slds-form-element__row">
+                  <div class="slds-form-element slds-size_1-of-2">
+                    <label class="slds-form-element__label" for="FirstName">Main Account First Name</label>
+            		<input type="text" id="FirstName" disabled="disabled" value="{!v.lead.FirstName}" class="slds-input" />
+        		  </div>
+                  <div class="slds-form-element slds-size_1-of-2">
+                    <label class="slds-form-element__label" for="LastName">Main Account Last Name</label>
+            		<input type="text" id="LastName" disabled="disabled" value="{!v.lead.LastName}" class="slds-input" />
+        		  </div>                  
+                </div>
+                <!-- Row 2 --> 
+                <div class="slds-form-element__row">
+                    <div class="slds-form-element slds-size_1-of-2">
+                      <label class="slds-form-element__label" for="input-01">Position in Company</label>
+            		  <input type="text" value="{!v.lead.Title}" id="input-01" class="slds-input" />
+                  	</div>
+                    <div class="slds-form-element slds-size_1-of-2">
+                    	<div class="slds-form-element">
+                            <lightning:input aura:id="leadEmail" name="leadEmail" label="Email Address"
+                                              value="{!v.lead.Email}" type="Email" required="true"/>
+                        </div>
+                    </div>
+                </div>
+                <!-- Row 3 --> 
+                <div class="slds-form-element__row">                  
+                  <div class="slds-form-element slds-size_1-of-2">
+                  	   <label class="slds-form-element__label" for="input-02">Phone</label>
+            		   <input type="text" id="input-02" value="{!v.lead.Main_Business_Phone__c}" class="slds-input" required="true"/>
+        		  </div>
+                  <div class="slds-form-element slds-size_1-of-2">
+                       <label class="slds-form-element__label" for="input-02">Alternate Phone</label>
+            			<input type="text" value="{!v.lead.Alternate_Phone__c}" id="input-02" class="slds-input" />
+       			  </div>
+                </div>  
+                <!-- Row 4 --> 
+                <div class="slds-form-element__row">                  
+                  <div class="slds-form-element slds-size_1-of-2">
+                      <label class="slds-form-element__label" for="JobRelatedFirstName">Job Related Contact First Name</label>
+            		  <input type="text" id="JobRelatedFirstName"  value="{!v.lead.Job_Related_First_Name__c}" class="slds-input" />
+       
+                   </div>
+                  <div class="slds-form-element slds-size_1-of-2">
+                    <label class="slds-form-element__label" for="JobRelatedLastName">Job Related Contact Last Name</label>
+           			<input type="text" id="JobRelatedLastName" value="{!v.lead.Job_Related_Last_Name__c}" class="slds-input" />
+           		 </div>
+                </div> 
+                  <!-- Row 5 --> 
+                <div class="slds-form-element__row">                  
+                  <div class="slds-form-element slds-size_1-of-2">
+                     <label class="slds-form-element__label" for="input-01">Position in Company</label>
+            		<input type="text" value="{!v.lead.Job_Related_Position_in_Company__c}" id="input-01" class="slds-input" />
+               	  </div>
+                  <div class="slds-form-element slds-size_1-of-2">
+                      <div class="slds-form-element">
+                            <lightning:input aura:id="JobEmail" name="JobEmail" label="Email Address"
+                                              value="{!v.lead.Job_Email__c}" type="Email" required="true"/>
+                        </div>
+                     </div>
+                </div>
+                <!-- Row 6 --> 
+                <div class="slds-form-element__row">                  
+                  <div class="slds-form-element slds-size_1-of-2">
+                     <label class="slds-form-element__label" for="input-02">Phone</label>
+            		 <input type="text" id="input-02" value="{!v.lead.Job_Related_Phone__c}" class="slds-input" required="true"/>
+                  </div>
+                  <div class="slds-form-element slds-size_1-of-2">
+                       <label class="slds-form-element__label" for="input-02">Alternate Phone</label>
+            			<input type="text" value="{!v.lead.JR_Alernate_Phone__c}" id="input-02" class="slds-input" />
+       				</div>
+                </div>
+                <!-- Row 7 --> 
+                <div class="slds-form-element__row">                  
+                  <div class="slds-form-element slds-size_1-of-2">
+                     <label class="slds-form-element__label" for="AccountsFirstName">Account First Name</label>
+                      <input type="text" id="AccountsFirstName"  value="{!v.lead.Accounts_First_Name__c}" class="slds-input" />
+                  </div>
+                  <div class="slds-form-element slds-size_1-of-2">
+                     <label class="slds-form-element__label" for="AccountLastName">Account Last Name</label>
+            		 <input type="text" id="AccountLastName" value="{!v.lead.Accounts_Last_Name__c}" class="slds-input" />
+          		  </div>
+                </div>
+                <!-- Row 8 --> 
+                <div class="slds-form-element__row">                  
+                  <div class="slds-form-element slds-size_1-of-2">
+                      <label class="slds-form-element__label" for="input-01">Position in Company</label>
+                      <input type="text" value="{!v.lead.AC_Position_in_Company__c}" id="input-01" class="slds-input" />
+                 </div>
+                  <div class="slds-form-element slds-size_1-of-2">
+                      <div class="slds-form-element">
+                            <lightning:input aura:id="JobEmail" name="JobEmail" label="Email Address"
+                                              value="{!v.lead.Accounts_Email_Address__c}" type="Email" required="true"/>
+                        </div>
+                  </div>
+                </div>
+                  <!-- Row 9 --> 
+                <div class="slds-form-element__row">                  
+                  <div class="slds-form-element slds-size_1-of-2">
+                       <label class="slds-form-element__label" for="input-02">Phone</label>
+                   	   <input type="text" id="input-02" value="{!v.lead.Accounts_Phone__c}" class="slds-input" required="true"/>
+                  </div>
+                  <div class="slds-form-element slds-size_1-of-2">
+                      <label class="slds-form-element__label" for="input-02">Alternate Phone</label>
+            		  <input type="text" value="{!v.lead.Accounts_Alt_Phone__c}" id="input-02" class="slds-input" />
+        		  </div>
+                </div>
+              </div>
+            </fieldset>             
+          </div>
+            <fieldset class="slds-form-element">
+              <legend class="slds-form-element__label slds-text-title_caps" style="padding: 10px;background-color: rgb(249, 249, 250);width: 100%;border-radius: 5px;margin-bottom: 11px;">
+                    <h1 style="font-size: 16px;">Account Details</h1>
+            		<h3>Complete your account details to enable invoice payments.</h3>
+             </legend>
+            </fieldset>
+            <div class="slds-form slds-form_compound" style="width: 440px;">
+                <fieldset class="slds-form-element">             
+                  <div class="slds-form-element__group">
+                      <div class="slds-form-element__row">                  
+                          <div class="slds-form-element slds-size_1-of-2">
+                               <div class="slds-form-element">
+                                <lightning:input aura:id="BankAccountName" name="BankAccountName" label="Bank Account Name"
+                                                  value="{!v.lead.Bank_Account_Name__c}" type="text" required="true"/>
+                                </div>
+                          </div>
+                          <div class="slds-form-element slds-size_1-of-2">
+                              <div class="slds-form-element">
+                                <lightning:input aura:id="BSB" name="BSB" label="Bank Account Name"
+                                                  value="{!v.lead.BSB__c}" type="text" required="true"/>
+                                </div>
+                          </div>
+                       </div>
+                      <div class="slds-form-element__row">                  
+                          <div class="slds-form-element slds-size_1-of-2">
+                               <div class="slds-form-element">
+                                <lightning:input aura:id="AccountNumber" name="AccountNumber" label="Account Number"
+                                                  value="{!v.lead.Account_Number__c}" type="text" required="true"/>
+                                </div>
+                          </div>
+                          <div class="slds-form-element slds-size_1-of-2">                              
+                          </div>
+                       </div>
+                  </div>
+                </fieldset>
+            </div>
+            <fieldset class="slds-form-element">
+              <legend class="slds-form-element__label slds-text-title_caps" style="padding: 10px;background-color: rgb(249, 249, 250);width: 100%;border-radius: 5px;margin-bottom: 11px;">
+                    <h1 style="font-size: 16px;">Your Insurance Policy Details</h1>
+            		<h3>Describe and provide copies of the requested insurance policies.</h3> 
+             </legend>
+            </fieldset>
+            <div class="slds-form slds-form_compound" style="width: 440px;">
+                <fieldset class="slds-form-element">             
+                  <div class="slds-form-element__group">                      
+                      <div class="slds-form-element__row">                  
+                          <div class="slds-form-element slds-size_1-of-2">
+                               <div class="slds-form-element">
+                                <lightning:input aura:id="WorkCoverInsuranceProvider" name="WorkCoverInsuranceProvider" label="Insurance Provider"
+                                                  value="{!v.lead.Work_Cover_Insurance_Provider__c}" type="text" required="true"/>
+                                </div>
+                          </div>
+                          <div class="slds-form-element slds-size_1-of-2">  
+                              Work Cover Insurance State*
+                          </div>
+                       </div>
+                      <div class="slds-form-element__row">                  
+                          <div class="slds-form-element slds-size_1-of-2">
+                                <div class="slds-form-element">
+                                <lightning:input aura:id="WorkCoverAmount" name="WorkCoverAmount" label="Cover amount"
+                                                  value="{!v.lead.Work_Cover_Amount__c}" type="Currency" required="true"/>
+                                </div>
+                          </div>
+                          <div class="slds-form-element slds-size_1-of-2">  
+                              <div class="slds-form-element">
+                                <lightning:input aura:id="WorkCoverExpiry" name="WorkCoverExpiry" label="Expiry"
+                                                  value="{!v.lead.Work_Cover_Expiry__c}" type="date" required="true"/>
+                                </div>
+                          </div>
+                       </div>
+                      <div class="slds-form-element__row">                  
+                          <div class="slds-form-element slds-size_1-of-2">
+                               <div class="slds-form-element">
+                                <lightning:input aura:id="PublicLiabilityInsuranceProvider" name="PublicLiabilityInsuranceProvider" label="Insurance Provider"
+                                                  value="{!v.lead.Public_Liability_Insurance_Provider__c}" type="text" required="true"/>
+                                </div>
+                          </div>
+                          <div class="slds-form-element slds-size_1-of-2">  
+                              <div class="slds-form-element">
+                                <lightning:input aura:id="PublicLiabilityCoverAmount" name="PublicLiabilityCoverAmount" label="Cover amount"
+                                                  value="{!v.lead.Public_Liability_Cover_Amount__c}" type="Currency" required="true"/>
+                                </div>
+                          </div>
+                       </div>
+                      <div class="slds-form-element__row">                  
+                          <div class="slds-form-element slds-size_1-of-2">
+                               <div class="slds-form-element">
+                                <lightning:input aura:id="PublicLiabilityExpiry" name="PublicLiabilityExpiry" label="Expiry"
+                                                  value="{!v.lead.Public_Liability_Expiry__c}" type="date" required="true"/>
+                                </div>
+                          </div>
+                          <div class="slds-form-element slds-size_1-of-2">  
+                             <div class="slds-form-element">
+                                <lightning:input aura:id="OtherInsurancePolicies" name="OtherInsurancePolicies" label="Other Insurance Policies"
+                                                  value="{!v.lead.Other_Insurance_Policies__c}" type="text" required="true"/>
+                             </div>
+                          </div>
+                       </div>                      
+                  </div>
+                </fieldset>
+            </div>
+            <fieldset class="slds-form-element">
+              <legend class="slds-form-element__label slds-text-title_caps" style="padding: 10px;background-color: rgb(249, 249, 250);width: 100%;border-radius: 5px;margin-bottom: 11px;">
+                    <h1 style="font-size: 16px;">Workplace Health and Safety Agreement</h1>            		
+             </legend>
+            </fieldset>
+            <div class="slds-form slds-form_compound" style="width: 440px;">
+                <fieldset class="slds-form-element">             
+                  <div class="slds-form-element__group">
+                      <div class="slds-form-element__row">                  
+                          <div class="slds-form-element slds-size_2-of-2">
+                              <div class="slds-form-element">
+                                <lightning:input aura:id="SWMS" name="SWMS" label="I agree a SWMS will be completed and distributed to all employees for each site they attend."
+                                                  value="{!v.lead.Safe_Work_Method_Statement_Agreement__c}" type="checkbox" required="true"/>
+                             </div>
+                          </div>                         
+                       </div>
+                      <div class="slds-form-element__row">                  
+                          <div class="slds-form-element slds-size_2-of-2">
+                              <div class="slds-form-element">
+                                <lightning:input aura:id="AnyPreviousIssues" name="AnyPreviousIssues" label="Have you, or any partnership or company of which you were a member or director, ever been refused or disqualified from holding a license, authority, certificate or registration or had any such instrument cancelled or suspended? "
+                                                  value="{!v.lead.Any_previous_issues__c}" type="checkbox" required="true"/>
+                             </div>
+                          </div>                         
+                       </div>
+                      <div class="slds-form-element__row">                  
+                          <div class="slds-form-element slds-size_2-of-2">
+                              <div class="slds-form-element">
+                                <lightning:input aura:id="AnyPreviousComplaints" name="AnyPreviousComplaints" label="Have you, or any partnership or company of which you were/are a member or director, had any complaints lodged or compliance action commenced arising from your activities in relation to the conduct of residential work?"
+                                                  value="{!v.lead.Any_previous_complaints__c}" type="checkbox" required="true"/>
+                             </div>
+                          </div>                         
+                       </div>
+                      <div class="slds-form-element__row">                  
+                          <div class="slds-form-element slds-size_2-of-2">
+                              <div class="slds-form-element">
+                                <lightning:input aura:id="AnyCurrentWorkOrders" name="AnyCurrentWorkOrders" label="Do you currently in any capacity work for any insurers, loss adjusters or builders within the insurance industry?"
+                                                  value="{!v.lead.Any_current_work_orders__c}" type="checkbox" required="true"/>
+                             </div>
+                          </div>                         
+                       </div>
+                      <div class="slds-form-element__row">                  
+                          <div class="slds-form-element slds-size_2-of-2">
+                              <div class="slds-form-element">
+                                <lightning:input aura:id="AnyPreviousWork" name="AnyPreviousWork" label="Have you in any capacity worked for any insurers, loss adjusters or builders within the insurance industry in the past?"
+                                                  value="{!v.lead.Any_previous_work__c}" type="checkbox" required="true"/>
+                             </div>
+                          </div>                         
+                       </div>
+                      <div class="slds-form-element__row">                  
+                          <div class="slds-form-element slds-size_2-of-2">
+                              <div class="slds-form-element">
+                                    <lightning:input aura:id="Referred" name="Referred" label="Were you referred to HomeRepair?"
+                                                      value="{!v.lead.Referred__c}" type="checkbox" required="true"/>
+                              </div>
+                          </div>                         
+                       </div>
+                      <div class="slds-form-element__row">                  
+                          <div class="slds-form-element slds-size_1-of-2">
+                              <div class="slds-form-element">
+                                <lightning:input aura:id="Additionalcomments" name="Additionalcomments" label="Additional comments"
+                                                  value="{!v.lead.Additional_comments__c}" type="Text"/>
+                             </div>
+                          </div>                         
+                       </div>
+						<div class="slds-form-element__row">                  
+                          <div class="slds-form-element slds-size_1-of-2">
+                              <div class="slds-form-element">
+                                  <lightning:button type="submit" name="submit" variant="brand" label="Submit" onclick="{!c.updateLeadJs}"/>
+                                 </div>
+                          </div>                         
+                       </div>
+                  </div>
+                </fieldset>
+            </div>
+        </div> 
+                </aura:set> 
+            </aura:If>
+           </aura:If>
+             
+         <aura:set attribute="else"> 
+             <div class="slds-col slds-p-around_medium" style="background-color: #fff;margin: 15px;border: 1px solid #CCC;border-radius: 5px;padding: 15px;"> 
+                 <div class="slds-align_absolute-center" style="height: 21rem;"><h1>Thank you for Submitted details</h1></div>                 
+             </div> 
+        </aura:set> 
+    </aura:If>
+ </aura:component>

@@ -1,0 +1,65 @@
+<aura:component controller="homeRepRepairToolController"
+                implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+
+    <aura:attribute name="_record" type="Object" />
+    <aura:attribute name="_rooms" type="Object[]" access="public" />
+
+    <aura:attribute name="_repair_items" type="Object[]" access="public"/>    
+    <aura:attribute name="_error" type="String" />
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="showProductSelection" type="Boolean" default="true" />
+    <aura:attribute name="showSpinner" type="Boolean" default="true" />
+
+    <aura:attribute name="_pricebookId" type="String" />
+
+
+   <!-- detect event when a case is edited -->
+   <!-- https://developer.salesforce.com/docs/atlas.en-us.200.0.lightning.meta/lightning/ref_tag_dependency.htm -->
+    <aura:dependency resource="markup://force:editRecord" type="EVENT" />
+
+    <!-- re-initialise when view is refreshed -->
+    <aura:handler event="force:refreshView" 
+                  action="{!c.init}"/>  
+    <aura:handler name="init" 
+                  action="{!c.init}" 
+                  value="{!this}" />
+
+    <!-- Indicates that an attribute value has changed.
+         This event is automatically fired when an attribute value changes. 
+         The aura:valueChange event is handled by a client-side controller. 
+         A component can have multiple <aura:handler name="change"> tags to 
+         detect changes to different attributes. -->
+
+    <!-- fires when a case is loaded -->
+    <aura:handler name="change" action="{!c.afterCaseLoads}" value="{!v._record}" />
+
+    <!-- fires when Assessment Report Items are to be created -->
+    <aura:handler name="createRepairItems" event="c:homeRepCreateRepairItemEvent" action="{!c.createRepairItem}"/>
+
+    <!-- fires on Cancel/Save of Assessment Report Item(s) -->
+    <aura:handler name="handleRepairItems" event="c:homeRepRepairItemEvent" action="{!c.handleRepairItems}" />    
+
+    <aura:If isTrue="{!v.showSpinner}"> 
+        <div class="slds-spinner_container">
+        <div class="slds-spinner slds-spinner--medium" role="alert">
+            <span class="slds-assistive-text">Loading</span>
+            <div class="slds-spinner__dot-a"></div>
+            <div class="slds-spinner__dot-b"></div>
+        </div>
+    </div>
+        <!--<lightning:spinner variant="brand" size="large" />-->
+    </aura:If>
+
+    <aura:If isTrue="{!v.showProductSelection}">
+        <!-- allow selection of products -->
+        <c:homeRepRepairItemSelection _case="{!v._record}" _rooms="{!v._rooms}" />
+        <aura:set attribute="else">
+            <!-- Finalisation of Products -->
+            <c:homeRepRepairItemTable aura:id="assessmentRepairTable"
+                                       _repair_items="{!v._repair_items}" />
+        </aura:set>
+    </aura:If>
+    
+    <!--<button class="slds-button slds-button_brand">Lightning Button</button>-->
+	
+</aura:component>

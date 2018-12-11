@@ -1,0 +1,17 @@
+.THIS {
+}
+.THIS .li-items{
+	padding-left: 10px;
+    font-weight: 300;
+    line-height: 25px;  
+}
+
+.THIS .introduction-message{
+    padding-bottom:20px;
+}
+
+.THIS div.wrapper{
+    margin: 20px !important;
+    border: 1px solid #CCC !important;
+    border-radius: 5px !important;
+}

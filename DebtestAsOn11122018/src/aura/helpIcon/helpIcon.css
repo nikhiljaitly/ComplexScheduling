@@ -1,0 +1,10 @@
+.THIS {
+}
+.THIS.radius {
+    background: #D8F9F8;
+    border: 1px;
+    border-radius: 50%;
+}
+.THIS.radius.slds-icon {
+    fill: #356D75;
+}

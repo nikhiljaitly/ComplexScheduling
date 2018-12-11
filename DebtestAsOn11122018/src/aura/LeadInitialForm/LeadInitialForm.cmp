@@ -1,0 +1,23 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="EOI_Controller">
+    <aura:attribute name="wizardSetting" type="Object" default="{}"/>
+    <aura:attribute name="sections" type="Object" default="[]" />
+    <aura:attribute name="cacheData" type="Object" default ="{}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="fieldInfo" event="c:Message" action="{!c.customActions}"/>
+    <aura:handler name="dataChanged" event="c:Message" action="{!c.customActions}"/>
+    
+    <div class="leadWrapper"> 
+        <c:LeadTerms />
+        <div class="enquiry-container">
+            <c:Card sections="{!v.sections}" cacheData="{!v.cacheData}" aura:id="card"  />
+        </div> 
+        <div class="complianceWrapper">
+            <c:TradeComplianceAdder aura:id="compliance" showFile="false" />
+        </div>
+        <lightning:button type="submit" name="submit" variant="brand" 
+                          label="Submit Application" onclick="{!c.onSubmit}" 
+                          class="slds-align_absolute-center"/>
+    </div>
+    
+    
+</aura:component>

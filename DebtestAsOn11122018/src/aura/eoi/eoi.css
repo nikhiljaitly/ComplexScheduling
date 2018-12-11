@@ -1,0 +1,35 @@
+.THIS {
+    margin-left:-10px;
+    display:flex;
+    justify-content:center;
+    margin-top:-20px;
+}
+
+.THIS .home-image img{
+    width:100%;
+}
+
+.THIS .side-messages{
+    padding:23px;
+    line-height:20px;
+    word-spacing:2px;
+}
+
+.THIS .side-message{
+    margin-bottom:30px;
+}
+
+.THIS .heading-ndis{
+    color:#405364;
+}
+
+.THIS .li-items{
+	padding-left: 10px;
+    font-weight: 300;
+    line-height: 25px;  
+}
+
+.THIS .introduction-message{
+    padding-bottom:20px;
+    padding-top:20px;
+}

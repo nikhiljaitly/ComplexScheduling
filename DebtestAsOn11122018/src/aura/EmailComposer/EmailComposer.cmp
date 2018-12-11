@@ -1,0 +1,179 @@
+<aura:component controller="ListEmailClaimController">    
+    <aura:attribute name="selectedLookUpRecords" type="sObject[]" default="[]"/>
+    <aura:attribute name="selectedLookUpRecordsForCC" type="sObject[]" default="[]"/>
+    
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="message" type="String" description=""/>
+    <aura:attribute name="shwSucesMsg" type="boolean" default="false" description=""/>
+    <aura:attribute name="shoMsg" type="boolean" default="false" description=""/>
+    <aura:attribute name="templates" type="EmailTemplate[]" default="[]"/>
+    <aura:attribute name="selTemplate" type="String" description=""/>
+    <aura:attribute name="contacts" type="List" default="[]"/>
+    <aura:attribute name="bodyContent" type="String" />
+    <aura:attribute name="subjTxt" type="String" />    
+    <aura:attribute name="templDetail" type="EmailTemplate" default="{}" />
+    <aura:attribute name="recipient" type="User"  default="{ 'sobjectType': 'User' }" 
+                    access="public"/>
+    <aura:method name="showComposer" action="{!c.showEmailComposer}" />
+    
+    <aura:attribute name="selectedLookUpRecordUserCC" type="sObject" default="{}"/>
+    
+    <aura:handler name="oSelectedRecordEvent" event="c:selectedsObjectRecordEvent" 
+                  action="{!c.selectRecipients}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <div aura:id="FileModal"  class="slds-hide" style="height: 640px;">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" 
+                 aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                            title="Close" onclick="{!c.hideEmailComposer}" >
+                        <lightning:icon iconName="utility:close" size="small" variant="bare"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                        Email Composer
+                    </h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <aura:if isTrue="{!v.shoMsg}" >
+                        <ui:message aura:id="panel"  title="{!v.shwSucesMsg? 'Success!': 'Error'}"
+                                    severity="{!v.shwSucesMsg? 'confirm': 'error'}" closable="false">
+                            {!v.message}
+                        </ui:message>                        
+                    </aura:if>                    
+                    <div class="c-container">
+                        <lightning:layout>
+                            <lightning:layoutItem flexibility="auto, no-grow" padding="around-medium">
+                                <label class="slds-form-element__label">
+                                   <!--render facet: 3101:0-->
+                                   <span >To</span>
+                                </label>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem flexibility="auto" padding="horizontal-medium">
+                                <div class="slds-p-bottom_medium" >
+                                    <c:CustomMultiSelectLookup objectAPIName="User"
+                                       IconName="standard:user"
+                                       lstSelectedRecords="{!v.selectedLookUpRecords}"
+                                       label="Account Name"/>                                    
+                                </div>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                        <lightning:layout>
+                          	<lightning:layoutItem flexibility="auto, no-grow" padding="around-medium">
+                                <label class="slds-form-element__label">
+                                   <!--render facet: 3101:0-->
+                                   <span >Selected</span>
+                                </label>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem flexibility="auto" padding="horizontal-medium">
+                                <div class="slds-p-bottom_medium" >
+                                    <lightning:pillContainer label="Recipients" items="{!v.contacts}" 
+                                             onitemremove="{!c.handleItemRemove}" onclick="{!c.clickPills}" />
+                                </div>
+                        	</lightning:layoutItem>
+                        </lightning:layout>
+                        <lightning:layout>
+                            <lightning:layoutItem flexibility="auto, no-grow" padding="around-medium">
+                                <label class="slds-form-element__label">
+                                   <!--render facet: 3101:0-->
+                                   <span >CC</span>
+                                </label>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem flexibility="auto" padding="horizontal-medium">
+                                <div class="slds-p-bottom_medium" >
+                                    <c:CustomMultiSelectLookup objectAPIName="User"
+                                       IconName="standard:user"
+                                       lstSelectedRecords="{!v.selectedLookUpRecordsForCC}"
+                                       label="Account Name"/>                                    
+                                </div>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                        <lightning:layout>
+                          	<lightning:layoutItem flexibility="auto, no-grow" padding="around-medium">
+                                <label class="slds-form-element__label">
+                                   <!--render facet: 3101:0-->
+                                   <span >Template</span>
+                                </label>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem flexibility="auto" padding="horizontal-medium">
+                                <div class="selectItem" >
+                                    <lightning:select onchange="{!c.loadTemplate}" 
+                                                      name="SelectDivision" label="Select a Template:" 
+                                                      aura:id="templateId" variant="label-hidden" value="{!v.selTemplate}">
+                                        <option text="None" value=""/>            
+                                        <aura:iteration items="{!v.templates}" var="item">
+                                            <option text="{!item.Name}" value="{!item.Id}"/>
+                                        </aura:iteration>
+                                    </lightning:select>
+                                </div>
+                        	</lightning:layoutItem>
+                        </lightning:layout>
+                        <lightning:layout>
+                          	<lightning:layoutItem flexibility="auto, no-grow" padding="around-medium">
+                                <label class="slds-form-element__label">
+                                   <!--render facet: 3101:0-->
+                                   <span >Subject</span>
+                                </label>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem flexibility="auto" padding="horizontal-medium">
+                                <div class="slds-p-bottom_medium" >
+                                    <lightning:input id="subjMatter" type="Text" 
+                                     autocomplete="off" aura:id="subjectText" 
+                                     value="{!v.subjTxt}" variant="label-hidden" label="Subject" />
+                                </div>
+                        	</lightning:layoutItem>
+                        </lightning:layout>
+                        <lightning:layout>
+                            <lightning:layoutItem flexibility="auto" padding="horizontal-medium">
+                                <div class="slds-p-bottom_medium" >
+                                    <div class="slds-p-top_x-small" >
+                                        <aura:if isTrue="{!empty(v.templDetail)}" >
+                                            <lightning:inputRichText aura:id="txtBody" value="{!v.bodyContent}" 
+                                                                     label="Content:" class="txtAreaCls" >
+                                                <lightning:insertImageButton/>
+                                            </lightning:inputRichText>
+                                            <aura:set attribute="else">
+                                                <lightning:textarea name="myTextArea"
+                                                                    value="{!v.templDetail.Body}" label="Content:" 
+                                                                    maxlength="700" class="txtAreaCls"/>
+                                            </aura:set>
+                                        </aura:if>
+                                    </div>
+                                </div>
+                        	</lightning:layoutItem>
+                        </lightning:layout>
+                        <lightning:layout>
+                            <lightning:layoutItem flexibility="auto" padding="horizontal-medium">
+                                <div class="slds-grid slds-grid_align-end slds-border_top slds-p-horizontal_medium slds-p-vertical_x-small" >
+                                    <div class="slds-grid emailuiEmailToolbarContainer">
+                                        <div class="slds-col">
+                                           <button class="slds-button slds-button--icon  cuf-publisherAttachmentButton slds-p-left--xxx-small slds-p-right--xxx-small uiButton" 
+                                                   title="Close" onclick="{!c.openAttachments}" >
+                                               <lightning:icon iconName="utility:attach" size="x-small" />
+                                               <span class="slds-assistive-text">Attach File</span>
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <c:EmailAttachmentsModal aura:id="attachmentModal" recordId="{!v.recordId}" />
+                        	</lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" 
+                            onclick="{!c.hideEmailComposer}">
+                        Cancel
+                    </button>
+                    <button class="slds-button slds-button_brand" 
+                            onclick="{!c.sendEmail}">
+                        Send
+                    </button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+</aura:component>

@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="by this event we are capturing the WorkTypeEntry Lookup Clearance">
+    <aura:attribute name="workTypeEntryPillCleared" type="string"/>
+</aura:event>

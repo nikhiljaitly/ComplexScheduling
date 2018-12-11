@@ -1,0 +1,160 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:appHostable,flexipage:availableForRecordHome,force:lightningQuickAction,force:hasRecordId,force:hasSObjectName,lightning:availableForFlowScreens" access="global" 
+                controller="CompLookupController">
+    
+    <aura:attribute name="newWOLI" type="workOrderLineItem" default="{}"/>
+    <!--Lookup field attributes-->
+    <aura:attribute name="ProductId" type="Id" default=""/>
+    <aura:attribute name="LabourCost" type="double" default="0.00"/>
+    <aura:attribute name="MaterialCost" type="double" default="0.00"/>
+    
+    <aura:attribute name="ServiceApp" type="Id" default=""/>
+    <aura:attribute name="Room" type="Id" default=""/>
+    
+    <aura:attribute name="recordId" type="Id" access="global"/>
+       
+  <!--  <aura:registerEvent name="HrWorkOrderIDEvent" type="c:HrWorkOrderIDEvent"/>    
+	   
+	 <aura:handler name="HrWorkOrderIDEvent" event="c:HrWorkOrderIDEvent" action="{!c.fetchWorkOrderID}" /> !-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    <aura:handler name="moveCosts" event="c:ProductPricesEvent" action="{!c.handleCostChange}"/>
+    <aura:handler name="sendRoomId" event="c:RoomLookupEvent" action="handleRoomId"/>
+    
+    <lightning:card>
+    <h1>ver 145</h1> 
+    
+    <form class="slds-grid slds-gutters">
+            <div class="slds-col slds-size_1-of-2">
+                <!--INFORMATION-->
+                <!--workType Lookup Here-->
+                <lightning:input auraId ="woliForm" 
+                                 type="text"
+                                 label="Site Visit Number"
+                                 name="SiteVisNum"
+                                 value="{!v.newWOLI.Site_Visit_Number__c}"/>
+                
+                <lightning:input auraId = "woliForm"
+                                 type="number"
+                                 label="Service Appointment Sort Order"
+                                 name="SAorder"
+                                 value="{!v.newWOLI.Sort_Order__c}"/>
+                <!--INFORMATION-->
+                <!--Put Service App Lookup Here-->
+                
+                <c:HRLookupServiceAppComp object="WorkOrderLineItem" lookupField="Service_Appointment__c" selectedRecordId="entityId"/>
+                
+                <!--LINE-ITEM-AMOUNTS-->
+            	<c:HRLookUpInputComp object="PricebookEntry" lookupField="Product2Id" selectedRecordId="entityId" woRecordID = "{!v.recordId}"/>
+                <lightning:input auraid="woliForm"
+                                 type="number"
+                                 name="wLabourCost"
+                                 label="Labour Cost"
+                                 min = "0.00"
+                                 formatter = "currency"
+                                 step="0.01"
+                                 value="{!v.LabourCost}"/>
+                
+                <lightning:input auraId="woliForm"
+                                 type="number"
+                                 name="LabourTime"
+                                 label="Labour Time"
+                                 value="{!v.newWOLI.Labour_Time__c}"/>
+                
+                <lightning:input auraid="woliForm"
+                                 type="number"
+                                 name="wMaterialCost"
+                                 label="Material Cost"
+                                 min = "0.00"
+                                 formatter = "currency"
+                                 step="0.01"
+                                 value="{!v.MaterialCost}"/>
+                
+                <lightning:input auraId="woliForm"
+                                 type="number"
+                                 name="Quantity"
+                                 label="Quantity"
+                                 value="{!v.newWOLI.Quantity}"/>
+                <!--LINE-ITEM-AMOUNTS-->
+                <!--WORKITEM-->
+                	<!--Put Room Lookup Here-->
+                <c:HRLookupRoomComp object="WorkOrderLineItem" lookupfield="Room__c" selectedRecordId="entityId"/>
+                
+                	<Lightning:input auraId="woliForm"
+                                     type="text-area"
+                                     name="WorkItmDesc"
+                                     label="Work Item Description"
+                                     value="{!v.newWOLI.Work_Item_Description__c}"/>
+                <!--WORKITEM-->
+          	</div>
+            <div class="slds-col slds-size_1-of-2">
+                <!--INFORMATION-->
+                <lightning:select name="Status" label="Status" value="{!v.newWOLI.Status}"> 
+                    <option value="">choose one...</option>
+                    <option value="New">New</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="On Hold">On Hold</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Closed">Closed</option>
+                    <option value="Cannot Complete">Cannot Complete</option>
+                    <option value="Canceled">Canceled</option>
+                    <option value="Estimated">Estimated</option>
+                </lightning:select>
+                    
+                <lightning:input auraid="woliForm"
+                                 type="text"
+                                 name="workOrderId"
+                                 label="Work Order"
+                                 value="{!v.recordId}"
+                                 access="read-only"/>
+                
+                <lightning:input auraid="woliForm"
+                                 type="picklist"
+                                 name="ContentsType"
+                                 label="Contents Type"
+                                 value="{!v.newWOLI.Contents_Type__c}"/>
+                
+                <lightning:input auraId="woliForm"
+                                 type="checkbox"
+                                 name="CashSettled"
+                                 label="Cash Settled"
+                                 value="{!v.newWOLI.Cash_Settled__c}"/>
+                <!--INFORMATION-->
+                <!--LINE ITEM AMOUNTS-->
+                	<lightning:input auraId="woliForm"
+                                     type="checkbox"
+                                     Name="DoNotAR"
+                                     label="Do Not Invoice AR"
+                                     value="{!v.newWOLI.Do_Not_Invoice_AR__c}"/>
+                <!--LINE ITEM AMOUNTS-->
+                <!--WORKITEM-->
+                	<lightning:input auraId="woliForm"
+                                     type="checkbox"
+                                     Name="CstRep"
+                                     label="Custom Repairs?"
+                                     value="{!v.newWOLI.Custom_Repairs__c}"/>
+                <!--WORKITEM-->
+                <!--INVOICE DETAILS-->
+                	<lightning:input auraId="woliForm"
+                                     type="checkbox"
+                                     Name="Prepayment"
+                                     label="Prepayment"
+                                     value="{!v.newWOLI.Prepayment__c}"/>
+                
+                	<lightning:input auraId="woliForm"
+                                     type="number"
+                                     Name="PrepayAmnt"
+                                     label="Prepayment Amount"
+                                     min = "0.00"
+                                 	 formatter = "currency"
+                                 	 step="0.01"
+                                     default="0.00"
+                                     value="{!v.newWOLI.Prepayment_Amount__c}"/>
+                <!--INVOICE DETAILS-->
+            </div>
+        
+    </form>
+    	<lightning:button label="Save"
+                          class="slds-m-top--medium"
+                          variant="Brand"
+                          onclick="{!c.ClickCreate}"/>
+    </lightning:card>
+</aura:component>

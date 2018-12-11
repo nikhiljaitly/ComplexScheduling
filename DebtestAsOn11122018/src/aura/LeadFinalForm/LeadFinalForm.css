@@ -1,0 +1,16 @@
+.THIS .uiInputDate .datePicker-openIcon {
+    position: absolute;
+    left: 95%;
+    top: 55%;
+}
+.THIS div.wrapper{
+    margin: 20px !important;
+    border: 1px solid #CCC !important;
+    border-radius: 5px !important;
+}
+.THIS .slds-select_container{
+    width:100px;
+}
+.THIS .slds-file-selector__dropzone {
+    border-color:#c23934;
+}

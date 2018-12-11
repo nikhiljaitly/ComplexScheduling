@@ -1,0 +1,37 @@
+<!--Parent Lightning Compomemt-->
+<aura:component Implements="forceCommunity:availableForAllPageTypes">
+    <aura:attribute name="attachmentList" type="attachment[]"/> 
+ <aura:attribute name="comunitityName" type="String" default=""/>
+ <!--Header Part-->        
+    <div class="slds-page-header">
+        <h1 class="slds-page-header__title">Attachments</h1>
+        <p class="slds-text-body_small slds-line-height_reset">Added By You</p>
+    </div>
+    
+ <!--Table Part-->           
+    <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+        <thead>
+            <tr class="slds-text-title_caps">
+                <th scope="col">
+                    <div class="slds-truncate">S.No</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="fileName">File Name</div>
+                </th>               
+                <th scope="col">
+                    <div class="slds-truncate" title="fileType">File Type</div>
+                </th>
+
+            </tr>
+        </thead>   
+        <tbody>
+           <!--Iterate the child Component for display Table rows 
+               with pass the List Item Index for track the Every child Component 
+               and pass each List Contact Instance -->         
+            <aura:iteration items="{!v.attachmentList}" var="item" indexVar="index">
+                <c:AttachmentCell comunitityName="{!v.comunitityName}" attachmentInstance="{!item}" rowIndex="{!index}" />
+            </aura:iteration>
+        </tbody>
+    </table>
+    <br/>
+</aura:component>

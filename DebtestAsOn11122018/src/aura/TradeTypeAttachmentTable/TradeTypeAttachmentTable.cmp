@@ -1,0 +1,77 @@
+<!--Parent Lightning Compomemt-->
+<aura:component Implements="forceCommunity:availableForAllPageTypes">
+    <aura:attribute name="attachmentList" type="attachment[]"/>
+    <aura:attribute name="parentId" type="String" />
+    <aura:attribute name="tradeTypes" type="List" />
+    <aura:attribute name="showFile" type="Boolean" default="true"/>
+    <aura:attribute name="onrowaction" type="Object" />
+    
+    <aura:method name="initiate" action="{!c.initiateFiles}" />
+    
+    <!--Header Part-->        
+    <div class="slds-page-header">
+        <h1 class="slds-page-header__title">Trade Types</h1>
+        <p class="slds-text-body_small slds-line-height_reset">Add Licenses below</p>
+    </div>
+    
+    <!--Table Part-->           
+    <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+        <thead>
+            <tr class="slds-text-title_caps">
+                <th scope="col" style="width:60px;">
+                    Action
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="Trade Type">Trade Type</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="License Number">License Number</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="License Expiry">License Expiry</div>
+                </th>
+                <th scope="col">
+                    <div class="slds-truncate" title="Status">Status</div>
+                </th>
+                
+            </tr>
+        </thead>   
+        <tbody>
+            <!--Iterate the child Component for display Table rows 
+               with pass the List Item Index for track the Every child Component 
+               and pass each List Contact Instance -->         
+            <aura:iteration items="{!v.tradeTypes}" var="item" indexVar="index">
+                <tr class="slds-text-title_caps">
+                    <td style="width:60px;">
+                        <div class="x-grid3-cell-inner x-grid3-col-ACTION_COLUMN" id="ACTION_COLUMN">
+                            <lightning:button variant="base" iconName="utility:edit" 
+                                              name="show_details" tabindex="{!index}"
+                                              title="show details" onclick="{!v.onrowaction}" />
+                        </div>
+                    </td>
+                    <td>
+                        <ui:outputText value="{!item.Trade_Type__c}"/>
+                    </td>
+                    <td>
+                        <ui:outputText value="{!item.License_Number__c}"/>
+                    </td>
+                    <td>
+                        <ui:outputText value="{!item.License_Expiry__c}"/>
+                    </td>
+                    <td>
+                        <ui:outputText value="{!item.Status__c}"/>
+                    </td>
+                    <aura:if isTrue="{!v.showFile}">
+                        <td>
+                            <c:FileContentUploadAndDisplay isRequired="false" parentId="{!item.Id}"
+                                   fileDescription="{!item.Trade_Type__c}" 
+                                   attachmentList="{!v.attachmentList}" 
+                                   aura:id="ttFile" documentHeader="Licence" />
+                        </td>
+                    </aura:if>
+                </tr>                 
+            </aura:iteration>
+        </tbody>
+    </table>
+    <br/>
+</aura:component>

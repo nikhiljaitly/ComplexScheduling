@@ -1,0 +1,22 @@
+.THIS.buttonDiv .right {
+    float:right;
+}
+.THIS.chartDiv {
+    width:100%; 
+    height:600px; 
+    float:left; 
+    margin: 5px;
+    border: 1px solid #ccc4c4; 
+    padding:5px;
+    max-width: 98%;
+}
+.THIS.buttonDiv{
+    width:100%;
+    float:left;
+}
+.THIS .closeIcon {
+	float:right;
+	color:Red;
+	margin-top: -60px;
+	margin-right: -20px;
+}

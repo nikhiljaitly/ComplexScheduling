@@ -1,0 +1,44 @@
+<aura:component >
+    <aura:attribute name="options" type="List" />
+    <aura:attribute name="valueMap" type="Object" />
+    <aura:attribute name="parentValue" type="Boolean" default="false" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    
+    <aura:method name="initiate" action="{!c.doInit}" >
+    </aura:method>
+    
+    <aura:registerEvent name="dataChanged" type="c:Message" />
+    <aura:method name="updateChildDisabled" action="{!c.toggleChildrenDisable}">
+        <aura:attribute name="disabled" type="Boolean" />
+    </aura:method>
+    
+    <aura:iteration items="{!v.options}" var="item" indexVar="number">       
+        <div class="slds-p-left_medium slds-p-bottom_xx-small">
+            <span class="inlinFlex" >
+                <ui:inputCheckBox aura:id="checkbox" 
+                                  change="{!c.onCheck}" name="{!number}" />
+                <div class="slds-p-left_xx-small regions" >
+                    {!item.label}
+                </div>
+                <aura:if isTrue="{!item.children != null}">
+                    <div class="{!!item.hideChildren ? 'slds-hide': slds-show}">
+                        <a href="javascript:void(0)" onclick="{!c.toggle}" tabIndex="{!number}">
+                            <c:svg ariaHidden="true" class="slds-button__icon slds-button__icon_small" 
+                                   xlinkHref="/_slds/icons/utility-sprite/svg/symbols.svg#chevronright" />
+                        </a> 
+                    </div>
+                    <div class="{!item.hideChildren ? 'slds-hide': slds-show}">
+                        <a href="javascript:void(0)" onclick="{!c.toggle}" tabIndex="{!number}" >
+                            <c:svg ariaHidden="true" class="slds-button__icon slds-button__icon_small" 
+                                   xlinkHref="/_slds/icons/utility-sprite/svg/symbols.svg#chevronleft" />
+                        </a> 
+                        <c:NestedCheckboxes aura:id="child" parentValue="{#item.value || v.parentValue}"
+                                            options="{!item.children}" valueMap="{!v.valueMap}" />
+                    </div>
+                </aura:if>
+                
+            </span>
+        </div>
+    </aura:iteration>
+</aura:component>

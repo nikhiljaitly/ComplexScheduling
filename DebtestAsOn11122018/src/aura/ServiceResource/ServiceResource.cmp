@@ -1,0 +1,37 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" controller="homeRepPersonDetailAURA">
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:dependency resource="markup://force:navigateToSObject" type="EVENT"/>
+    <lightning:spinner aura:id="mySpinner" alternativeText="Loading" class="slds-hide"/>
+    <aura:attribute name="listOfServiceResource" type="Sobject[]"/>
+    <lightning:card title="{!'Service Resource ('+v.listOfServiceResource.length+')'}" iconName="standard:work_type">
+    <table class="slds-table slds-table--bordered slds-table--cell-buffer" width="151px">
+      <thead>
+        <tr class="slds-text-title--caps">           
+           <th class="slds-is-sortable slds-text-title--caps" scope="col">
+              <span class="slds-truncate" style="width:151px;" title="AppointmentNumber">Name</span>  
+           </th>  
+           <th class="slds-is-sortable slds-text-title--caps" scope="col">
+              <span class="slds-truncate" style="width:151px;" title="Subject">ResourceType</span>  
+           </th>           
+        </tr>
+      </thead>
+      <tbody>
+        <aura:iteration items="{!v.listOfServiceResource}" var="sr" indexVar="index">
+                <tr>
+                  <th scope="row">			
+                    <div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
+                        <a href="javascript:void(0);" onclick="{!c.redirectToRecord}" id="{!sr.Id}">{!sr.Name}</a>
+                    </div>
+                  </th>                               
+                  <th scope="row">			
+                    <div class="slds-truncate" style="white-space: pre-wrap;word-wrap: break-word;word-break: break-all;">
+                             {!sr.ResourceType}
+                    </div>
+                  </th>
+                </tr>
+       </aura:iteration>          
+      </tbody>
+    </table> 
+    </lightning:card>
+   
+</aura:component>

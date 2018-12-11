@@ -1,0 +1,9 @@
+<aura:component controller="HRResetCostCentreTrade" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:availableForFlowActions" access="global" >
+<!-- <aura:component implements="flowruntime:availableForLocalInvocableActions"> -->
+    <aura:attribute name="type" type="string" default="error" />
+    <aura:attribute name="message" type="string"  default="testmsg"/>
+    <aura:attribute name="recordId" type="Id"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.invoke}" />
+    
+</aura:component>
